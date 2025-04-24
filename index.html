@@ -56,13 +56,22 @@
       <label>Nom :
         <input type="text" id="${idPrefix}_nom">
       </label>
-      <label>Classe / Race :
+      <label>Race :
         <select id="${idPrefix}_classe">
-          <option value="vampire">Vampire</option>
-          <option value="humain">Humain</option>
-          <option value="loup-garou">Loup-Garou</option>
-          <option value="démon">Démon</option>
-          <option value="elfe">Elfe</option>
+        <option value="abyssal">Abyssal</option>
+        <option value="djöllfulin">Djöllfulin</option>
+        <option value="elfe">Elfe</option>
+        <option value="entomothrope">Entomothrope</option>
+        <option value="géant">Géant</option>
+        <option value="humain">Humain</option>
+        <option value="hybride">Hybride</option>
+        <option value="naga">Naga</option>
+        <option value="nain">Nain</option>
+        <option value="orc">Orc</option>
+        <option value="stryge-blanc">Stryge Blanc</option>
+        <option value="stryge-noir">Stryge Noir</option>
+        <option value="thérianthrope">Thérianthrope</option>
+        <option value="vampire">Vampire</option>
         </select>
       </label>
       
@@ -105,12 +114,15 @@
         container.innerHTML += `
         <div class="capacite-container">
           <label><strong>Capacité ${i + 1}</strong></label>
-          <label>Titre (<em>) : <input type="text" class="${prefix}_titreCapacite"></label>
+          <label>Titre : <input type="text" class="${prefix}_titreCapacite"></label>
           <label>Description : <input type="text" class="${prefix}_descriptionCapacite"></label>
-          <label>Classe CSS :
+          <label>Etat :
             <select class="${prefix}_classeCapacite">
+              <option value="capacité_spéciale">Neutre</option>
               <option value="capacité_spéciale active">Active</option>
               <option value="capacité_spéciale passive">Passive</option>
+              <option value="capacité_spéciale bloquée">Bloquée</option>
+              <option value="capacité_spéciale utilisée">Utilisée</option>
               <option value="capacité_spéciale annulée">Annulée</option>
               <option value="capacité_spéciale inactive">Inactive</option>
             </select>
@@ -128,7 +140,7 @@
         container.innerHTML += `
         <div class="companion-container">
           <h4>Invocation/Compagnon ${i + 1}</h4>
-          <label>Nom / Race :
+          <label>Race :
             <input type="text" class="${prefix}_comp_nom">
           </label>
           <label>Vitalité :
@@ -158,10 +170,13 @@
         <div class="capacite-container">
           <label>Titre : <input type="text" class="${prefix}_comp${index}_titreCapacite"></label>
           <label>Description : <input type="text" class="${prefix}_comp${index}_descriptionCapacite"></label>
-          <label>Classe CSS :
+          <label>Etat :
             <select class="${prefix}_comp${index}_classeCapacite">
+              <option value="capacité_spéciale">Neutre</option>
               <option value="capacité_spéciale active">Active</option>
               <option value="capacité_spéciale passive">Passive</option>
+              <option value="capacité_spéciale bloquée">Bloquée</option>
+              <option value="capacité_spéciale utilisée">Utilisée</option>
               <option value="capacité_spéciale annulée">Annulée</option>
               <option value="capacité_spéciale inactive">Inactive</option>
             </select>
@@ -173,6 +188,7 @@
 
     function extractCharacter(prefix) {
       let html = `
+      Vitesse de ${document.getElementById(`${prefix}_nom`).value} : <strong class="vitesse">${document.getElementById(`${prefix}_vitesse`).value}</strong>
 <strong class="${document.getElementById(`${prefix}_classe`).value}">${document.getElementById(`${prefix}_nom`).value}</strong> : 
 <strong class="vitalité">${document.getElementById(`${prefix}_vitalite`).value}</strong><br>
 <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${document.getElementById(`${prefix}_vitesse`).value}</strong><br>
@@ -225,12 +241,34 @@
       return html;
     }
 
+    function calculerVitesseTotale(prefix) {
+      let totalVitesse = parseInt(document.getElementById(`${prefix}_vitesse`).value || 0);
+      const compagnons = document.querySelectorAll(`.${prefix}_comp_vitesse`);
+      compagnons.forEach(v => totalVitesse += parseInt(v.value || 0));
+      return totalVitesse;
+    }
+
+
     function genererHTML() {
+      const perso1Nom = document.getElementById('p1_nom').value || 'P1';
+      const perso2Nom = document.getElementById('p2_nom').value || 'P2';
+
+      const vitesse1 = calculerVitesseTotale('p1');
+      const vitesse2 = calculerVitesseTotale('p2');
+
+      const commence = vitesse1 >= vitesse2 ? perso1Nom : perso2Nom;
+
+      const header = `
+<div class="titre">${perso1Nom} contre ${perso2Nom}</div>
+<em>${commence} commence le combat</em>
+`;
+
       const perso1 = extractCharacter('p1');
       const perso2 = extractCharacter('p2');
 
-      document.getElementById('resultat').value = `${perso1}\n<div class="combat-séparation">Contre</div>\n${perso2}`;
+      document.getElementById('resultat').value = `${header}\n\n${perso1}\n<div class="combat-séparation">Contre</div>\n${perso2}`;
     }
+
 
     function toggleAbsorption(prefix) {
       const bloc = document.getElementById(`${prefix}_absorptionBloc`);
