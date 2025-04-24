@@ -140,9 +140,27 @@
         container.innerHTML += `
         <div class="companion-container">
           <h4>Invocation/Compagnon ${i + 1}</h4>
-          <label>Race :
+          <label>Nom :
             <input type="text" class="${prefix}_comp_nom">
           </label>
+             <label>Race :
+        <select class="${prefix}_comp_race">
+        <option value="abyssal">Abyssal</option>
+        <option value="djöllfulin">Djöllfulin</option>
+        <option value="elfe">Elfe</option>
+        <option value="entomothrope">Entomothrope</option>
+        <option value="géant">Géant</option>
+        <option value="humain">Humain</option>
+        <option value="hybride">Hybride</option>
+        <option value="naga">Naga</option>
+        <option value="nain">Nain</option>
+        <option value="orc">Orc</option>
+        <option value="stryge-blanc">Stryge Blanc</option>
+        <option value="stryge-noir">Stryge Noir</option>
+        <option value="thérianthrope">Thérianthrope</option>
+        <option value="vampire">Vampire</option>
+        </select>
+      </label>
           <label>Vitalité :
             <input type="number" class="${prefix}_comp_vitalite">
           </label>
@@ -214,18 +232,21 @@
 
       html += `</ul>`;
 
-      const companions = document.querySelectorAll(`.${prefix}_comp_nom`);
-      companions.forEach((comp, idx) => {
+      const noms = document.querySelectorAll(`.${prefix}_comp_nom`);
+      const races = document.querySelectorAll(`.${prefix}_comp_race`);
+      noms.forEach((compNom, idx) => {
+        const race = document.querySelectorAll(`.${prefix}_comp_race`)[idx]?.value || 'Compagnon'; // Sélectionner la classe pour chaque compagnon
         const vit = document.querySelectorAll(`.${prefix}_comp_vitalite`)[idx].value;
         const vitess = document.querySelectorAll(`.${prefix}_comp_vitesse`)[idx].value;
         const deg = document.querySelectorAll(`.${prefix}_comp_degats`)[idx].value;
 
         html += `
-<strong class="RACE">${comp.value}</strong> : <strong class="vitalité">${vit}</strong><br>
+<strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong><br>
 <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong><br>
 <span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong><br>
 <span class="bestiaire-champ">Capacités spéciales</span> :
 <ul>`;
+
 
         const comp_titles = document.querySelectorAll(`.${prefix}_comp${idx}_titreCapacite`);
         const comp_descs = document.querySelectorAll(`.${prefix}_comp${idx}_descriptionCapacite`);
