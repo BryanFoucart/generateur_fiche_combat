@@ -41,101 +41,113 @@
   <body>
     <h2>Générateur de Fiche de Combat</h2>
 
+    <div>
+      <label
+        >Nombre de personnages dans le Groupe 1 :
+        <input
+          type="number"
+          id="nbGroupe1"
+          value="1"
+          min="1"
+          onchange="genererFormulairesGroupes()"
+        />
+      </label>
+      <label
+        >Nombre de personnages dans le Groupe 2 :
+        <input
+          type="number"
+          id="nbGroupe2"
+          value="1"
+          min="1"
+          onchange="genererFormulairesGroupes()"
+        />
+      </label>
+    </div>
+
     <div id="combat-form"></div>
+
+    <button onclick="genererHTML()">Générer le Code HTML</button>
 
     <h2>Résultat HTML :</h2>
     <textarea id="resultat" readonly></textarea>
 
     <script>
-      function createCharacterForm(idPrefix, label) {
-        return `
-    <div class="bloc">
-      <h3>${label}</h3>
-      <label>Nom :
-        <input type="text" id="${idPrefix}_nom">
-      </label>
-      <label>Race :
-        <select id="${idPrefix}_classe">
-        <option value="abyssal">Abyssal</option>
-        <option value="djöllfulin">Djöllfulin</option>
-        <option value="elfe">Elfe</option>
-        <option value="entomothrope">Entomothrope</option>
-        <option value="géant">Géant</option>
-        <option value="humain">Humain</option>
-        <option value="hybride">Hybride</option>
-        <option value="naga">Naga</option>
-        <option value="nain">Nain</option>
-        <option value="orc">Orc</option>
-        <option value="stryge-blanc">Stryge Blanc</option>
-        <option value="stryge-noir">Stryge Noir</option>
-        <option value="thérianthrope">Thérianthrope</option>
-        <option value="vampire">Vampire</option>
-        </select>
-      </label>
-      
-      <label>Vitalité :
-        <input type="number" id="${idPrefix}_vitalite">
-      </label>
-      <label>Vitesse :
-        <input type="number" id="${idPrefix}_vitesse">
-      </label>
-      <label>
-  <input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
-</label>
-<div id="${idPrefix}_absorptionBloc" style="display: none;">
-  <label>Absorption (%) :
-    <input type="number" id="${idPrefix}_absorption" value="0">
-  </label>
-</div>
-      <label>Dégâts :
-        <input type="number" id="${idPrefix}_degats">
-      </label>
+      function genererFormulairesGroupes() {
+        const nb1 = parseInt(document.getElementById("nbGroupe1").value);
+        const nb2 = parseInt(document.getElementById("nbGroupe2").value);
+        let html = "";
 
-<label>Capacités spéciales (format : Titre : Description, une par ligne) :
-  <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')"></textarea>
-</label>
-<div id="${idPrefix}_capacites"></div>
+        html += `<h3>Groupe 1</h3>`;
+        for (let i = 0; i < nb1; i++) {
+          html += createCharacterForm(`g1_p${i}`, `Personnage ${i + 1}`);
+        }
 
+        html += `<h3>Groupe 2</h3>`;
+        for (let i = 0; i < nb2; i++) {
+          html += createCharacterForm(`g2_p${i}`, `Personnage ${i + 1}`);
+        }
 
-      // <label>Nombre de capacités spéciales :
-      //   <input type="number" id="${idPrefix}_nbCapacites" value="0" min="0" onchange="updateCapacities('${idPrefix}')">
-      // </label>
-      // <div id="${idPrefix}_capacites"></div>
-
-      <label>Nombre d'invocations/compagnons :
-        <input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onchange="updateCompanions('${idPrefix}')">
-      </label>
-      <div id="${idPrefix}_compagnons"></div>
-    </div>
-    `;
+        document.getElementById("combat-form").innerHTML = html;
       }
 
-      function updateCapacities(prefix) {
-        const nb = parseInt(
-          document.getElementById(`${prefix}_nbCapacites`).value
-        );
-        const container = document.getElementById(`${prefix}_capacites`);
-        container.innerHTML = "";
-        for (let i = 0; i < nb; i++) {
-          container.innerHTML += `
-        <div class="capacite-container">
-          <label><strong>Capacité ${i + 1}</strong></label>
-          <label>Titre : <input type="text" class="${prefix}_titreCapacite"></label>
-          <label>Description : <input type="text" class="${prefix}_descriptionCapacite"></label>
-          <label>Etat :
-            <select class="${prefix}_classeCapacite">
-              <option value="capacité_spéciale">Neutre</option>
-              <option value="capacité_spéciale active">Active</option>
-              <option value="capacité_spéciale passive">Passive</option>
-              <option value="capacité_spéciale bloquée">Bloquée</option>
-              <option value="capacité_spéciale utilisée">Utilisée</option>
-              <option value="capacité_spéciale annulée">Annulée</option>
-              <option value="capacité_spéciale inactive">Inactive</option>
-            </select>
-          </label>
-        </div>
-      `;
-        }
+      function createCharacterForm(idPrefix, label) {
+        return `
+          <div class="bloc">
+            <h3>${label}</h3>
+            <label>Nom :
+              <input type="text" id="${idPrefix}_nom">
+            </label>
+            <label>Race :
+              <select id="${idPrefix}_classe">
+              <option value="abyssal">Abyssal</option>
+              <option value="djöllfulin">Djöllfulin</option>
+              <option value="elfe">Elfe</option>
+              <option value="entomothrope">Entomothrope</option>
+              <option value="géant">Géant</option>
+              <option value="humain">Humain</option>
+              <option value="hybride">Hybride</option>
+              <option value="naga">Naga</option>
+              <option value="nain">Nain</option>
+              <option value="orc">Orc</option>
+              <option value="stryge-blanc">Stryge Blanc</option>
+              <option value="stryge-noir">Stryge Noir</option>
+              <option value="thérianthrope">Thérianthrope</option>
+              <option value="vampire">Vampire</option>
+              </select>
+            </label>
+
+            <label>Vitalité :
+              <input type="number" id="${idPrefix}_vitalite">
+            </label>
+            <label>Vitesse :
+              <input type="number" id="${idPrefix}_vitesse">
+            </label>
+            <label>
+        <input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
+      </label>
+      <div id="${idPrefix}_absorptionBloc" style="display: none;">
+        <label>Absorption (%) :
+          <input type="number" id="${idPrefix}_absorption" value="0">
+        </label>
+      </div>
+            <label>Dégâts :
+              <input type="number" id="${idPrefix}_degats">
+            </label>
+
+      <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+        <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
+         Rapidité : permet d'attaquer à deux reprises.
+         Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+         Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
+      </label>
+      <div id="${idPrefix}_capacites"></div>
+
+            <label>Nombre d'invocations :
+              <input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onchange="updateCompanions('${idPrefix}')">
+            </label>
+            <div id="${idPrefix}_compagnons"></div>
+          </div>
+          `;
       }
 
       function parseCapacites(prefix) {
@@ -153,23 +165,23 @@
           const description = parts[1]?.trim() || "";
 
           container.innerHTML += `
-      <div class="capacite-container">
-        <input type="hidden" class="${prefix}_titreCapacite" value="${titre}">
-        <input type="hidden" class="${prefix}_descriptionCapacite" value="${description}">
-        <p><strong><em>${titre}</em></strong> : ${description}</p>
-        <label>État :
-          <select class="${prefix}_classeCapacite">
-            <option value="capacité_spéciale">Neutre</option>
-            <option value="capacité_spéciale active">Active</option>
-            <option value="capacité_spéciale passive">Passive</option>
-            <option value="capacité_spéciale bloquée">Bloquée</option>
-            <option value="capacité_spéciale utilisée">Utilisée</option>
-            <option value="capacité_spéciale annulée">Annulée</option>
-            <option value="capacité_spéciale inactive">Inactive</option>
-          </select>
-        </label>
-      </div>
-    `;
+            <div class="capacite-container">
+              <input type="hidden" class="${prefix}_titreCapacite" value="${titre}">
+              <input type="hidden" class="${prefix}_descriptionCapacite" value="${description}">
+              <p><strong><em>${titre}</em></strong> : ${description}</p>
+              <label>État :
+                <select class="${prefix}_classeCapacite">
+                  <option value="capacité_spéciale">Neutre</option>
+                  <option value="capacité_spéciale active">Active</option>
+                  <option value="capacité_spéciale passive">Passive</option>
+                  <option value="capacité_spéciale bloquée">Bloquée</option>
+                  <option value="capacité_spéciale utilisée">Utilisée</option>
+                  <option value="capacité_spéciale annulée">Annulée</option>
+                  <option value="capacité_spéciale inactive">Inactive</option>
+                </select>
+              </label>
+            </div>
+          `;
         });
       }
 
@@ -181,45 +193,48 @@
         container.innerHTML = "";
         for (let i = 0; i < nb; i++) {
           container.innerHTML += `
-        <div class="companion-container">
-          <h4>Invocation/Compagnon ${i + 1}</h4>
-          <label>Nom :
-            <input type="text" class="${prefix}_comp_nom">
-          </label>
-             <label>Race :
-        <select class="${prefix}_comp_race">
-        <option value="abyssal">Abyssal</option>
-        <option value="djöllfulin">Djöllfulin</option>
-        <option value="elfe">Elfe</option>
-        <option value="entomothrope">Entomothrope</option>
-        <option value="géant">Géant</option>
-        <option value="humain">Humain</option>
-        <option value="hybride">Hybride</option>
-        <option value="naga">Naga</option>
-        <option value="nain">Nain</option>
-        <option value="orc">Orc</option>
-        <option value="stryge-blanc">Stryge Blanc</option>
-        <option value="stryge-noir">Stryge Noir</option>
-        <option value="thérianthrope">Thérianthrope</option>
-        <option value="vampire">Vampire</option>
-        <option value="invocation">Invocation</option>
-        </select>
+              <div class="companion-container">
+                <h4>Invocation/Compagnon ${i + 1}</h4>
+                <label>Nom :
+                  <input type="text" class="${prefix}_comp_nom">
+                </label>
+                   <label>Race :
+              <select class="${prefix}_comp_race">
+              <option value="abyssal">Abyssal</option>
+              <option value="djöllfulin">Djöllfulin</option>
+              <option value="elfe">Elfe</option>
+              <option value="entomothrope">Entomothrope</option>
+              <option value="géant">Géant</option>
+              <option value="humain">Humain</option>
+              <option value="hybride">Hybride</option>
+              <option value="naga">Naga</option>
+              <option value="nain">Nain</option>
+              <option value="orc">Orc</option>
+              <option value="stryge-blanc">Stryge Blanc</option>
+              <option value="stryge-noir">Stryge Noir</option>
+              <option value="thérianthrope">Thérianthrope</option>
+              <option value="vampire">Vampire</option>
+              <option value="invocation">Invocation</option>
+              </select>
+            </label>
+                <label>Vitalité :
+                  <input type="number" class="${prefix}_comp_vitalite">
+                </label>
+                <label>Vitesse :
+                  <input type="number" class="${prefix}_comp_vitesse">
+                </label>
+                <label>Dégâts :
+                  <input type="number" class="${prefix}_comp_degats">
+                </label>
+                      <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+        <textarea id="${prefix}_capacites_input" oninput="parseCapacites('${prefix}')" placeholder="EXEMPLE
+         Rapidité : permet d'attaquer à deux reprises.
+         Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+         Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
       </label>
-          <label>Vitalité :
-            <input type="number" class="${prefix}_comp_vitalite">
-          </label>
-          <label>Vitesse :
-            <input type="number" class="${prefix}_comp_vitesse">
-          </label>
-          <label>Dégâts :
-            <input type="number" class="${prefix}_comp_degats">
-          </label>
-          <label>Nombre de capacités :
-            <input type="number" class="${prefix}_comp_nbCapacites" onchange="updateCapacitiesForCompanion(this, '${prefix}', ${i})">
-          </label>
-          <div class="${prefix}_comp_capacites${i}"></div>
-        </div>
-      `;
+      <div id="${prefix}_capacites"></div>
+              </div>
+            `;
         }
       }
 
@@ -231,42 +246,37 @@
         container.innerHTML = "";
         for (let i = 0; i < nb; i++) {
           container.innerHTML += `
-        <div class="capacite-container">
-          <label>Titre : <input type="text" class="${prefix}_comp${index}_titreCapacite"></label>
-          <label>Description : <input type="text" class="${prefix}_comp${index}_descriptionCapacite"></label>
-          <label>Etat :
-            <select class="${prefix}_comp${index}_classeCapacite">
-              <option value="capacité_spéciale">Neutre</option>
-              <option value="capacité_spéciale active">Active</option>
-              <option value="capacité_spéciale passive">Passive</option>
-              <option value="capacité_spéciale bloquée">Bloquée</option>
-              <option value="capacité_spéciale utilisée">Utilisée</option>
-              <option value="capacité_spéciale annulée">Annulée</option>
-              <option value="capacité_spéciale inactive">Inactive</option>
-            </select>
-          </label>
-        </div>
-      `;
+              <div class="capacite-container">
+                <label>Titre : <input type="text" class="${prefix}_comp${index}_titreCapacite"></label>
+                <label>Description : <input type="text" class="${prefix}_comp${index}_descriptionCapacite"></label>
+                <label>Etat :
+                  <select class="${prefix}_comp${index}_classeCapacite">
+                    <option value="capacité_spéciale">Neutre</option>
+                    <option value="capacité_spéciale active">Active</option>
+                    <option value="capacité_spéciale passive">Passive</option>
+                    <option value="capacité_spéciale bloquée">Bloquée</option>
+                    <option value="capacité_spéciale utilisée">Utilisée</option>
+                    <option value="capacité_spéciale annulée">Annulée</option>
+                    <option value="capacité_spéciale inactive">Inactive</option>
+                  </select>
+                </label>
+              </div>
+            `;
         }
       }
 
       function extractCharacter(prefix) {
         let html = `
-      Vitesse de ${
-        document.getElementById(`${prefix}_nom`).value
-      } : <strong class="vitesse">${
-          document.getElementById(`${prefix}_vitesse`).value
-        }</strong>
-<strong class="${document.getElementById(`${prefix}_classe`).value}">${
+      <strong class="${document.getElementById(`${prefix}_classe`).value}">${
           document.getElementById(`${prefix}_nom`).value
-        }</strong> : 
-<strong class="vitalité">${
-          document.getElementById(`${prefix}_vitalite`).value
-        }</strong><br>
-<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
-          document.getElementById(`${prefix}_vitesse`).value
-        }</strong><br>
-`;
+        }</strong> :
+      <strong class="vitalité">${
+        document.getElementById(`${prefix}_vitalite`).value
+      }</strong><br>
+      <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
+        document.getElementById(`${prefix}_vitesse`).value
+      }</strong><br>
+      `;
 
         if (document.getElementById(`${prefix}_corrompu`).checked) {
           html += `<span class="bestiaire-champ">Absorption</span> : <strong class="dégâts">${
@@ -275,12 +285,12 @@
         }
 
         html += `
-<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${
-          document.getElementById(`${prefix}_degats`).value
-        }</strong><br>
-<span class="bestiaire-champ">Capacités spéciales</span> :
-<ul>
-`;
+      <span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${
+        document.getElementById(`${prefix}_degats`).value
+      }</strong><br>
+      <span class="bestiaire-champ">Capacités spéciales</span> :
+      <ul>
+      `;
 
         const titres = Array.from(
           document.getElementsByClassName(`${prefix}_titreCapacite`)
@@ -313,11 +323,10 @@
             .value;
 
           html += `
-<strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong><br>
-<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong><br>
-<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong><br>
-<span class="bestiaire-champ">Capacités spéciales</span> :
-<ul>`;
+      <strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong><br>
+      <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong><br>
+      <span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong><br>
+      <span class="bestiaire-champ">Capacités spéciales</span> :`;
 
           const comp_titles = document.querySelectorAll(
             `.${prefix}_comp${idx}_titreCapacite`
@@ -329,13 +338,19 @@
             `.${prefix}_comp${idx}_classeCapacite`
           );
 
-          for (let j = 0; j < comp_titles.length; j++) {
-            html += `<li class="${comp_classes[j].value}"><em>${comp_titles[j].value}</em> : ${comp_descs[j].value}</li>\n`;
+          if (
+            document.querySelectorAll(`.${prefix}_comp_capacites${idx}`)
+              .length > 0
+          ) {
+            html += `<ul>`;
+            for (let j = 0; j < comp_titles.length; j++) {
+              html += `<li class="${comp_classes[j].value}"><em>${comp_titles[j].value}</em> : ${comp_descs[j].value}</li>\n`;
+            }
+            html += "</ul>";
+          } else {
+            html += `<em>Aucune capacité spéciale</em>`;
           }
-
-          html += "</ul>";
         });
-
         return html;
       }
 
@@ -349,25 +364,42 @@
       }
 
       function genererHTML() {
-        const perso1Nom = document.getElementById("p1_nom").value || "P1";
-        const perso2Nom = document.getElementById("p2_nom").value || "P2";
+        const nb1 = parseInt(document.getElementById("nbGroupe1").value);
+        const nb2 = parseInt(document.getElementById("nbGroupe2").value);
 
-        const vitesse1 = calculerVitesseTotale("p1");
-        const vitesse2 = calculerVitesseTotale("p2");
+        let vitesseGroupe1 = 0;
+        let vitesseGroupe2 = 0;
 
-        const commence = vitesse1 >= vitesse2 ? perso1Nom : perso2Nom;
+        let htmlG1 = `<div class='groupe'>`;
+        for (let i = 0; i < nb1; i++) {
+          const prefix = `g1_p${i}`;
+          htmlG1 += extractCharacter(prefix) + "<br>";
+          vitesseGroupe1 += calculerVitesseTotale(prefix);
+        }
+        htmlG1 += "</div>";
 
-        const header = `
-<div class="titre">${perso1Nom} contre ${perso2Nom}</div>
-<em>${commence} commence le combat</em>
-`;
+        let vitesseG1 = `vitesse de Groupe 1 : ${vitesseGroupe1}`;
 
-        const perso1 = extractCharacter("p1");
-        const perso2 = extractCharacter("p2");
+        let htmlG2 = `<div class='groupe'>`;
+        for (let i = 0; i < nb2; i++) {
+          const prefix = `g2_p${i}`;
+          htmlG2 += extractCharacter(prefix) + "<br>";
+          vitesseGroupe2 += calculerVitesseTotale(prefix);
+        }
+        htmlG2 += "</div>";
+
+        let vitesseG2 = `vitesse de Groupe 2 : ${vitesseGroupe2}`;
+
+        const commence =
+          vitesseGroupe1 >= vitesseGroupe2 ? "Groupe 1" : "Groupe 2";
+
+        const header = `<div class="titre">Groupe 1 contre Groupe 2</div>
+        
+<em>${commence} commence le combat</em>`;
 
         document.getElementById(
           "resultat"
-        ).value = `${header}\n\n${perso1}\n<div class="combat-séparation">Contre</div>\n${perso2}`;
+        ).value = `${header}\n\n${vitesseG1}\n\n${htmlG1}\n<div class="combat-séparation">Contre</div>\n${vitesseG2}\n\n${htmlG2}`;
       }
 
       function toggleAbsorption(prefix) {
@@ -376,12 +408,9 @@
         bloc.style.display = isChecked ? "block" : "none";
       }
 
-      // Inject forms
-      document.getElementById("combat-form").innerHTML = `
-    ${createCharacterForm("p1", "Personnage 1")}
-    ${createCharacterForm("p2", "Personnage 2")}
-    <button onclick="genererHTML()">Générer le Code HTML</button>
-  `;
+      window.onload = function () {
+        genererFormulairesGroupes();
+      };
     </script>
   </body>
 </html>
