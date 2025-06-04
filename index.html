@@ -75,6 +75,18 @@
       function genererFormulairesGroupes() {
         const nb1 = parseInt(document.getElementById("nbGroupe1").value);
         const nb2 = parseInt(document.getElementById("nbGroupe2").value);
+
+        // 1. Sauvegarder les données déjà remplies
+        const existingData = {};
+        const inputs = document.querySelectorAll(
+          "#combat-form input, #combat-form select, #combat-form textarea"
+        );
+        inputs.forEach((input) => {
+          existingData[input.id] =
+            input.type === "checkbox" ? input.checked : input.value;
+        });
+
+        // 2. Regénérer les formulaires
         let html = "";
 
         html += `<h3>Groupe 1</h3>`;
@@ -88,6 +100,20 @@
         }
 
         document.getElementById("combat-form").innerHTML = html;
+
+        // 3. Réinjecter les données
+        for (const id in existingData) {
+          const el = document.getElementById(id);
+          if (el) {
+            if (el.type === "checkbox") {
+              el.checked = existingData[id];
+              if (el.onchange) el.onchange(); // Appeler toggleAbsorption si besoin
+            } else {
+              el.value = existingData[id];
+              if (el.oninput) el.oninput(); // Mettre à jour les capacités automatiquement
+            }
+          }
+        }
       }
 
       function createCharacterForm(idPrefix, label) {
