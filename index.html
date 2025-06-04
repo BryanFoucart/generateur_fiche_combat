@@ -1,56 +1,54 @@
 <!DOCTYPE html>
 <html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Générateur de Combat</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <title>Générateur de Combat</title>
-  <style>
-    body {
-      font-family: Arial;
-      padding: 20px;
-    }
+      label {
+        display: block;
+        margin-top: 10px;
+      }
 
-    label {
-      display: block;
-      margin-top: 10px;
-    }
+      .bloc {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-top: 20px;
+      }
 
-    .bloc {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-top: 20px;
-    }
+      .capacite-container {
+        margin-left: 20px;
+        margin-bottom: 10px;
+      }
 
-    .capacite-container {
-      margin-left: 20px;
-      margin-bottom: 10px;
-    }
+      .companion-container {
+        border: 1px dashed #aaa;
+        padding: 10px;
+        margin-top: 10px;
+      }
 
-    .companion-container {
-      border: 1px dashed #aaa;
-      padding: 10px;
-      margin-top: 10px;
-    }
+      textarea {
+        width: 100%;
+        height: 300px;
+      }
+    </style>
+  </head>
 
-    textarea {
-      width: 100%;
-      height: 300px;
-    }
-  </style>
-</head>
+  <body>
+    <h2>Générateur de Fiche de Combat</h2>
 
-<body>
+    <div id="combat-form"></div>
 
-  <h2>Générateur de Fiche de Combat</h2>
+    <h2>Résultat HTML :</h2>
+    <textarea id="resultat" readonly></textarea>
 
-  <div id="combat-form"></div>
-
-  <h2>Résultat HTML :</h2>
-  <textarea id="resultat" readonly></textarea>
-
-  <script>
-    function createCharacterForm(idPrefix, label) {
-      return `
+    <script>
+      function createCharacterForm(idPrefix, label) {
+        return `
     <div class="bloc">
       <h3>${label}</h3>
       <label>Nom :
@@ -93,10 +91,16 @@
         <input type="number" id="${idPrefix}_degats">
       </label>
 
-      <label>Nombre de capacités spéciales :
-        <input type="number" id="${idPrefix}_nbCapacites" value="0" min="0" onchange="updateCapacities('${idPrefix}')">
-      </label>
-      <div id="${idPrefix}_capacites"></div>
+<label>Capacités spéciales (format : Titre : Description, une par ligne) :
+  <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')"></textarea>
+</label>
+<div id="${idPrefix}_capacites"></div>
+
+
+      // <label>Nombre de capacités spéciales :
+      //   <input type="number" id="${idPrefix}_nbCapacites" value="0" min="0" onchange="updateCapacities('${idPrefix}')">
+      // </label>
+      // <div id="${idPrefix}_capacites"></div>
 
       <label>Nombre d'invocations/compagnons :
         <input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onchange="updateCompanions('${idPrefix}')">
@@ -104,14 +108,16 @@
       <div id="${idPrefix}_compagnons"></div>
     </div>
     `;
-    }
+      }
 
-    function updateCapacities(prefix) {
-      const nb = parseInt(document.getElementById(`${prefix}_nbCapacites`).value);
-      const container = document.getElementById(`${prefix}_capacites`);
-      container.innerHTML = '';
-      for (let i = 0; i < nb; i++) {
-        container.innerHTML += `
+      function updateCapacities(prefix) {
+        const nb = parseInt(
+          document.getElementById(`${prefix}_nbCapacites`).value
+        );
+        const container = document.getElementById(`${prefix}_capacites`);
+        container.innerHTML = "";
+        for (let i = 0; i < nb; i++) {
+          container.innerHTML += `
         <div class="capacite-container">
           <label><strong>Capacité ${i + 1}</strong></label>
           <label>Titre : <input type="text" class="${prefix}_titreCapacite"></label>
@@ -129,15 +135,52 @@
           </label>
         </div>
       `;
+        }
       }
-    }
 
-    function updateCompanions(prefix) {
-      const nb = parseInt(document.getElementById(`${prefix}_nbCompagnons`).value);
-      const container = document.getElementById(`${prefix}_compagnons`);
-      container.innerHTML = '';
-      for (let i = 0; i < nb; i++) {
-        container.innerHTML += `
+      function parseCapacites(prefix) {
+        const input = document.getElementById(
+          `${prefix}_capacites_input`
+        ).value;
+        const container = document.getElementById(`${prefix}_capacites`);
+        container.innerHTML = ""; // Reset
+
+        const lines = input.split("\n").filter((l) => l.trim() !== "");
+
+        lines.forEach((line, index) => {
+          const parts = line.split(":");
+          const titre = parts[0]?.trim() || `Capacité ${index + 1}`;
+          const description = parts[1]?.trim() || "";
+
+          container.innerHTML += `
+      <div class="capacite-container">
+        <input type="hidden" class="${prefix}_titreCapacite" value="${titre}">
+        <input type="hidden" class="${prefix}_descriptionCapacite" value="${description}">
+        <p><strong><em>${titre}</em></strong> : ${description}</p>
+        <label>État :
+          <select class="${prefix}_classeCapacite">
+            <option value="capacité_spéciale">Neutre</option>
+            <option value="capacité_spéciale active">Active</option>
+            <option value="capacité_spéciale passive">Passive</option>
+            <option value="capacité_spéciale bloquée">Bloquée</option>
+            <option value="capacité_spéciale utilisée">Utilisée</option>
+            <option value="capacité_spéciale annulée">Annulée</option>
+            <option value="capacité_spéciale inactive">Inactive</option>
+          </select>
+        </label>
+      </div>
+    `;
+        });
+      }
+
+      function updateCompanions(prefix) {
+        const nb = parseInt(
+          document.getElementById(`${prefix}_nbCompagnons`).value
+        );
+        const container = document.getElementById(`${prefix}_compagnons`);
+        container.innerHTML = "";
+        for (let i = 0; i < nb; i++) {
+          container.innerHTML += `
         <div class="companion-container">
           <h4>Invocation/Compagnon ${i + 1}</h4>
           <label>Nom :
@@ -177,15 +220,17 @@
           <div class="${prefix}_comp_capacites${i}"></div>
         </div>
       `;
+        }
       }
-    }
 
-    function updateCapacitiesForCompanion(input, prefix, index) {
-      const nb = parseInt(input.value);
-      const container = document.querySelector(`.${prefix}_comp_capacites${index}`);
-      container.innerHTML = '';
-      for (let i = 0; i < nb; i++) {
-        container.innerHTML += `
+      function updateCapacitiesForCompanion(input, prefix, index) {
+        const nb = parseInt(input.value);
+        const container = document.querySelector(
+          `.${prefix}_comp_capacites${index}`
+        );
+        container.innerHTML = "";
+        for (let i = 0; i < nb; i++) {
+          container.innerHTML += `
         <div class="capacite-container">
           <label>Titre : <input type="text" class="${prefix}_comp${index}_titreCapacite"></label>
           <label>Description : <input type="text" class="${prefix}_comp${index}_descriptionCapacite"></label>
@@ -202,110 +247,141 @@
           </label>
         </div>
       `;
+        }
       }
-    }
 
-    function extractCharacter(prefix) {
-      let html = `
-      Vitesse de ${document.getElementById(`${prefix}_nom`).value} : <strong class="vitesse">${document.getElementById(`${prefix}_vitesse`).value}</strong>
-<strong class="${document.getElementById(`${prefix}_classe`).value}">${document.getElementById(`${prefix}_nom`).value}</strong> : 
-<strong class="vitalité">${document.getElementById(`${prefix}_vitalite`).value}</strong><br>
-<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${document.getElementById(`${prefix}_vitesse`).value}</strong><br>
+      function extractCharacter(prefix) {
+        let html = `
+      Vitesse de ${
+        document.getElementById(`${prefix}_nom`).value
+      } : <strong class="vitesse">${
+          document.getElementById(`${prefix}_vitesse`).value
+        }</strong>
+<strong class="${document.getElementById(`${prefix}_classe`).value}">${
+          document.getElementById(`${prefix}_nom`).value
+        }</strong> : 
+<strong class="vitalité">${
+          document.getElementById(`${prefix}_vitalite`).value
+        }</strong><br>
+<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
+          document.getElementById(`${prefix}_vitesse`).value
+        }</strong><br>
 `;
 
-      if (document.getElementById(`${prefix}_corrompu`).checked) {
-        html += `<span class="bestiaire-champ">Absorption</span> : <strong class="dégâts">${document.getElementById(`${prefix}_absorption`).value}%</strong><br>`;
-      }
+        if (document.getElementById(`${prefix}_corrompu`).checked) {
+          html += `<span class="bestiaire-champ">Absorption</span> : <strong class="dégâts">${
+            document.getElementById(`${prefix}_absorption`).value
+          }%</strong><br>`;
+        }
 
-      html += `
-<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${document.getElementById(`${prefix}_degats`).value}</strong><br>
+        html += `
+<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${
+          document.getElementById(`${prefix}_degats`).value
+        }</strong><br>
 <span class="bestiaire-champ">Capacités spéciales</span> :
 <ul>
 `;
 
-      const titres = Array.from(document.getElementsByClassName(`${prefix}_titreCapacite`));
-      const descs = Array.from(document.getElementsByClassName(`${prefix}_descriptionCapacite`));
-      const classes = Array.from(document.getElementsByClassName(`${prefix}_classeCapacite`));
+        const titres = Array.from(
+          document.getElementsByClassName(`${prefix}_titreCapacite`)
+        );
+        const descs = Array.from(
+          document.getElementsByClassName(`${prefix}_descriptionCapacite`)
+        );
+        const classes = Array.from(
+          document.getElementsByClassName(`${prefix}_classeCapacite`)
+        );
 
-      for (let i = 0; i < titres.length; i++) {
-        html += `<li class="${classes[i].value}"><em>${titres[i].value}</em> : ${descs[i].value}</li>\n`;
-      }
+        for (let i = 0; i < titres.length; i++) {
+          html += `<li class="${classes[i].value}"><em>${titres[i].value}</em> : ${descs[i].value}</li>\n`;
+        }
 
-      html += `</ul>`;
+        html += `</ul>`;
 
-      const noms = document.querySelectorAll(`.${prefix}_comp_nom`);
-      const races = document.querySelectorAll(`.${prefix}_comp_race`);
-      noms.forEach((compNom, idx) => {
-        const race = document.querySelectorAll(`.${prefix}_comp_race`)[idx]?.value || 'Compagnon'; // Sélectionner la classe pour chaque compagnon
-        const vit = document.querySelectorAll(`.${prefix}_comp_vitalite`)[idx].value;
-        const vitess = document.querySelectorAll(`.${prefix}_comp_vitesse`)[idx].value;
-        const deg = document.querySelectorAll(`.${prefix}_comp_degats`)[idx].value;
+        const noms = document.querySelectorAll(`.${prefix}_comp_nom`);
+        const races = document.querySelectorAll(`.${prefix}_comp_race`);
+        noms.forEach((compNom, idx) => {
+          const race =
+            document.querySelectorAll(`.${prefix}_comp_race`)[idx]?.value ||
+            "Compagnon"; // Sélectionner la classe pour chaque compagnon
+          const vit = document.querySelectorAll(`.${prefix}_comp_vitalite`)[idx]
+            .value;
+          const vitess = document.querySelectorAll(`.${prefix}_comp_vitesse`)[
+            idx
+          ].value;
+          const deg = document.querySelectorAll(`.${prefix}_comp_degats`)[idx]
+            .value;
 
-        html += `
+          html += `
 <strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong><br>
 <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong><br>
 <span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong><br>
 <span class="bestiaire-champ">Capacités spéciales</span> :
 <ul>`;
 
+          const comp_titles = document.querySelectorAll(
+            `.${prefix}_comp${idx}_titreCapacite`
+          );
+          const comp_descs = document.querySelectorAll(
+            `.${prefix}_comp${idx}_descriptionCapacite`
+          );
+          const comp_classes = document.querySelectorAll(
+            `.${prefix}_comp${idx}_classeCapacite`
+          );
 
-        const comp_titles = document.querySelectorAll(`.${prefix}_comp${idx}_titreCapacite`);
-        const comp_descs = document.querySelectorAll(`.${prefix}_comp${idx}_descriptionCapacite`);
-        const comp_classes = document.querySelectorAll(`.${prefix}_comp${idx}_classeCapacite`);
+          for (let j = 0; j < comp_titles.length; j++) {
+            html += `<li class="${comp_classes[j].value}"><em>${comp_titles[j].value}</em> : ${comp_descs[j].value}</li>\n`;
+          }
 
-        for (let j = 0; j < comp_titles.length; j++) {
-          html += `<li class="${comp_classes[j].value}"><em>${comp_titles[j].value}</em> : ${comp_descs[j].value}</li>\n`;
-        }
+          html += "</ul>";
+        });
 
-        html += '</ul>';
-      });
+        return html;
+      }
 
-      return html;
-    }
+      function calculerVitesseTotale(prefix) {
+        let totalVitesse = parseInt(
+          document.getElementById(`${prefix}_vitesse`).value || 0
+        );
+        const compagnons = document.querySelectorAll(`.${prefix}_comp_vitesse`);
+        compagnons.forEach((v) => (totalVitesse += parseInt(v.value || 0)));
+        return totalVitesse;
+      }
 
-    function calculerVitesseTotale(prefix) {
-      let totalVitesse = parseInt(document.getElementById(`${prefix}_vitesse`).value || 0);
-      const compagnons = document.querySelectorAll(`.${prefix}_comp_vitesse`);
-      compagnons.forEach(v => totalVitesse += parseInt(v.value || 0));
-      return totalVitesse;
-    }
+      function genererHTML() {
+        const perso1Nom = document.getElementById("p1_nom").value || "P1";
+        const perso2Nom = document.getElementById("p2_nom").value || "P2";
 
+        const vitesse1 = calculerVitesseTotale("p1");
+        const vitesse2 = calculerVitesseTotale("p2");
 
-    function genererHTML() {
-      const perso1Nom = document.getElementById('p1_nom').value || 'P1';
-      const perso2Nom = document.getElementById('p2_nom').value || 'P2';
+        const commence = vitesse1 >= vitesse2 ? perso1Nom : perso2Nom;
 
-      const vitesse1 = calculerVitesseTotale('p1');
-      const vitesse2 = calculerVitesseTotale('p2');
-
-      const commence = vitesse1 >= vitesse2 ? perso1Nom : perso2Nom;
-
-      const header = `
+        const header = `
 <div class="titre">${perso1Nom} contre ${perso2Nom}</div>
 <em>${commence} commence le combat</em>
 `;
 
-      const perso1 = extractCharacter('p1');
-      const perso2 = extractCharacter('p2');
+        const perso1 = extractCharacter("p1");
+        const perso2 = extractCharacter("p2");
 
-      document.getElementById('resultat').value = `${header}\n\n${perso1}\n<div class="combat-séparation">Contre</div>\n${perso2}`;
-    }
+        document.getElementById(
+          "resultat"
+        ).value = `${header}\n\n${perso1}\n<div class="combat-séparation">Contre</div>\n${perso2}`;
+      }
 
+      function toggleAbsorption(prefix) {
+        const bloc = document.getElementById(`${prefix}_absorptionBloc`);
+        const isChecked = document.getElementById(`${prefix}_corrompu`).checked;
+        bloc.style.display = isChecked ? "block" : "none";
+      }
 
-    function toggleAbsorption(prefix) {
-      const bloc = document.getElementById(`${prefix}_absorptionBloc`);
-      const isChecked = document.getElementById(`${prefix}_corrompu`).checked;
-      bloc.style.display = isChecked ? 'block' : 'none';
-    }
-
-    // Inject forms
-    document.getElementById('combat-form').innerHTML = `
-    ${createCharacterForm('p1', 'Personnage 1')}
-    ${createCharacterForm('p2', 'Personnage 2')}
+      // Inject forms
+      document.getElementById("combat-form").innerHTML = `
+    ${createCharacterForm("p1", "Personnage 1")}
+    ${createCharacterForm("p2", "Personnage 2")}
     <button onclick="genererHTML()">Générer le Code HTML</button>
   `;
-  </script>
-
-</body>
-
+    </script>
+  </body>
 </html>
