@@ -118,62 +118,62 @@
 
       function createCharacterForm(idPrefix, label) {
         return `
-          <div class="bloc">
-            <h3>${label}</h3>
-            <label>Nom :
-              <input type="text" id="${idPrefix}_nom">
-            </label>
-            <label>Race :
-              <select id="${idPrefix}_classe">
-              <option value="abyssal">Abyssal</option>
-              <option value="djöllfulin">Djöllfulin</option>
-              <option value="elfe">Elfe</option>
-              <option value="entomothrope">Entomothrope</option>
-              <option value="géant">Géant</option>
-              <option value="humain">Humain</option>
-              <option value="hybride">Hybride</option>
-              <option value="naga">Naga</option>
-              <option value="nain">Nain</option>
-              <option value="orc">Orc</option>
-              <option value="stryge-blanc">Stryge Blanc</option>
-              <option value="stryge-noir">Stryge Noir</option>
-              <option value="thérianthrope">Thérianthrope</option>
-              <option value="vampire">Vampire</option>
-              </select>
-            </label>
+<div class="bloc">
+<h3>${label}</h3>
+<label>Nom :
+<input type="text" id="${idPrefix}_nom">
+</label>
+<label>Race :
+<select id="${idPrefix}_classe">
+<option value="abyssal">Abyssal</option>
+<option value="djöllfulin">Djöllfulin</option>
+<option value="elfe">Elfe</option>
+<option value="entomothrope">Entomothrope</option>
+<option value="géant">Géant</option>
+<option value="humain">Humain</option>
+<option value="hybride">Hybride</option>
+<option value="naga">Naga</option>
+<option value="nain">Nain</option>
+<option value="orc">Orc</option>
+<option value="stryge-blanc">Stryge Blanc</option>
+<option value="stryge-noir">Stryge Noir</option>
+<option value="thérianthrope">Thérianthrope</option>
+<option value="vampire">Vampire</option>
+</select>
+</label>
 
-            <label>Vitalité :
-              <input type="number" id="${idPrefix}_vitalite">
-            </label>
-            <label>Vitesse :
-              <input type="number" id="${idPrefix}_vitesse">
-            </label>
-            <label>
-        <input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
-      </label>
-      <div id="${idPrefix}_absorptionBloc" style="display: none;">
-        <label>Absorption (%) :
-          <input type="number" id="${idPrefix}_absorption" value="0">
-        </label>
-      </div>
-            <label>Dégâts :
-              <input type="number" id="${idPrefix}_degats">
-            </label>
+<label>Vitalité :
+<input type="number" id="${idPrefix}_vitalite">
+</label>
+<label>Vitesse :
+<input type="number" id="${idPrefix}_vitesse">
+</label>
+<label>
+<input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
+</label>
+<div id="${idPrefix}_absorptionBloc" style="display: none;">
+<label>Absorption (%) :
+<input type="number" id="${idPrefix}_absorption" value="0">
+</label>
+</div>
+<label>Dégâts :
+<input type="number" id="${idPrefix}_degats">
+</label>
 
-      <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
-        <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
-         Rapidité : permet d'attaquer à deux reprises.
-         Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
-         Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
-      </label>
-      <div id="${idPrefix}_capacites"></div>
+<label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+<textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
+Rapidité : permet d'attaquer à deux reprises.
+Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
+</label>
+<div id="${idPrefix}_capacites"></div>
 
-            <label>Nombre d'invocations :
-              <input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onchange="updateCompanions('${idPrefix}')">
-            </label>
-            <div id="${idPrefix}_compagnons"></div>
-          </div>
-          `;
+<label>Nombre d'invocations :
+<input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onchange="updateCompanions('${idPrefix}')">
+</label>
+<div id="${idPrefix}_compagnons"></div>
+</div>
+`;
       }
 
       function parseCapacites(prefix) {
@@ -191,23 +191,23 @@
           const description = parts[1]?.trim() || "";
 
           container.innerHTML += `
-            <div class="capacite-container">
-              <input type="hidden" class="${prefix}_titreCapacite" value="${titre}">
-              <input type="hidden" class="${prefix}_descriptionCapacite" value="${description}">
-              <p><strong><em>${titre}</em></strong> : ${description}</p>
-              <label>État :
-                <select class="${prefix}_classeCapacite">
-                  <option value="capacité_spéciale">Neutre</option>
-                  <option value="capacité_spéciale active">Active</option>
-                  <option value="capacité_spéciale passive">Passive</option>
-                  <option value="capacité_spéciale bloquée">Bloquée</option>
-                  <option value="capacité_spéciale utilisée">Utilisée</option>
-                  <option value="capacité_spéciale annulée">Annulée</option>
-                  <option value="capacité_spéciale inactive">Inactive</option>
-                </select>
-              </label>
-            </div>
-          `;
+<div class="capacite-container">
+<input type="hidden" class="${prefix}_titreCapacite" value="${titre}">
+<input type="hidden" class="${prefix}_descriptionCapacite" value="${description}">
+<p><strong><em>${titre}</em></strong> : ${description}</p>
+<label>État :
+<select class="${prefix}_classeCapacite">
+<option value="capacité_spéciale">Neutre</option>
+<option value="capacité_spéciale active">Active</option>
+<option value="capacité_spéciale passive">Passive</option>
+<option value="capacité_spéciale bloquée">Bloquée</option>
+<option value="capacité_spéciale utilisée">Utilisée</option>
+<option value="capacité_spéciale annulée">Annulée</option>
+<option value="capacité_spéciale inactive">Inactive</option>
+</select>
+</label>
+</div>
+`;
         });
       }
 
@@ -219,104 +219,97 @@
         container.innerHTML = "";
         for (let i = 0; i < nb; i++) {
           container.innerHTML += `
-              <div class="companion-container">
-                <h4>Invocation/Compagnon ${i + 1}</h4>
-                <label>Nom :
-                  <input type="text" class="${prefix}_comp_nom">
-                </label>
-                   <label>Race :
-              <select class="${prefix}_comp_race">
-              <option value="abyssal">Abyssal</option>
-              <option value="djöllfulin">Djöllfulin</option>
-              <option value="elfe">Elfe</option>
-              <option value="entomothrope">Entomothrope</option>
-              <option value="géant">Géant</option>
-              <option value="humain">Humain</option>
-              <option value="hybride">Hybride</option>
-              <option value="naga">Naga</option>
-              <option value="nain">Nain</option>
-              <option value="orc">Orc</option>
-              <option value="stryge-blanc">Stryge Blanc</option>
-              <option value="stryge-noir">Stryge Noir</option>
-              <option value="thérianthrope">Thérianthrope</option>
-              <option value="vampire">Vampire</option>
-              <option value="invocation">Invocation</option>
-              </select>
-            </label>
-                <label>Vitalité :
-                  <input type="number" class="${prefix}_comp_vitalite">
-                </label>
-                <label>Vitesse :
-                  <input type="number" class="${prefix}_comp_vitesse">
-                </label>
-                <label>Dégâts :
-                  <input type="number" class="${prefix}_comp_degats">
-                </label>
-                      <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
-        <textarea id="${prefix}_capacites_input" oninput="parseCapacites('${prefix}')" placeholder="EXEMPLE
-         Rapidité : permet d'attaquer à deux reprises.
-         Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
-         Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
-      </label>
-      <div id="${prefix}_capacites"></div>
-              </div>
-            `;
+<div class="companion-container">
+<h4>Invocation ${i + 1}</h4>
+<label>Nom :
+<input type="text" class="${prefix}_comp_nom">
+</label>
+<label>Race :
+<select class="${prefix}_comp_race">
+<option value="invocation">Invocation</option>
+</select>
+</label>
+<label>Vitalité :
+<input type="number" class="${prefix}_comp_vitalite">
+</label>
+<label>Vitesse :
+<input type="number" class="${prefix}_comp_vitesse">
+</label>
+<label>Dégâts :
+<input type="number" class="${prefix}_comp_degats">
+</label>
+<label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+<textarea id="${prefix}_comp${i}_capacites_input" oninput="parseCapacitesInvocations('${prefix}', ${i})" placeholder="EXEMPLE
+Rapidité : permet d'attaquer à deux reprises.
+Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
+</label>
+<div id="${prefix}_comp${i}_capacites"></div>
+</div>
+`;
         }
       }
 
-      function updateCapacitiesForCompanion(input, prefix, index) {
-        const nb = parseInt(input.value);
-        const container = document.querySelector(
-          `.${prefix}_comp_capacites${index}`
+      function parseCapacitesInvocations(prefix, idx) {
+        const input = document.getElementById(
+          `${prefix}_comp${idx}_capacites_input`
+        ).value;
+        const container = document.getElementById(
+          `${prefix}_comp${idx}_capacites`
         );
-        container.innerHTML = "";
-        for (let i = 0; i < nb; i++) {
+        container.innerHTML = ""; // Reset
+
+        const lines = input.split("\n").filter((l) => l.trim() !== "");
+
+        lines.forEach((line, index) => {
+          const parts = line.split(":");
+          const titre = parts[0]?.trim() || `Capacité ${index + 1}`;
+          const description = parts[1]?.trim() || "";
+
           container.innerHTML += `
-              <div class="capacite-container">
-                <label>Titre : <input type="text" class="${prefix}_comp${index}_titreCapacite"></label>
-                <label>Description : <input type="text" class="${prefix}_comp${index}_descriptionCapacite"></label>
-                <label>Etat :
-                  <select class="${prefix}_comp${index}_classeCapacite">
-                    <option value="capacité_spéciale">Neutre</option>
-                    <option value="capacité_spéciale active">Active</option>
-                    <option value="capacité_spéciale passive">Passive</option>
-                    <option value="capacité_spéciale bloquée">Bloquée</option>
-                    <option value="capacité_spéciale utilisée">Utilisée</option>
-                    <option value="capacité_spéciale annulée">Annulée</option>
-                    <option value="capacité_spéciale inactive">Inactive</option>
-                  </select>
-                </label>
-              </div>
-            `;
-        }
+<div class="capacite-container">
+<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${titre}">
+<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${description}">
+<p><strong><em>${titre}</em></strong> : ${description}</p>
+<label>État :
+<select class="${prefix}_comp${idx}_classeCapacite">
+<option value="capacité_spéciale">Neutre</option>
+<option value="capacité_spéciale active">Active</option>
+<option value="capacité_spéciale passive">Passive</option>
+<option value="capacité_spéciale bloquée">Bloquée</option>
+<option value="capacité_spéciale utilisée">Utilisée</option>
+<option value="capacité_spéciale annulée">Annulée</option>
+<option value="capacité_spéciale inactive">Inactive</option>
+</select>
+</label>
+</div>
+`;
+        });
       }
 
       function extractCharacter(prefix) {
-        let html = `
-      <strong class="${document.getElementById(`${prefix}_classe`).value}">${
+        let html = `\n<strong class="${
+          document.getElementById(`${prefix}_classe`).value
+        }">${
           document.getElementById(`${prefix}_nom`).value
-        }</strong> :
-      <strong class="vitalité">${
-        document.getElementById(`${prefix}_vitalite`).value
-      }</strong><br>
-      <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
-        document.getElementById(`${prefix}_vitesse`).value
-      }</strong><br>
-      `;
+        }</strong> : <strong class="vitalité">${
+          document.getElementById(`${prefix}_vitalite`).value
+        }</strong>
+<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
+          document.getElementById(`${prefix}_vitesse`).value
+        }</strong>
+`;
 
         if (document.getElementById(`${prefix}_corrompu`).checked) {
           html += `<span class="bestiaire-champ">Absorption</span> : <strong class="dégâts">${
             document.getElementById(`${prefix}_absorption`).value
-          }%</strong><br>`;
+          }%</strong>\n`;
         }
 
-        html += `
-      <span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${
-        document.getElementById(`${prefix}_degats`).value
-      }</strong><br>
-      <span class="bestiaire-champ">Capacités spéciales</span> :
-      <ul>
-      `;
+        html += `<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${
+          document.getElementById(`${prefix}_degats`).value
+        }</strong>
+<span class="bestiaire-champ">Capacités spéciales</span> :`;
 
         const titres = Array.from(
           document.getElementsByClassName(`${prefix}_titreCapacite`)
@@ -328,11 +321,15 @@
           document.getElementsByClassName(`${prefix}_classeCapacite`)
         );
 
-        for (let i = 0; i < titres.length; i++) {
-          html += `<li class="${classes[i].value}"><em>${titres[i].value}</em> : ${descs[i].value}</li>\n`;
+        if (titres.length > 0) {
+          html += `\n<ul>`;
+          for (let i = 0; i < titres.length; i++) {
+            html += `<li class="${classes[i].value}"><em>${titres[i].value}</em> : ${descs[i].value}</li>\n`;
+          }
+          html += `</ul>`;
+        } else {
+          html += ` <em>Aucune capacité spéciale</em>`;
         }
-
-        html += `</ul>`;
 
         const noms = document.querySelectorAll(`.${prefix}_comp_nom`);
         const races = document.querySelectorAll(`.${prefix}_comp_race`);
@@ -348,11 +345,11 @@
           const deg = document.querySelectorAll(`.${prefix}_comp_degats`)[idx]
             .value;
 
-          html += `
-      <strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong><br>
-      <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong><br>
-      <span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong><br>
-      <span class="bestiaire-champ">Capacités spéciales</span> :`;
+          html += `\n
+<strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong>
+<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong>
+<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong>
+<span class="bestiaire-champ">Capacités spéciales</span> : `;
 
           const comp_titles = document.querySelectorAll(
             `.${prefix}_comp${idx}_titreCapacite`
@@ -364,17 +361,15 @@
             `.${prefix}_comp${idx}_classeCapacite`
           );
 
-          if (
-            document.querySelectorAll(`.${prefix}_comp_capacites${idx}`)
-              .length > 0
-          ) {
-            html += `<ul>`;
-            for (let j = 0; j < comp_titles.length; j++) {
-              html += `<li class="${comp_classes[j].value}"><em>${comp_titles[j].value}</em> : ${comp_descs[j].value}</li>\n`;
+          // Correction de "lenght" en "length"
+          if (comp_titles.length > 0) {
+            html += `\n<ul>`;
+            for (let i = 0; i < comp_titles.length; i++) {
+              html += `<li class="${comp_classes[i].value}"><em>${comp_titles[i].value}</em> : ${comp_descs[i].value}</li>\n`;
             }
-            html += "</ul>";
+            html += `</ul>`;
           } else {
-            html += `<em>Aucune capacité spéciale</em>`;
+            html += ` <em>Aucune capacité spéciale</em>`;
           }
         });
         return html;
@@ -396,36 +391,34 @@
         let vitesseGroupe1 = 0;
         let vitesseGroupe2 = 0;
 
-        let htmlG1 = `<div class='groupe'>`;
+        let htmlG1 = ``;
         for (let i = 0; i < nb1; i++) {
           const prefix = `g1_p${i}`;
-          htmlG1 += extractCharacter(prefix) + "<br>";
+          htmlG1 += extractCharacter(prefix) + "\n";
           vitesseGroupe1 += calculerVitesseTotale(prefix);
         }
-        htmlG1 += "</div>";
 
-        let vitesseG1 = `vitesse de Groupe 1 : ${vitesseGroupe1}`;
+        let vitesseG1 = `Vitesse de Groupe 1 : ${vitesseGroupe1}`;
 
-        let htmlG2 = `<div class='groupe'>`;
+        let htmlG2 = ``;
         for (let i = 0; i < nb2; i++) {
           const prefix = `g2_p${i}`;
-          htmlG2 += extractCharacter(prefix) + "<br>";
+          htmlG2 += extractCharacter(prefix) + "\n";
           vitesseGroupe2 += calculerVitesseTotale(prefix);
         }
-        htmlG2 += "</div>";
 
-        let vitesseG2 = `vitesse de Groupe 2 : ${vitesseGroupe2}`;
+        let vitesseG2 = `Vitesse de Groupe 2 : ${vitesseGroupe2}`;
 
         const commence =
           vitesseGroupe1 >= vitesseGroupe2 ? "Groupe 1" : "Groupe 2";
 
         const header = `<div class="titre">Groupe 1 contre Groupe 2</div>
-        
+
 <em>${commence} commence le combat</em>`;
 
         document.getElementById(
           "resultat"
-        ).value = `${header}\n\n${vitesseG1}\n\n${htmlG1}\n<div class="combat-séparation">Contre</div>\n${vitesseG2}\n\n${htmlG2}`;
+        ).value = `${header}\n\n${vitesseG1}\n${htmlG1}\n\n<div class="combat-séparation">Contre</div>\n\n${vitesseG2}\n${htmlG2}`;
       }
 
       function toggleAbsorption(prefix) {
