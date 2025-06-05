@@ -82,8 +82,46 @@
           "#combat-form input, #combat-form select, #combat-form textarea"
         );
         inputs.forEach((input) => {
-          existingData[input.id] =
-            input.type === "checkbox" ? input.checked : input.value;
+          if (input.id) {
+            existingData[input.id] =
+              input.type === "checkbox" ? input.checked : input.value;
+          }
+        });
+
+        // Sauvegarder les données des invocations
+        const existingCompanions = {};
+        const groups = ["g1_p", "g2_p"];
+        const maxPersonnes = Math.max(nb1, nb2);
+
+        groups.forEach((group) => {
+          for (let i = 0; i < maxPersonnes; i++) {
+            const prefix = `${group}${i}`;
+            const compContainer = document.getElementById(
+              `${prefix}_compagnons`
+            );
+            if (compContainer) {
+              const companions = [];
+              const currentCompanions = compContainer.getElementsByClassName(
+                "companion-container"
+              );
+              Array.from(currentCompanions).forEach((comp, idx) => {
+                companions.push({
+                  nom: comp.querySelector(`.${prefix}_comp_nom`)?.value || "",
+                  race: comp.querySelector(`.${prefix}_comp_race`)?.value || "",
+                  vitalite:
+                    comp.querySelector(`.${prefix}_comp_vitalite`)?.value || "",
+                  vitesse:
+                    comp.querySelector(`.${prefix}_comp_vitesse`)?.value || "",
+                  degats:
+                    comp.querySelector(`.${prefix}_comp_degats`)?.value || "",
+                  capacites:
+                    comp.querySelector(`#${prefix}_comp${idx}_capacites_input`)
+                      ?.value || "",
+                });
+              });
+              existingCompanions[prefix] = companions;
+            }
+          }
         });
 
         // 2. Regénérer les formulaires
@@ -107,10 +145,49 @@
           if (el) {
             if (el.type === "checkbox") {
               el.checked = existingData[id];
-              if (el.onchange) el.onchange(); // Appeler toggleAbsorption si besoin
+              if (el.onchange) el.onchange();
             } else {
               el.value = existingData[id];
-              if (el.oninput) el.oninput(); // Mettre à jour les capacités automatiquement
+              if (el.oninput) el.oninput();
+            }
+          }
+        }
+
+        // 4. Restaurer les invocations
+        for (const prefix in existingCompanions) {
+          const nbCompagnonsEl = document.getElementById(
+            `${prefix}_nbCompagnons`
+          );
+          if (nbCompagnonsEl) {
+            nbCompagnonsEl.value = existingCompanions[prefix].length;
+            updateCompanions(prefix);
+
+            // Restaurer les données des invocations
+            const container = document.getElementById(`${prefix}_compagnons`);
+            if (container) {
+              existingCompanions[prefix].forEach((comp, idx) => {
+                const newContainer = container.children[idx];
+                if (newContainer) {
+                  newContainer.querySelector(`.${prefix}_comp_nom`).value =
+                    comp.nom;
+                  newContainer.querySelector(`.${prefix}_comp_race`).value =
+                    comp.race;
+                  newContainer.querySelector(`.${prefix}_comp_vitalite`).value =
+                    comp.vitalite;
+                  newContainer.querySelector(`.${prefix}_comp_vitesse`).value =
+                    comp.vitesse;
+                  newContainer.querySelector(`.${prefix}_comp_degats`).value =
+                    comp.degats;
+
+                  const capacitesInput = newContainer.querySelector(
+                    `#${prefix}_comp${idx}_capacites_input`
+                  );
+                  if (capacitesInput) {
+                    capacitesInput.value = comp.capacites;
+                    parseCapacitesInvocations(prefix, idx);
+                  }
+                }
+              });
             }
           }
         }
@@ -161,6 +238,7 @@
 </label>
 
 <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+<button type="button" onclick="ajouterSpoiler('${idPrefix}_capacites_input')">Ajouter Spoiler</button>
 <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
 Rapidité : permet d'attaquer à deux reprises.
 Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
@@ -182,6 +260,15 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
 `;
       }
 
+      function escapeHtml(text) {
+        return text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
       function parseCapacites(prefix) {
         const input = document.getElementById(
           `${prefix}_capacites_input`
@@ -189,18 +276,70 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
         const container = document.getElementById(`${prefix}_capacites`);
         container.innerHTML = ""; // Reset
 
-        const lines = input.split("\n").filter((l) => l.trim() !== "");
+        // Séparer d'abord par les spoilers
+        const segments = input.split(/(\[spoiler\].*?\[\/spoiler\])/s);
+        let currentLines = [];
 
-        lines.forEach((line, index) => {
-          const parts = line.split(":");
-          const titre = parts[0]?.trim() || `Capacité ${index + 1}`;
-          const description = parts[1]?.trim() || "";
+        segments.forEach((segment) => {
+          if (segment.trim() === "") return;
 
-          container.innerHTML += `
+          if (segment.startsWith("[spoiler]")) {
+            // Traiter le contenu du spoiler comme un seul élément
+            const spoilerContent = segment
+              .replace("[spoiler]", "")
+              .replace("[/spoiler]", "")
+              .trim();
+
+            if (spoilerContent) {
+              currentLines.push(spoilerContent);
+            }
+          } else {
+            // Traiter les lignes normales et @not
+            const lines = segment.split("\n").filter((l) => l.trim() !== "");
+            let tempLines = [];
+
+            for (let i = 0; i < lines.length; i++) {
+              if (lines[i].trim() === "@not") {
+                // Si on trouve @not, on fusionne la ligne précédente avec la suivante
+                if (tempLines.length > 0 && i + 1 < lines.length) {
+                  const lastLine = tempLines.pop();
+                  tempLines.push(lastLine + "\n" + lines[i + 1]);
+                  i++; // Sauter la ligne suivante
+                }
+              } else {
+                tempLines.push(lines[i]);
+              }
+            }
+
+            currentLines.push(...tempLines);
+          }
+        });
+
+        currentLines.forEach((line, index) => {
+          // Nettoyer les éventuels @not restants
+          const cleanLine = line
+            .split("\n")
+            .filter((l) => l.trim() !== "@not")
+            .join("\n");
+
+          // Pour les lignes normales, ne prendre en compte que le premier ":"
+          const firstColonIndex = cleanLine.indexOf(":");
+          if (firstColonIndex !== -1) {
+            const titre = cleanLine.substring(0, firstColonIndex).trim();
+            const description = cleanLine.substring(firstColonIndex + 1).trim();
+
+            // Échapper les caractères spéciaux pour l'HTML
+            const escapedTitre = escapeHtml(titre);
+            const escapedDescription = escapeHtml(description);
+
+            container.innerHTML += `
 <div class="capacite-container">
-<input type="hidden" class="${prefix}_titreCapacite" value="${titre}">
-<input type="hidden" class="${prefix}_descriptionCapacite" value="${description}">
-<p><strong><em>${titre}</em></strong> : ${description}</p>
+<input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
+<input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
+<p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription.replace(
+              /\n/g,
+              "<br>"
+            )}</p>
 <label>État :
 <select class="${prefix}_classeCapacite">
 <option value="capacité_spéciale">Neutre</option>
@@ -214,6 +353,33 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
 </label>
 </div>
 `;
+          } else {
+            // Si pas de ":", traiter comme une capacité sans titre
+            const escapedLine = escapeHtml(cleanLine);
+            container.innerHTML += `
+<div class="capacite-container">
+<input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
+              index + 1
+            }">
+<input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
+<p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine.replace(
+              /\n/g,
+              "<br>"
+            )}</p>
+<label>État :
+<select class="${prefix}_classeCapacite">
+<option value="capacité_spéciale">Neutre</option>
+<option value="capacité_spéciale active">Active</option>
+<option value="capacité_spéciale passive">Passive</option>
+<option value="capacité_spéciale bloquée">Bloquée</option>
+<option value="capacité_spéciale utilisée">Utilisée</option>
+<option value="capacité_spéciale annulée">Annulée</option>
+<option value="capacité_spéciale inactive">Inactive</option>
+</select>
+</label>
+</div>
+`;
+          }
         });
       }
 
@@ -222,6 +388,28 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
           document.getElementById(`${prefix}_nbCompagnons`).value
         );
         const container = document.getElementById(`${prefix}_compagnons`);
+
+        // Sauvegarder les données existantes des invocations
+        const existingCompanions = [];
+        const currentCompanions = container.getElementsByClassName(
+          "companion-container"
+        );
+        Array.from(currentCompanions).forEach((comp, idx) => {
+          const companion = {
+            nom: comp.querySelector(`.${prefix}_comp_nom`)?.value || "",
+            race: comp.querySelector(`.${prefix}_comp_race`)?.value || "",
+            vitalite:
+              comp.querySelector(`.${prefix}_comp_vitalite`)?.value || "",
+            vitesse: comp.querySelector(`.${prefix}_comp_vitesse`)?.value || "",
+            degats: comp.querySelector(`.${prefix}_comp_degats`)?.value || "",
+            capacites:
+              comp.querySelector(`#${prefix}_comp${idx}_capacites_input`)
+                ?.value || "",
+          };
+          existingCompanions.push(companion);
+        });
+
+        // Générer le nouveau HTML
         container.innerHTML = "";
         for (let i = 0; i < nb; i++) {
           container.innerHTML += `
@@ -245,6 +433,7 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
 <input type="number" class="${prefix}_comp_degats">
 </label>
 <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+<button type="button" onclick="ajouterSpoiler('${prefix}_comp${i}_capacites_input')">Ajouter Spoiler</button>
 <textarea id="${prefix}_comp${i}_capacites_input" oninput="parseCapacitesInvocations('${prefix}', ${i})" placeholder="EXEMPLE
 Rapidité : permet d'attaquer à deux reprises.
 Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
@@ -254,6 +443,34 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
 </div>
 `;
         }
+
+        // Restaurer les données sauvegardées
+        existingCompanions.forEach((comp, idx) => {
+          if (idx < nb) {
+            // Ne restaurer que si l'invocation existe toujours
+            const newContainer = container.children[idx];
+            if (newContainer) {
+              newContainer.querySelector(`.${prefix}_comp_nom`).value =
+                comp.nom;
+              newContainer.querySelector(`.${prefix}_comp_race`).value =
+                comp.race;
+              newContainer.querySelector(`.${prefix}_comp_vitalite`).value =
+                comp.vitalite;
+              newContainer.querySelector(`.${prefix}_comp_vitesse`).value =
+                comp.vitesse;
+              newContainer.querySelector(`.${prefix}_comp_degats`).value =
+                comp.degats;
+
+              const capacitesInput = newContainer.querySelector(
+                `#${prefix}_comp${idx}_capacites_input`
+              );
+              if (capacitesInput) {
+                capacitesInput.value = comp.capacites;
+                parseCapacitesInvocations(prefix, idx);
+              }
+            }
+          }
+        });
       }
 
       function parseCapacitesInvocations(prefix, idx) {
@@ -265,18 +482,70 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
         );
         container.innerHTML = ""; // Reset
 
-        const lines = input.split("\n").filter((l) => l.trim() !== "");
+        // Séparer d'abord par les spoilers
+        const segments = input.split(/(\[spoiler\].*?\[\/spoiler\])/s);
+        let currentLines = [];
 
-        lines.forEach((line, index) => {
-          const parts = line.split(":");
-          const titre = parts[0]?.trim() || `Capacité ${index + 1}`;
-          const description = parts[1]?.trim() || "";
+        segments.forEach((segment) => {
+          if (segment.trim() === "") return;
 
-          container.innerHTML += `
+          if (segment.startsWith("[spoiler]")) {
+            // Traiter le contenu du spoiler comme un seul élément
+            const spoilerContent = segment
+              .replace("[spoiler]", "")
+              .replace("[/spoiler]", "")
+              .trim();
+
+            if (spoilerContent) {
+              currentLines.push(spoilerContent);
+            }
+          } else {
+            // Traiter les lignes normales et @not
+            const lines = segment.split("\n").filter((l) => l.trim() !== "");
+            let tempLines = [];
+
+            for (let i = 0; i < lines.length; i++) {
+              if (lines[i].trim() === "@not") {
+                // Si on trouve @not, on fusionne la ligne précédente avec la suivante
+                if (tempLines.length > 0 && i + 1 < lines.length) {
+                  const lastLine = tempLines.pop();
+                  tempLines.push(lastLine + "\n" + lines[i + 1]);
+                  i++; // Sauter la ligne suivante
+                }
+              } else {
+                tempLines.push(lines[i]);
+              }
+            }
+
+            currentLines.push(...tempLines);
+          }
+        });
+
+        currentLines.forEach((line, index) => {
+          // Nettoyer les éventuels @not restants
+          const cleanLine = line
+            .split("\n")
+            .filter((l) => l.trim() !== "@not")
+            .join("\n");
+
+          // Pour les lignes normales, ne prendre en compte que le premier ":"
+          const firstColonIndex = cleanLine.indexOf(":");
+          if (firstColonIndex !== -1) {
+            const titre = cleanLine.substring(0, firstColonIndex).trim();
+            const description = cleanLine.substring(firstColonIndex + 1).trim();
+
+            // Échapper les caractères spéciaux pour l'HTML
+            const escapedTitre = escapeHtml(titre);
+            const escapedDescription = escapeHtml(description);
+
+            container.innerHTML += `
 <div class="capacite-container">
-<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${titre}">
-<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${description}">
-<p><strong><em>${titre}</em></strong> : ${description}</p>
+<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
+<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
+<p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription.replace(
+              /\n/g,
+              "<br>"
+            )}</p>
 <label>État :
 <select class="${prefix}_comp${idx}_classeCapacite">
 <option value="capacité_spéciale">Neutre</option>
@@ -290,6 +559,33 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
 </label>
 </div>
 `;
+          } else {
+            // Si pas de ":", traiter comme une capacité sans titre
+            const escapedLine = escapeHtml(cleanLine);
+            container.innerHTML += `
+<div class="capacite-container">
+<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="Capacité ${
+              index + 1
+            }">
+<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedLine}">
+<p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine.replace(
+              /\n/g,
+              "<br>"
+            )}</p>
+<label>État :
+<select class="${prefix}_comp${idx}_classeCapacite">
+<option value="capacité_spéciale">Neutre</option>
+<option value="capacité_spéciale active">Active</option>
+<option value="capacité_spéciale passive">Passive</option>
+<option value="capacité_spéciale bloquée">Bloquée</option>
+<option value="capacité_spéciale utilisée">Utilisée</option>
+<option value="capacité_spéciale annulée">Annulée</option>
+<option value="capacité_spéciale inactive">Inactive</option>
+</select>
+</label>
+</div>
+`;
+          }
         });
       }
 
@@ -404,7 +700,12 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
           vitesseGroupe1 += calculerVitesseTotale(prefix);
         }
 
-        let vitesseG1 = `Vitesse de Groupe 1 : ${vitesseGroupe1}`;
+        let vitesseG1 =
+          nb1 > 1
+            ? `Vitesse de Groupe 1 : ${vitesseGroupe1}`
+            : `Vitesse de ${
+                document.getElementById("g1_p0_nom").value
+              } : ${vitesseGroupe1}`;
 
         let htmlG2 = ``;
         for (let i = 0; i < nb2; i++) {
@@ -413,12 +714,30 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
           vitesseGroupe2 += calculerVitesseTotale(prefix);
         }
 
-        let vitesseG2 = `Vitesse de Groupe 2 : ${vitesseGroupe2}`;
+        let vitesseG2 =
+          nb2 > 1
+            ? `Vitesse de Groupe 2 : ${vitesseGroupe2}`
+            : `Vitesse de ${
+                document.getElementById("g2_p0_nom").value
+              } : ${vitesseGroupe2}`;
 
         const commence =
           vitesseGroupe1 >= vitesseGroupe2 ? "Groupe 1" : "Groupe 2";
 
-        const header = `<div class="titre">Groupe 1 contre Groupe 2</div>
+        const headerTitle =
+          nb1 > 1 && nb2 > 1
+            ? "Groupe 1 contre Groupe 2"
+            : `${
+                nb1 === 1
+                  ? document.getElementById("g1_p0_nom").value
+                  : "Groupe 1"
+              } contre ${
+                nb2 === 1
+                  ? document.getElementById("g2_p0_nom").value
+                  : "Groupe 2"
+              }`;
+
+        const header = `<div class="titre">${headerTitle}</div>
 
 <em>${commence} commence le combat</em>`;
 
@@ -612,6 +931,29 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
               if (classes[i]) classes[i].value = c.etat;
             });
           }
+        }
+      }
+
+      function ajouterSpoiler(textareaId) {
+        const textarea = document.getElementById(textareaId);
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const texteSelectionne = textarea.value.substring(start, end);
+
+        if (start !== end) {
+          const nouveauTexte =
+            textarea.value.substring(0, start) +
+            "[spoiler]" +
+            texteSelectionne +
+            "[/spoiler]" +
+            textarea.value.substring(end);
+          textarea.value = nouveauTexte;
+
+          // Déclencher l'événement oninput pour mettre à jour le parsing
+          if (textarea.oninput) textarea.oninput();
+
+          // Replacer le curseur après le spoiler
+          textarea.setSelectionRange(end + 19, end + 19); // 19 = longueur des balises ajoutées
         }
       }
 
