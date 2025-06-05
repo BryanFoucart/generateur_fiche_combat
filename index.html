@@ -195,72 +195,72 @@
 
       function createCharacterForm(idPrefix, label) {
         return `
-<div class="bloc">
-<h3>${label}</h3>
-<label>Nom :
-<input type="text" id="${idPrefix}_nom">
-</label>
-<label>Race :
-<select id="${idPrefix}_classe">
-<option value="abyssal">Abyssal</option>
-<option value="djöllfulin">Djöllfulin</option>
-<option value="elfe">Elfe</option>
-<option value="entomothrope">Entomothrope</option>
-<option value="géant">Géant</option>
-<option value="humain">Humain</option>
-<option value="hybride">Hybride</option>
-<option value="naga">Naga</option>
-<option value="nain">Nain</option>
-<option value="orc">Orc</option>
-<option value="stryge-blanc">Stryge Blanc</option>
-<option value="stryge-noir">Stryge Noir</option>
-<option value="thérianthrope">Thérianthrope</option>
-<option value="vampire">Vampire</option>
-<option value="bestiaire-nom">Créature</option>
-<option value="boss">Boss</option>
-<option value="archi-boss">Archi-Boss</option>
-</select>
-</label>
+      <div class="bloc">
+      <h3>${label}</h3>
+      <label>Nom :
+      <input type="text" id="${idPrefix}_nom">
+      </label>
+      <label>Race :
+      <select id="${idPrefix}_classe">
+      <option value="abyssal">Abyssal</option>
+      <option value="djöllfulin">Djöllfulin</option>
+      <option value="elfe">Elfe</option>
+      <option value="entomothrope">Entomothrope</option>
+      <option value="géant">Géant</option>
+      <option value="humain">Humain</option>
+      <option value="hybride">Hybride</option>
+      <option value="naga">Naga</option>
+      <option value="nain">Nain</option>
+      <option value="orc">Orc</option>
+      <option value="stryge-blanc">Stryge Blanc</option>
+      <option value="stryge-noir">Stryge Noir</option>
+      <option value="thérianthrope">Thérianthrope</option>
+      <option value="vampire">Vampire</option>
+      <option value="bestiaire-nom">Créature</option>
+      <option value="boss">Boss</option>
+      <option value="archi-boss">Archi-Boss</option>
+      </select>
+      </label>
 
-<label>Vitalité :
-<input type="number" id="${idPrefix}_vitalite">
-</label>
-<label>Vitesse :
-<input type="number" id="${idPrefix}_vitesse">
-</label>
-<label>
-<input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
-</label>
-<div id="${idPrefix}_absorptionBloc" style="display: none;">
-<label>Absorption (%) :
-<input type="number" id="${idPrefix}_absorption" value="0">
-</label>
-</div>
-<label>Dégâts :
-<input type="number" id="${idPrefix}_degats">
-</label>
+      <label>Vitalité :
+      <input type="number" id="${idPrefix}_vitalite">
+      </label>
+      <label>Vitesse :
+      <input type="number" id="${idPrefix}_vitesse">
+      </label>
+      <label>
+      <input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
+      </label>
+      <div id="${idPrefix}_absorptionBloc" style="display: none;">
+      <label>Absorption (%) :
+      <input type="number" id="${idPrefix}_absorption" value="0">
+      </label>
+      </div>
+      <label>Dégâts :
+      <input type="number" id="${idPrefix}_degats">
+      </label>
 
-<label>Capacités spéciales (format : "Titre : Description", une par ligne) :
-<button type="button" onclick="ajouterSpoiler('${idPrefix}_capacites_input')">Ajouter Spoiler</button>
-<textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
-Rapidité : permet d'attaquer à deux reprises.
-Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
-Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
-</label>
-<div id="${idPrefix}_capacites"></div>
+      <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+      <button type="button" onclick="ajouterSpoiler('${idPrefix}_capacites_input')">Ajouter Spoiler</button>
+      <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
+      Rapidité : permet d'attaquer à deux reprises.
+      Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+      Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
+      </label>
+      <div id="${idPrefix}_capacites"></div>
 
-<label>Nombre d'invocations :
-<input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onchange="updateCompanions('${idPrefix}')">
-</label>
-<div id="${idPrefix}_compagnons"></div>
+      <label>Nombre d'invocations :
+      <input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onchange="updateCompanions('${idPrefix}')">
+      </label>
+      <div id="${idPrefix}_compagnons"></div>
 
-<div class="character-actions">
-<button onclick="exporterPersonnage('${idPrefix}')">Exporter ce personnage</button>
-<input type="file" id="${idPrefix}_import" accept=".json" onchange="importerPersonnage(event, '${idPrefix}')" style="display: none;">
-<button onclick="document.getElementById('${idPrefix}_import').click()">Importer un personnage</button>
-</div>
-</div>
-`;
+      <div class="character-actions">
+        <button onclick="exporterPersonnage('${idPrefix}')">Exporter ce personnage</button>
+        <input type="file" id="${idPrefix}_import" accept=".json" onchange="importerPersonnage(event, '${idPrefix}')" style="display: none;">
+        <button onclick="document.getElementById('${idPrefix}_import').click()">Importer un personnage</button>
+      </div>
+      </div>
+      `;
       }
 
       function escapeHtml(text) {
@@ -292,27 +292,7 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
               i++; // Sauter la ligne suivante
             }
           } else {
-            // Vérifier si la ligne contient un spoiler
-            const line = lines[i];
-            if (line.includes("[spoiler]") && line.includes("[/spoiler]")) {
-              // Si le spoiler est sur la même ligne, on l'ajoute tel quel
-              currentLines.push(line);
-            } else if (line.includes("[spoiler]")) {
-              // Si on trouve le début d'un spoiler, on cherche la fin
-              let spoilerContent = line;
-              let j = i + 1;
-              while (j < lines.length && !lines[j].includes("[/spoiler]")) {
-                spoilerContent += " " + lines[j];
-                j++;
-              }
-              if (j < lines.length) {
-                spoilerContent += " " + lines[j];
-                i = j; // Sauter les lignes traitées
-              }
-              currentLines.push(spoilerContent);
-            } else {
-              currentLines.push(line);
-            }
+            currentLines.push(lines[i]);
           }
         }
 
@@ -346,60 +326,50 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
 
             // Échapper les caractères spéciaux pour l'HTML
             const escapedTitre = escapeHtml(titre);
-            const escapedDescription = escapeHtml(description)
-              .replace("[spoiler]", "")
-              .replace("[/spoiler]", "");
+            const escapedDescription = escapeHtml(description);
 
             container.innerHTML += `
-<div class="capacite-container">
-<input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
-<input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
-<p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription.replace(
-              /\n/g,
-              "<br>"
-            )}</p>
-<label>État :
-<select class="${prefix}_classeCapacite">
-<option value="capacité_spéciale">Neutre</option>
-<option value="capacité_spéciale active">Active</option>
-<option value="capacité_spéciale passive">Passive</option>
-<option value="capacité_spéciale bloquée">Bloquée</option>
-<option value="capacité_spéciale utilisée">Utilisée</option>
-<option value="capacité_spéciale annulée">Annulée</option>
-<option value="capacité_spéciale inactive">Inactive</option>
-</select>
-</label>
-</div>
-`;
+      <div class="capacite-container">
+      <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
+      <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
+      <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
+      <label>État :
+      <select class="${prefix}_classeCapacite">
+      <option value="capacité_spéciale">Neutre</option>
+      <option value="capacité_spéciale active">Active</option>
+      <option value="capacité_spéciale passive">Passive</option>
+      <option value="capacité_spéciale bloquée">Bloquée</option>
+      <option value="capacité_spéciale utilisée">Utilisée</option>
+      <option value="capacité_spéciale annulée">Annulée</option>
+      <option value="capacité_spéciale inactive">Inactive</option>
+      </select>
+      </label>
+      </div>
+      `;
           } else {
             // Si pas de ":", traiter comme une capacité sans titre
-            const escapedLine = escapeHtml(cleanLine)
-              .replace("[spoiler]", "")
-              .replace("[/spoiler]", "");
+            const escapedLine = escapeHtml(cleanLine);
 
             container.innerHTML += `
-<div class="capacite-container">
-<input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
+      <div class="capacite-container">
+      <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
               index + 1
             }">
-<input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
-<p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine.replace(
-              /\n/g,
-              "<br>"
-            )}</p>
-<label>État :
-<select class="${prefix}_classeCapacite">
-<option value="capacité_spéciale">Neutre</option>
-<option value="capacité_spéciale active">Active</option>
-<option value="capacité_spéciale passive">Passive</option>
-<option value="capacité_spéciale bloquée">Bloquée</option>
-<option value="capacité_spéciale utilisée">Utilisée</option>
-<option value="capacité_spéciale annulée">Annulée</option>
-<option value="capacité_spéciale inactive">Inactive</option>
-</select>
-</label>
-</div>
-`;
+      <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
+      <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
+      <label>État :
+      <select class="${prefix}_classeCapacite">
+      <option value="capacité_spéciale">Neutre</option>
+      <option value="capacité_spéciale active">Active</option>
+      <option value="capacité_spéciale passive">Passive</option>
+      <option value="capacité_spéciale bloquée">Bloquée</option>
+      <option value="capacité_spéciale utilisée">Utilisée</option>
+      <option value="capacité_spéciale annulée">Annulée</option>
+      <option value="capacité_spéciale inactive">Inactive</option>
+      </select>
+      </label>
+      </div>
+      `;
           }
         });
       }
@@ -434,33 +404,33 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
         container.innerHTML = "";
         for (let i = 0; i < nb; i++) {
           container.innerHTML += `
-<div class="companion-container">
-<h4>Invocation ${i + 1}</h4>
-<label>Nom :
-<input type="text" class="${prefix}_comp_nom">
-</label>
-<label>Race :
-<input type="text" class="${prefix}_comp_race" value="invocation" hidden>Invocation
-</label>
-<label>Vitalité :
-<input type="number" class="${prefix}_comp_vitalite">
-</label>
-<label>Vitesse :
-<input type="number" class="${prefix}_comp_vitesse">
-</label>
-<label>Dégâts :
-<input type="number" class="${prefix}_comp_degats">
-</label>
-<label>Capacités spéciales (format : "Titre : Description", une par ligne) :
-<button type="button" onclick="ajouterSpoiler('${prefix}_comp${i}_capacites_input')">Ajouter Spoiler</button>
-<textarea id="${prefix}_comp${i}_capacites_input" oninput="parseCapacitesInvocations('${prefix}', ${i})" placeholder="EXEMPLE
-Rapidité : permet d'attaquer à deux reprises.
-Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
-Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
-</label>
-<div id="${prefix}_comp${i}_capacites"></div>
-</div>
-`;
+      <div class="companion-container">
+      <h4>Invocation ${i + 1}</h4>
+      <label>Nom :
+      <input type="text" class="${prefix}_comp_nom">
+      </label>
+      <label>Race :
+      <input type="text" class="${prefix}_comp_race" value="invocation" hidden>Invocation
+      </label>
+      <label>Vitalité :
+      <input type="number" class="${prefix}_comp_vitalite">
+      </label>
+      <label>Vitesse :
+      <input type="number" class="${prefix}_comp_vitesse">
+      </label>
+      <label>Dégâts :
+      <input type="number" class="${prefix}_comp_degats">
+      </label>
+      <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+      <button type="button" onclick="ajouterSpoiler('${prefix}_comp${i}_capacites_input')">Ajouter Spoiler</button>
+      <textarea id="${prefix}_comp${i}_capacites_input" oninput="parseCapacitesInvocations('${prefix}', ${i})" placeholder="EXEMPLE
+      Rapidité : permet d'attaquer à deux reprises.
+      Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+      Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
+      </label>
+      <div id="${prefix}_comp${i}_capacites"></div>
+      </div>
+      `;
         }
 
         // Restaurer les données sauvegardées
@@ -501,40 +471,22 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
         );
         container.innerHTML = ""; // Reset
 
-        // Séparer d'abord par les spoilers
-        const segments = input.split(/(\[spoiler\].*?\[\/spoiler\])/s);
+        // Traiter les lignes une par une
+        const lines = input.split("\n").filter((l) => l.trim() !== "");
         let currentLines = [];
 
-        segments.forEach((segment) => {
-          if (segment.trim() === "") return;
-
-          if (segment.startsWith("[spoiler]")) {
-            // Garder le contenu du spoiler avec les balises
-            const spoilerContent = segment.trim();
-            if (spoilerContent) {
-              currentLines.push(spoilerContent);
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].trim() === "@not") {
+            // Si on trouve @not, on fusionne la ligne précédente avec la suivante
+            if (currentLines.length > 0 && i + 1 < lines.length) {
+              const lastLine = currentLines.pop();
+              currentLines.push(lastLine + "\n" + lines[i + 1]);
+              i++; // Sauter la ligne suivante
             }
           } else {
-            // Traiter les lignes normales et @not
-            const lines = segment.split("\n").filter((l) => l.trim() !== "");
-            let tempLines = [];
-
-            for (let i = 0; i < lines.length; i++) {
-              if (lines[i].trim() === "@not") {
-                // Si on trouve @not, on fusionne la ligne précédente avec la suivante
-                if (tempLines.length > 0 && i + 1 < lines.length) {
-                  const lastLine = tempLines.pop();
-                  tempLines.push(lastLine + "\n" + lines[i + 1]);
-                  i++; // Sauter la ligne suivante
-                }
-              } else {
-                tempLines.push(lines[i]);
-              }
-            }
-
-            currentLines.push(...tempLines);
+            currentLines.push(lines[i]);
           }
-        });
+        }
 
         currentLines.forEach((line, index) => {
           // Nettoyer les éventuels @not restants
@@ -543,68 +495,73 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
             .filter((l) => l.trim() !== "@not")
             .join("\n");
 
-          // Pour les lignes normales, ne prendre en compte que le premier ":"
-          const firstColonIndex = cleanLine.indexOf(":");
+          // Pour les lignes normales, ne prendre en compte que le premier ":" qui n'est pas dans un spoiler
+          let firstColonIndex = -1;
+          let inSpoiler = false;
+
+          for (let i = 0; i < cleanLine.length; i++) {
+            if (cleanLine.substring(i, i + 9) === "[spoiler]") {
+              inSpoiler = true;
+              i += 8; // Sauter la balise
+            } else if (cleanLine.substring(i, i + 10) === "[/spoiler]") {
+              inSpoiler = false;
+              i += 9; // Sauter la balise
+            } else if (cleanLine[i] === ":" && !inSpoiler) {
+              firstColonIndex = i;
+              break;
+            }
+          }
+
           if (firstColonIndex !== -1) {
             const titre = cleanLine.substring(0, firstColonIndex).trim();
             const description = cleanLine.substring(firstColonIndex + 1).trim();
 
             // Échapper les caractères spéciaux pour l'HTML
             const escapedTitre = escapeHtml(titre);
-            const escapedDescription = escapeHtml(description)
-              .replace("[spoiler]", "")
-              .replace("[/spoiler]", "");
+            const escapedDescription = escapeHtml(description);
 
             container.innerHTML += `
-<div class="capacite-container">
-<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
-<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
-<p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription.replace(
-              /\n/g,
-              "<br>"
-            )}</p>
-<label>État :
-<select class="${prefix}_comp${idx}_classeCapacite">
-<option value="capacité_spéciale">Neutre</option>
-<option value="capacité_spéciale active">Active</option>
-<option value="capacité_spéciale passive">Passive</option>
-<option value="capacité_spéciale bloquée">Bloquée</option>
-<option value="capacité_spéciale utilisée">Utilisée</option>
-<option value="capacité_spéciale annulée">Annulée</option>
-<option value="capacité_spéciale inactive">Inactive</option>
-</select>
-</label>
-</div>
-`;
+      <div class="capacite-container">
+      <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
+      <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
+      <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
+      <label>État :
+      <select class="${prefix}_comp${idx}_classeCapacite">
+      <option value="capacité_spéciale">Neutre</option>
+      <option value="capacité_spéciale active">Active</option>
+      <option value="capacité_spéciale passive">Passive</option>
+      <option value="capacité_spéciale bloquée">Bloquée</option>
+      <option value="capacité_spéciale utilisée">Utilisée</option>
+      <option value="capacité_spéciale annulée">Annulée</option>
+      <option value="capacité_spéciale inactive">Inactive</option>
+      </select>
+      </label>
+      </div>
+      `;
           } else {
             // Si pas de ":", traiter comme une capacité sans titre
-            const escapedLine = escapeHtml(cleanLine)
-              .replace("[spoiler]", "")
-              .replace("[/spoiler]", "");
+            const escapedLine = escapeHtml(cleanLine);
 
             container.innerHTML += `
-<div class="capacite-container">
-<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="Capacité ${
+      <div class="capacite-container">
+      <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="Capacité ${
               index + 1
             }">
-<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedLine}">
-<p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine.replace(
-              /\n/g,
-              "<br>"
-            )}</p>
-<label>État :
-<select class="${prefix}_comp${idx}_classeCapacite">
-<option value="capacité_spéciale">Neutre</option>
-<option value="capacité_spéciale active">Active</option>
-<option value="capacité_spéciale passive">Passive</option>
-<option value="capacité_spéciale bloquée">Bloquée</option>
-<option value="capacité_spéciale utilisée">Utilisée</option>
-<option value="capacité_spéciale annulée">Annulée</option>
-<option value="capacité_spéciale inactive">Inactive</option>
-</select>
-</label>
-</div>
-`;
+      <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedLine}">
+      <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
+      <label>État :
+      <select class="${prefix}_comp${idx}_classeCapacite">
+      <option value="capacité_spéciale">Neutre</option>
+      <option value="capacité_spéciale active">Active</option>
+      <option value="capacité_spéciale passive">Passive</option>
+      <option value="capacité_spéciale bloquée">Bloquée</option>
+      <option value="capacité_spéciale utilisée">Utilisée</option>
+      <option value="capacité_spéciale annulée">Annulée</option>
+      <option value="capacité_spéciale inactive">Inactive</option>
+      </select>
+      </label>
+      </div>
+      `;
           }
         });
       }
@@ -627,10 +584,10 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
         }</strong> : <strong class="vitalité">${
           document.getElementById(`${prefix}_vitalite`).value
         }</strong>
-<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
-          document.getElementById(`${prefix}_vitesse`).value
-        }</strong>
-`;
+      <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
+        document.getElementById(`${prefix}_vitesse`).value
+      }</strong>
+      `;
 
         if (document.getElementById(`${prefix}_corrompu`).checked) {
           html += `<span class="bestiaire-champ">Absorption</span> : <strong class="dégâts">${
@@ -641,7 +598,7 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
         html += `<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${
           document.getElementById(`${prefix}_degats`).value
         }</strong>
-<span class="bestiaire-champ">Capacités spéciales</span> :`;
+      <span class="bestiaire-champ">Capacités spéciales</span> :`;
 
         const titres = Array.from(
           document.getElementsByClassName(`${prefix}_titreCapacite`)
@@ -678,10 +635,10 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
             .value;
 
           html += `\n
-<strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong>
-<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong>
-<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong>
-<span class="bestiaire-champ">Capacités spéciales</span> : `;
+      <strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong>
+      <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong>
+      <span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong>
+      <span class="bestiaire-champ">Capacités spéciales</span> : `;
 
           const comp_titles = document.querySelectorAll(
             `.${prefix}_comp${idx}_titreCapacite`
@@ -775,7 +732,7 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
 
         const header = `<div class="titre">${headerTitle}</div>
 
-<em>${commence} commence le combat</em>`;
+      <em>${commence} commence le combat</em>`;
 
         document.getElementById(
           "resultat"
