@@ -216,6 +216,9 @@
 <option value="stryge-noir">Stryge Noir</option>
 <option value="thérianthrope">Thérianthrope</option>
 <option value="vampire">Vampire</option>
+<option value="bestiare-name">Créature</option>
+<option value="boss">Boss</option>
+<option value="archi-boss">Archi-Boss</option>
 </select>
 </label>
 
@@ -419,9 +422,7 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
 <input type="text" class="${prefix}_comp_nom">
 </label>
 <label>Race :
-<select class="${prefix}_comp_race">
-<option value="invocation">Invocation</option>
-</select>
+<input type="text" class="${prefix}_comp_race" value="invocation" hidden>Invocation
 </label>
 <label>Vitalité :
 <input type="number" class="${prefix}_comp_vitalite">
@@ -590,9 +591,19 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
       }
 
       function extractCharacter(prefix) {
-        let html = `\n<strong class="${
-          document.getElementById(`${prefix}_classe`).value
-        }">${
+        let html = `\n${
+          document.getElementById(`${prefix}_classe`).value === "boss"
+            ? `<strong class="${
+                document.getElementById(`${prefix}_classe`).value
+              }"><i class="icon boss" title="{BOSS}"></i>`
+            : document.getElementById(`${prefix}_classe`).value === "archi-boss"
+            ? `<strong class="${
+                document.getElementById(`${prefix}_classe`).value
+              }"><i class="icon archi-boss" title="{ARCHI-BOSS}"></i>`
+            : `<strong class="${
+                document.getElementById(`${prefix}_classe`).value
+              }">`
+        }${
           document.getElementById(`${prefix}_nom`).value
         }</strong> : <strong class="vitalité">${
           document.getElementById(`${prefix}_vitalite`).value
