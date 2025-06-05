@@ -722,7 +722,13 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
               } : ${vitesseGroupe2}`;
 
         const commence =
-          vitesseGroupe1 >= vitesseGroupe2 ? "Groupe 1" : "Groupe 2";
+          vitesseGroupe1 >= vitesseGroupe2
+            ? nb1 > 1
+              ? "Groupe 1"
+              : document.getElementById("g1_p0_nom").value
+            : nb2 > 1
+            ? "Groupe 2"
+            : document.getElementById("g2_p0_nom").value;
 
         const headerTitle =
           nb1 > 1 && nb2 > 1
