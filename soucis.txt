@@ -1,0 +1,11 @@
+Résumé des trucs à faire : 
+Quand on génère un second personnage : 
+- si @not, il les supprime 
+- si rien, il rajoute "Capaicté X :" devant la ligne qui dépasse
+
+Faire en sorte qu'il prends en compte "x" en début de lige au lieu du retour à la ligne 
+Soucis : l'autre code le fait, mais les x disparaissent vu qu'ils ne sont pas sauvegardés dans l'extract HTML (trouver une solution ou juste les sauvegarder dans l'extract html ?) 
+
+Mettre en place les malus 
+Mettre en place pour les arlequins 
+Bouton @not (?)
