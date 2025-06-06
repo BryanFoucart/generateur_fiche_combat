@@ -90,6 +90,25 @@
         ) {
           const prefix = `g${groupeNum}_p${i}`;
           const personnage = collecterPersonnage(prefix); // Utilise la fonction existante
+          personnage._tempData = {
+            changementVieCheck: document.getElementById(
+              `${prefix}_changementVieCheck`
+            )?.checked,
+            changementVie: document.getElementById(`${prefix}_changementVie`)
+              ?.value,
+            changementVitesseCheck: document.getElementById(
+              `${prefix}_changementVitesseCheck`
+            )?.checked,
+            changementVitesse: document.getElementById(
+              `${prefix}_changementVitesse`
+            )?.value,
+            changementDegatsCheck: document.getElementById(
+              `${prefix}_changementDegatsCheck`
+            )?.checked,
+            changementDegats: document.getElementById(
+              `${prefix}_changementDegats`
+            )?.value,
+          };
           savedCharacters.push(personnage);
         }
 
@@ -109,6 +128,31 @@
             // Ne restaurer que si le personnage existe toujours
             const prefix = `g${groupeNum}_p${i}`;
             remplirPersonnage(prefix, personnage); // Utilise la fonction existante
+            if (personnage._tempData) {
+              document.getElementById(`${prefix}_changementVieCheck`).checked =
+                personnage._tempData.changementVieCheck;
+              document.getElementById(`${prefix}_changementVie`).value =
+                personnage._tempData.changementVie;
+              document.getElementById(
+                `${prefix}_changementVitesseCheck`
+              ).checked = personnage._tempData.changementVitesseCheck;
+              document.getElementById(`${prefix}_changementVitesse`).value =
+                personnage._tempData.changementVitesse;
+              document.getElementById(
+                `${prefix}_changementDegatsCheck`
+              ).checked = personnage._tempData.changementDegatsCheck;
+              document.getElementById(`${prefix}_changementDegats`).value =
+                personnage._tempData.changementDegats;
+              if (personnage._tempData.changementVieCheck) {
+                toggleChangementVie(prefix);
+              }
+              if (personnage._tempData.changementVitesseCheck) {
+                toggleChangementVitesse(prefix);
+              }
+              if (personnage._tempData.changementDegatsCheck) {
+                toggleChangementDegats(prefix);
+              }
+            }
           }
         });
       }
@@ -189,9 +233,25 @@
       <label>Vitalité :
       <input type="number" id="${idPrefix}_vitalite">
       </label>
+      <label>
+      <input type="checkbox" id="${idPrefix}_changementVieCheck" onchange="toggleChangementVie('${idPrefix}')"> Bonus/Malus ?
+      </label>
+      <div id="${idPrefix}_changementVieBloc" style="display: none;">
+      <label>Bonus/Malus :
+      <input type="text" id="${idPrefix}_changementVie">
+      </label>
+      </div>
       <label>Vitesse :
       <input type="number" id="${idPrefix}_vitesse">
       </label>
+      <label>
+      <input type="checkbox" id="${idPrefix}_changementVitesseCheck" onchange="toggleChangementVitesse('${idPrefix}')"> Bonus/Malus ?
+      </label>
+      <div id="${idPrefix}_changementVitesseBloc" style="display: none;">
+      <label>Bonus/Malus :
+      <input type="text" id="${idPrefix}_changementVitesse">
+      </label>
+      </div>
       <label>
       <input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
       </label>
@@ -203,6 +263,14 @@
       <label>Dégâts :
       <input type="number" id="${idPrefix}_degats">
       </label>
+      <label>
+      <input type="checkbox" id="${idPrefix}_changementDegatsCheck" onchange="toggleChangementDegats('${idPrefix}')"> Bonus/Malus ?
+      </label>
+      <div id="${idPrefix}_changementDegatsBloc" style="display: none;">
+      <label>Bonus/Malus :
+      <input type="text" id="${idPrefix}_changementDegats">
+      </label>
+      </div>
 
       <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
       <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
@@ -235,87 +303,6 @@
           .replace(/'/g, "&#039;");
       }
 
-      // function parseCapacites(prefix) {
-      //   const input = document.getElementById(
-      //     `${prefix}_capacites_input`
-      //   ).value;
-      //   const container = document.getElementById(`${prefix}_capacites`);
-      //   container.innerHTML = ""; // Reset
-
-      //   // Traiter les lignes une par une
-      //   const lines = input.split("\n").filter((l) => l.trim() !== "");
-      //   let currentLines = [];
-
-      //   for (let i = 0; i < lines.length; i++) {
-      //     if (lines[i].trim() === "@not") {
-      //       if (currentLines.length > 0 && i + 1 < lines.length) {
-      //         const lastLine = currentLines.pop();
-      //         currentLines.push(lastLine + "\n" + lines[i + 1]);
-      //         i++;
-      //       }
-      //     } else {
-      //       currentLines.push(lines[i]);
-      //     }
-      //   }
-
-      //   currentLines.forEach((line, index) => {
-      //     // Nettoyer les éventuels @not restants
-      //     const cleanLine = line
-      //       .split("\n")
-      //       .filter((l) => l.trim() !== "@not")
-      //       .join("\n");
-
-      //     const firstColonIndex = cleanLine.indexOf(":");
-
-      //     // Continuer avec le traitement normal pour les lignes sans spoiler
-      //     if (firstColonIndex !== -1) {
-      //       const titre = cleanLine.substring(0, firstColonIndex).trim();
-      //       const description = cleanLine.substring(firstColonIndex + 1).trim();
-      //       const escapedTitre = escapeHtml(titre);
-      //       const escapedDescription = escapeHtml(description);
-
-      //       container.innerHTML += `
-      // <div class="capacite-container">
-      //   <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
-      //   <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
-      //   <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
-      //   <label>État :
-      //     <select class="${prefix}_classeCapacite">
-      //       <option value="capacité_spéciale">Neutre</option>
-      //       <option value="capacité_spéciale active">Active</option>
-      //       <option value="capacité_spéciale passive">Passive</option>
-      //       <option value="capacité_spéciale bloquée">Bloquée</option>
-      //       <option value="capacité_spéciale utilisée">Utilisée</option>
-      //       <option value="capacité_spéciale annulée">Annulée</option>
-      //       <option value="capacité_spéciale inactive">Inactive</option>
-      //     </select>
-      //   </label>
-      // </div>`;
-      //     } else {
-      //       const escapedLine = escapeHtml(cleanLine);
-      //       container.innerHTML += `
-      // <div class="capacite-container">
-      //   <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
-      //         index + 1
-      //       }">
-      //   <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
-      //   <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
-      //   <label>État :
-      //     <select class="${prefix}_classeCapacite">
-      //       <option value="capacité_spéciale">Neutre</option>
-      //       <option value="capacité_spéciale active">Active</option>
-      //       <option value="capacité_spéciale passive">Passive</option>
-      //       <option value="capacité_spéciale bloquée">Bloquée</option>
-      //       <option value="capacité_spéciale utilisée">Utilisée</option>
-      //       <option value="capacité_spéciale annulée">Annulée</option>
-      //       <option value="capacité_spéciale inactive">Inactive</option>
-      //     </select>
-      //   </label>
-      // </div>`;
-      //     }
-      //   });
-      // }
-
       function parseCapacites(prefix) {
         const input = document.getElementById(
           `${prefix}_capacites_input`
@@ -323,45 +310,43 @@
         const container = document.getElementById(`${prefix}_capacites`);
         container.innerHTML = ""; // Reset
 
-        const lines = input
-          .split("\n")
-          .map((l) => l.trim())
-          .filter((l) => l !== "");
+        // Traiter les lignes une par une
+        const lines = input.split("\n").filter((l) => l.trim() !== "");
+        let currentLines = [];
 
-        const entries = [];
-        let currentLine = null;
-
-        lines.forEach((line) => {
-          if (line.startsWith("x ")) {
-            // Nouvelle capacité
-            if (currentLine !== null) {
-              entries.push(currentLine);
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].trim() === "@not") {
+            if (currentLines.length > 0 && i + 1 < lines.length) {
+              const lastLine = currentLines.pop();
+              currentLines.push(lastLine + "\n" + lines[i + 1]);
+              i++;
             }
-            currentLine = line.substring(2); // Retire le "x "
-          } else if (currentLine !== null) {
-            currentLine += "\n" + line; // Ajoute la ligne suivante à la description
+          } else {
+            currentLines.push(lines[i]);
           }
-        });
-
-        if (currentLine !== null) {
-          entries.push(currentLine); // Ajouter la dernière
         }
 
-        entries.forEach((entry, index) => {
-          const firstColonIndex = entry.indexOf(":");
+        currentLines.forEach((line, index) => {
+          // Nettoyer les éventuels @not restants
+          const cleanLine = line
+            .split("\n")
+            .filter((l) => l.trim() !== "@not")
+            .join("\n");
 
+          const firstColonIndex = cleanLine.indexOf(":");
+
+          // Continuer avec le traitement normal pour les lignes sans spoiler
           if (firstColonIndex !== -1) {
-            const titre = entry.substring(0, firstColonIndex).trim();
-            const description = entry.substring(firstColonIndex + 1).trim();
+            const titre = cleanLine.substring(0, firstColonIndex).trim();
+            const description = cleanLine.substring(firstColonIndex + 1).trim();
             const escapedTitre = escapeHtml(titre);
             const escapedDescription = escapeHtml(description);
 
             container.innerHTML += `
-      <li>
+      <div class="capacite-container">
         <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
         <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
-        <em>${escapedTitre}</em> : ${escapedDescription}
-        <br>
+        <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
         <label>État :
           <select class="${prefix}_classeCapacite">
             <option value="capacité_spéciale">Neutre</option>
@@ -373,17 +358,16 @@
             <option value="capacité_spéciale inactive">Inactive</option>
           </select>
         </label>
-      </li>`;
+      </div>`;
           } else {
-            const escapedLine = escapeHtml(entry);
+            const escapedLine = escapeHtml(cleanLine);
             container.innerHTML += `
-      <li>
-        <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
+      <div class="capacite-container">
+         <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
               index + 1
             }">
         <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
-        <em>Capacité ${index + 1}</em> : ${escapedLine}
-        <br>
+        <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
         <label>État :
           <select class="${prefix}_classeCapacite">
             <option value="capacité_spéciale">Neutre</option>
@@ -395,10 +379,94 @@
             <option value="capacité_spéciale inactive">Inactive</option>
           </select>
         </label>
-      </li>`;
+      </div>`;
           }
         });
       }
+
+      // function parseCapacites(prefix) {
+      //   const input = document.getElementById(
+      //     `${prefix}_capacites_input`
+      //   ).value;
+      //   const container = document.getElementById(`${prefix}_capacites`);
+      //   container.innerHTML = ""; // Reset
+
+      //   const lines = input
+      //     .split("\n")
+      //     .map((l) => l.trim())
+      //     .filter((l) => l !== "");
+
+      //   const entries = [];
+      //   let currentLine = null;
+
+      //   lines.forEach((line) => {
+      //     if (line.startsWith("x ")) {
+      //       // Nouvelle capacité
+      //       if (currentLine !== null) {
+      //         entries.push(currentLine);
+      //       }
+      //       currentLine = line.substring(2); // Retire le "x "
+      //     } else if (currentLine !== null) {
+      //       currentLine += "\n" + line; // Ajoute la ligne suivante à la description
+      //     }
+      //   });
+
+      //   if (currentLine !== null) {
+      //     entries.push(currentLine); // Ajouter la dernière
+      //   }
+
+      //   entries.forEach((entry, index) => {
+      //     const firstColonIndex = entry.indexOf(":");
+
+      //     if (firstColonIndex !== -1) {
+      //       const titre = entry.substring(0, firstColonIndex).trim();
+      //       const description = entry.substring(firstColonIndex + 1).trim();
+      //       const escapedTitre = escapeHtml(titre);
+      //       const escapedDescription = escapeHtml(description);
+
+      //       container.innerHTML += `
+      // <li>
+      //   <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
+      //   <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
+      //   <em>${escapedTitre}</em> : ${escapedDescription}
+      //   <br>
+      //   <label>État :
+      //     <select class="${prefix}_classeCapacite">
+      //       <option value="capacité_spéciale">Neutre</option>
+      //       <option value="capacité_spéciale active">Active</option>
+      //       <option value="capacité_spéciale passive">Passive</option>
+      //       <option value="capacité_spéciale bloquée">Bloquée</option>
+      //       <option value="capacité_spéciale utilisée">Utilisée</option>
+      //       <option value="capacité_spéciale annulée">Annulée</option>
+      //       <option value="capacité_spéciale inactive">Inactive</option>
+      //     </select>
+      //   </label>
+      // </li>`;
+      //     } else {
+      //       const escapedLine = escapeHtml(entry);
+      //       container.innerHTML += `
+      // <li>
+      //   <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
+      //         index + 1
+      //       }">
+      //   <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
+      //   <em>Capacité ${index + 1}</em> : ${escapedLine}
+      //   <br>
+      //   <label>État :
+      //     <select class="${prefix}_classeCapacite">
+      //       <option value="capacité_spéciale">Neutre</option>
+      //       <option value="capacité_spéciale active">Active</option>
+      //       <option value="capacité_spéciale passive">Passive</option>
+      //       <option value="capacité_spéciale bloquée">Bloquée</option>
+      //       <option value="capacité_spéciale utilisée">Utilisée</option>
+      //       <option value="capacité_spéciale annulée">Annulée</option>
+      //       <option value="capacité_spéciale inactive">Inactive</option>
+      //     </select>
+      //   </label>
+      // </li>`;
+      //     }
+      //   });
+      // }
 
       function updateCompanions(prefix) {
         const nb = parseInt(
@@ -620,11 +688,35 @@
           document.getElementById(`${prefix}_nom`).value
         }</strong> : <strong class="vitalité">${
           document.getElementById(`${prefix}_vitalite`).value
-        }</strong>
-      <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
-        document.getElementById(`${prefix}_vitesse`).value
-      }</strong>
-      `;
+        }</strong>`;
+
+        if (document.getElementById(`${prefix}_changementVieCheck`).checked) {
+          const valeur = document.getElementById(
+            `${prefix}_changementVie`
+          ).value;
+          if (valeur.startsWith("-")) {
+            html += ` <strong class="stat-malus">${valeur}</strong>`;
+          } else {
+            html += ` <strong class="stat-bonus">${valeur}</strong>`;
+          }
+        }
+
+        html += `\n<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
+          document.getElementById(`${prefix}_vitesse`).value
+        }</strong>\n`;
+
+        if (
+          document.getElementById(`${prefix}_changementVitesseCheck`).checked
+        ) {
+          const valeur = document.getElementById(
+            `${prefix}_changementVitesse`
+          ).value;
+          if (valeur.startsWith("-")) {
+            html += ` <strong class="stat-malus">${valeur}</strong>`;
+          } else {
+            html += ` <strong class="stat-bonus">${valeur}</strong>`;
+          }
+        }
 
         if (document.getElementById(`${prefix}_corrompu`).checked) {
           html += `<span class="bestiaire-champ">Absorption</span> : <strong class="dégâts">${
@@ -634,8 +726,22 @@
 
         html += `<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${
           document.getElementById(`${prefix}_degats`).value
-        }</strong>
-      <span class="bestiaire-champ">Capacités spéciales</span> :`;
+        }</strong>`;
+
+        if (
+          document.getElementById(`${prefix}_changementDegatsCheck`).checked
+        ) {
+          const valeur = document.getElementById(
+            `${prefix}_changementDegats`
+          ).value;
+          if (valeur.startsWith("-")) {
+            html += ` <strong class="stat-malus">${valeur}</strong>`;
+          } else {
+            html += ` <strong class="stat-bonus">${valeur}</strong>`;
+          }
+        }
+
+        html += `<span class="bestiaire-champ">Capacités spéciales</span> :`;
 
         const titres = Array.from(
           document.getElementsByClassName(`${prefix}_titreCapacite`)
@@ -782,11 +888,37 @@
         bloc.style.display = isChecked ? "block" : "none";
       }
 
+      function toggleChangementVie(prefix) {
+        const bloc = document.getElementById(`${prefix}_changementVieBloc`);
+        const isChecked = document.getElementById(
+          `${prefix}_changementVieCheck`
+        ).checked;
+        bloc.style.display = isChecked ? "block" : "none";
+      }
+
+      function toggleChangementVitesse(prefix) {
+        const bloc = document.getElementById(`${prefix}_changementVitesseBloc`);
+        const isChecked = document.getElementById(
+          `${prefix}_changementVitesseCheck`
+        ).checked;
+        bloc.style.display = isChecked ? "block" : "none";
+      }
+
+      function toggleChangementDegats(prefix) {
+        const bloc = document.getElementById(`${prefix}_changementDegatsBloc`);
+        const isChecked = document.getElementById(
+          `${prefix}_changementDegatsCheck`
+        ).checked;
+        bloc.style.display = isChecked ? "block" : "none";
+      }
+
       function collecterPersonnage(prefix) {
         const personnage = {
           nom: document.getElementById(`${prefix}_nom`).value,
           race: document.getElementById(`${prefix}_classe`).value,
           vitalite: document.getElementById(`${prefix}_vitalite`).value,
+          // changementVie: document.getElementById(`${prefix}_changementVie`)
+          // .value,
           vitesse: document.getElementById(`${prefix}_vitesse`).value,
           degats: document.getElementById(`${prefix}_degats`).value,
           corrompu: document.getElementById(`${prefix}_corrompu`).checked,
@@ -891,8 +1023,14 @@
         document.getElementById(`${prefix}_nom`).value = data.nom;
         document.getElementById(`${prefix}_classe`).value = data.race;
         document.getElementById(`${prefix}_vitalite`).value = data.vitalite;
+        document.getElementById(`${prefix}_changementVieCheck`).checked =
+          data.changementVie;
         document.getElementById(`${prefix}_vitesse`).value = data.vitesse;
+        document.getElementById(`${prefix}_changementVitesseCheck`).checked =
+          data.changementVitesse;
         document.getElementById(`${prefix}_degats`).value = data.degats;
+        document.getElementById(`${prefix}_changementDegatsCheck`).checked =
+          data.changementDegats;
         document.getElementById(`${prefix}_corrompu`).checked = data.corrompu;
 
         // Gérer l'absorption si corrompu
@@ -900,6 +1038,27 @@
           document.getElementById(`${prefix}_absorption`).value =
             data.absorption;
           toggleAbsorption(prefix); // Assurez-vous que le bloc d'absorption est visible
+        }
+
+        // Gérer les malus/bonus de Vie si activé
+        if (data.changementVie) {
+          document.getElementById(`${prefix}_changementVie`).value =
+            data.changementVie;
+          toggleChangementVie(prefix); // Assurez-vous que le bloc de Malus/Bonus Vie est visible
+        }
+
+        // Gérer les malus/bonus de Vitesse si activé
+        if (data.changementVitesse) {
+          document.getElementById(`${prefix}_changementVitesse`).value =
+            data.changementVitesse;
+          toggleChangementVitesse(prefix); // Assurez-vous que le bloc de Malus/Bonus Vitesse est visible
+        }
+
+        // Gérer les malus/bonus de Degats si activé
+        if (data.changementDegats) {
+          document.getElementById(`${prefix}_changementDegats`).value =
+            data.changementDegats;
+          toggleChangementDegats(prefix); // Assurez-vous que le bloc de Malus/Bonus Degats est visible
         }
 
         // Remplir les capacités
