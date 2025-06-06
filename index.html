@@ -49,7 +49,7 @@
           id="nbGroupe1"
           value="1"
           min="1"
-          onchange="genererFormulairesGroupes()"
+          onchange="genererGroupe(1)"
         />
       </label>
       <label
@@ -59,12 +59,15 @@
           id="nbGroupe2"
           value="1"
           min="1"
-          onchange="genererFormulairesGroupes()"
+          onchange="genererGroupe(2)"
         />
       </label>
     </div>
 
-    <div id="combat-form"></div>
+    <div id="combat-form">
+      <div id="groupe1-form"></div>
+      <div id="groupe2-form"></div>
+    </div>
 
     <button onclick="genererHTML()">Générer le Code HTML</button>
 
@@ -72,14 +75,13 @@
     <textarea id="resultat" readonly></textarea>
 
     <script>
-      function genererFormulairesGroupes() {
-        const nb1 = parseInt(document.getElementById("nbGroupe1").value);
-        const nb2 = parseInt(document.getElementById("nbGroupe2").value);
+      function genererGroupe(groupeNum) {
+        const nb = parseInt(document.getElementById(`nbGroupe${groupeNum}`).value);
 
-        // 1. Sauvegarder les données déjà remplies
+        // Sauvegarder les données existantes pour ce groupe
         const existingData = {};
         const inputs = document.querySelectorAll(
-          "#combat-form input, #combat-form select, #combat-form textarea"
+          `#groupe${groupeNum}-form input, #groupe${groupeNum}-form select, #groupe${groupeNum}-form textarea`
         );
         inputs.forEach((input) => {
           if (input.id) {
@@ -88,58 +90,14 @@
           }
         });
 
-        // Sauvegarder les données des invocations
-        const existingCompanions = {};
-        const groups = ["g1_p", "g2_p"];
-        const maxPersonnes = Math.max(nb1, nb2);
-
-        groups.forEach((group) => {
-          for (let i = 0; i < maxPersonnes; i++) {
-            const prefix = `${group}${i}`;
-            const compContainer = document.getElementById(
-              `${prefix}_compagnons`
-            );
-            if (compContainer) {
-              const companions = [];
-              const currentCompanions = compContainer.getElementsByClassName(
-                "companion-container"
-              );
-              Array.from(currentCompanions).forEach((comp, idx) => {
-                companions.push({
-                  nom: comp.querySelector(`.${prefix}_comp_nom`)?.value || "",
-                  race: comp.querySelector(`.${prefix}_comp_race`)?.value || "",
-                  vitalite:
-                    comp.querySelector(`.${prefix}_comp_vitalite`)?.value || "",
-                  vitesse:
-                    comp.querySelector(`.${prefix}_comp_vitesse`)?.value || "",
-                  degats:
-                    comp.querySelector(`.${prefix}_comp_degats`)?.value || "",
-                  capacites:
-                    comp.querySelector(`#${prefix}_comp${idx}_capacites_input`)
-                      ?.value || "",
-                });
-              });
-              existingCompanions[prefix] = companions;
-            }
-          }
-        });
-
-        // 2. Regénérer les formulaires
-        let html = "";
-
-        html += `<h3>Groupe 1</h3>`;
-        for (let i = 0; i < nb1; i++) {
-          html += createCharacterForm(`g1_p${i}`, `Personnage ${i + 1}`);
+        // Générer le HTML pour ce groupe
+        let html = `<h3>Groupe ${groupeNum}</h3>`;
+        for (let i = 0; i < nb; i++) {
+          html += createCharacterForm(`g${groupeNum}_p${i}`, `Personnage ${i + 1}`);
         }
+        document.getElementById(`groupe${groupeNum}-form`).innerHTML = html;
 
-        html += `<h3>Groupe 2</h3>`;
-        for (let i = 0; i < nb2; i++) {
-          html += createCharacterForm(`g2_p${i}`, `Personnage ${i + 1}`);
-        }
-
-        document.getElementById("combat-form").innerHTML = html;
-
-        // 3. Réinjecter les données
+        // Restaurer les données pour ce groupe
         for (const id in existingData) {
           const el = document.getElementById(id);
           if (el) {
@@ -152,42 +110,47 @@
             }
           }
         }
+      }
 
-        // 4. Restaurer les invocations
-        for (const prefix in existingCompanions) {
-          const nbCompagnonsEl = document.getElementById(
-            `${prefix}_nbCompagnons`
-          );
-          if (nbCompagnonsEl) {
-            nbCompagnonsEl.value = existingCompanions[prefix].length;
-            updateCompanions(prefix);
+      function genererFormulairesGroupes() {
+        const nb1 = parseInt(document.getElementById("nbGroupe1").value);
+        const nb2 = parseInt(document.getElementById("nbGroupe2").value);
 
-            // Restaurer les données des invocations
-            const container = document.getElementById(`${prefix}_compagnons`);
-            if (container) {
-              existingCompanions[prefix].forEach((comp, idx) => {
-                const newContainer = container.children[idx];
-                if (newContainer) {
-                  newContainer.querySelector(`.${prefix}_comp_nom`).value =
-                    comp.nom;
-                  newContainer.querySelector(`.${prefix}_comp_race`).value =
-                    comp.race;
-                  newContainer.querySelector(`.${prefix}_comp_vitalite`).value =
-                    comp.vitalite;
-                  newContainer.querySelector(`.${prefix}_comp_vitesse`).value =
-                    comp.vitesse;
-                  newContainer.querySelector(`.${prefix}_comp_degats`).value =
-                    comp.degats;
+        // 1. Sauvegarder les données existantes
+        const existingData = {};
+        const inputs = document.querySelectorAll(
+          "#combat-form input, #combat-form select, #combat-form textarea"
+        );
+        inputs.forEach((input) => {
+          if (input.id) {
+            existingData[input.id] =
+              input.type === "checkbox" ? input.checked : input.value;
+          }
+        });
 
-                  const capacitesInput = newContainer.querySelector(
-                    `#${prefix}_comp${idx}_capacites_input`
-                  );
-                  if (capacitesInput) {
-                    capacitesInput.value = comp.capacites;
-                    parseCapacitesInvocations(prefix, idx);
-                  }
-                }
-              });
+        // 2. Générer le HTML pour chaque groupe
+        let html1 = `<h3>Groupe 1</h3>`;
+        for (let i = 0; i < nb1; i++) {
+          html1 += createCharacterForm(`g1_p${i}`, `Personnage ${i + 1}`);
+        }
+        document.getElementById("groupe1-form").innerHTML = html1;
+
+        let html2 = `<h3>Groupe 2</h3>`;
+        for (let i = 0; i < nb2; i++) {
+          html2 += createCharacterForm(`g2_p${i}`, `Personnage ${i + 1}`);
+        }
+        document.getElementById("groupe2-form").innerHTML = html2;
+
+        // 3. Restaurer les données
+        for (const id in existingData) {
+          const el = document.getElementById(id);
+          if (el) {
+            if (el.type === "checkbox") {
+              el.checked = existingData[id];
+              if (el.onchange) el.onchange();
+            } else {
+              el.value = existingData[id];
+              if (el.oninput) el.oninput();
             }
           }
         }
@@ -241,7 +204,6 @@
       </label>
 
       <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
-      <button type="button" onclick="ajouterSpoiler('${idPrefix}_capacites_input')">Ajouter Spoiler</button>
       <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
       Rapidité : permet d'attaquer à deux reprises.
       Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
@@ -273,23 +235,20 @@
       }
 
       function parseCapacites(prefix) {
-        const input = document.getElementById(
-          `${prefix}_capacites_input`
-        ).value;
+        const input = document.getElementById(`${prefix}_capacites_input`).value;
         const container = document.getElementById(`${prefix}_capacites`);
         container.innerHTML = ""; // Reset
 
         // Traiter les lignes une par une
-        const lines = input.split("\n").filter((l) => l.trim() !== "");
+        const lines = input.split("\n").filter(l => l.trim() !== "");
         let currentLines = [];
 
         for (let i = 0; i < lines.length; i++) {
           if (lines[i].trim() === "@not") {
-            // Si on trouve @not, on fusionne la ligne précédente avec la suivante
             if (currentLines.length > 0 && i + 1 < lines.length) {
               const lastLine = currentLines.pop();
               currentLines.push(lastLine + "\n" + lines[i + 1]);
-              i++; // Sauter la ligne suivante
+              i++;
             }
           } else {
             currentLines.push(lines[i]);
@@ -298,10 +257,15 @@
 
         currentLines.forEach((line, index) => {
           // Nettoyer les éventuels @not restants
-          const cleanLine = line
-            .split("\n")
-            .filter((l) => l.trim() !== "@not")
-            .join("\n");
+          const cleanLine = line.split("\n").filter(l => l.trim() !== "@not").join("\n");
+
+          // Vérifier si la ligne contient un spoiler
+          if (cleanLine.includes("[spoiler]") && cleanLine.includes("[/spoiler]")) {
+            // Pour les lignes avec spoiler, ajouter directement le texte sans créer de <li>
+            const escapedLine = escapeHtml(cleanLine);
+            container.innerHTML += `<p>${escapedLine}</p>`;
+            return; // Passer à la ligne suivante
+          }
 
           // Pour les lignes normales, ne prendre en compte que le premier ":" qui n'est pas dans un spoiler
           let firstColonIndex = -1;
@@ -310,66 +274,59 @@
           for (let i = 0; i < cleanLine.length; i++) {
             if (cleanLine.substring(i, i + 9) === "[spoiler]") {
               inSpoiler = true;
-              i += 8; // Sauter la balise
+              i += 8;
             } else if (cleanLine.substring(i, i + 10) === "[/spoiler]") {
               inSpoiler = false;
-              i += 9; // Sauter la balise
+              i += 9;
             } else if (cleanLine[i] === ":" && !inSpoiler) {
               firstColonIndex = i;
               break;
             }
           }
 
+          // Continuer avec le traitement normal pour les lignes sans spoiler
           if (firstColonIndex !== -1) {
             const titre = cleanLine.substring(0, firstColonIndex).trim();
             const description = cleanLine.substring(firstColonIndex + 1).trim();
-
-            // Échapper les caractères spéciaux pour l'HTML
             const escapedTitre = escapeHtml(titre);
             const escapedDescription = escapeHtml(description);
 
             container.innerHTML += `
       <div class="capacite-container">
-      <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
-      <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
-      <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
-      <label>État :
-      <select class="${prefix}_classeCapacite">
-      <option value="capacité_spéciale">Neutre</option>
-      <option value="capacité_spéciale active">Active</option>
-      <option value="capacité_spéciale passive">Passive</option>
-      <option value="capacité_spéciale bloquée">Bloquée</option>
-      <option value="capacité_spéciale utilisée">Utilisée</option>
-      <option value="capacité_spéciale annulée">Annulée</option>
-      <option value="capacité_spéciale inactive">Inactive</option>
-      </select>
-      </label>
-      </div>
-      `;
+        <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
+        <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
+        <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
+        <label>État :
+          <select class="${prefix}_classeCapacite">
+            <option value="capacité_spéciale">Neutre</option>
+            <option value="capacité_spéciale active">Active</option>
+            <option value="capacité_spéciale passive">Passive</option>
+            <option value="capacité_spéciale bloquée">Bloquée</option>
+            <option value="capacité_spéciale utilisée">Utilisée</option>
+            <option value="capacité_spéciale annulée">Annulée</option>
+            <option value="capacité_spéciale inactive">Inactive</option>
+          </select>
+        </label>
+      </div>`;
           } else {
-            // Si pas de ":", traiter comme une capacité sans titre
             const escapedLine = escapeHtml(cleanLine);
-
             container.innerHTML += `
       <div class="capacite-container">
-      <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
-              index + 1
-            }">
-      <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
-      <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
-      <label>État :
-      <select class="${prefix}_classeCapacite">
-      <option value="capacité_spéciale">Neutre</option>
-      <option value="capacité_spéciale active">Active</option>
-      <option value="capacité_spéciale passive">Passive</option>
-      <option value="capacité_spéciale bloquée">Bloquée</option>
-      <option value="capacité_spéciale utilisée">Utilisée</option>
-      <option value="capacité_spéciale annulée">Annulée</option>
-      <option value="capacité_spéciale inactive">Inactive</option>
-      </select>
-      </label>
-      </div>
-      `;
+        <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${index + 1}">
+        <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
+        <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
+        <label>État :
+          <select class="${prefix}_classeCapacite">
+            <option value="capacité_spéciale">Neutre</option>
+            <option value="capacité_spéciale active">Active</option>
+            <option value="capacité_spéciale passive">Passive</option>
+            <option value="capacité_spéciale bloquée">Bloquée</option>
+            <option value="capacité_spéciale utilisée">Utilisée</option>
+            <option value="capacité_spéciale annulée">Annulée</option>
+            <option value="capacité_spéciale inactive">Inactive</option>
+          </select>
+        </label>
+      </div>`;
           }
         });
       }
@@ -422,7 +379,6 @@
       <input type="number" class="${prefix}_comp_degats">
       </label>
       <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
-      <button type="button" onclick="ajouterSpoiler('${prefix}_comp${i}_capacites_input')">Ajouter Spoiler</button>
       <textarea id="${prefix}_comp${i}_capacites_input" oninput="parseCapacitesInvocations('${prefix}', ${i})" placeholder="EXEMPLE
       Rapidité : permet d'attaquer à deux reprises.
       Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
@@ -495,6 +451,14 @@
             .filter((l) => l.trim() !== "@not")
             .join("\n");
 
+          // Vérifier si la ligne contient un spoiler
+          if (cleanLine.includes("[spoiler]") && cleanLine.includes("[/spoiler]")) {
+            // Pour les lignes avec spoiler, ajouter directement le texte sans créer de <li>
+            const escapedLine = escapeHtml(cleanLine);
+            container.innerHTML += `<p>${escapedLine}</p>`;
+            return; // Passer à la ligne suivante
+          }
+
           // Pour les lignes normales, ne prendre en compte que le premier ":" qui n'est pas dans un spoiler
           let firstColonIndex = -1;
           let inSpoiler = false;
@@ -502,16 +466,17 @@
           for (let i = 0; i < cleanLine.length; i++) {
             if (cleanLine.substring(i, i + 9) === "[spoiler]") {
               inSpoiler = true;
-              i += 8; // Sauter la balise
+              i += 8;
             } else if (cleanLine.substring(i, i + 10) === "[/spoiler]") {
               inSpoiler = false;
-              i += 9; // Sauter la balise
+              i += 9;
             } else if (cleanLine[i] === ":" && !inSpoiler) {
               firstColonIndex = i;
               break;
             }
           }
 
+          // Continuer avec le traitement normal pour les lignes sans spoiler
           if (firstColonIndex !== -1) {
             const titre = cleanLine.substring(0, firstColonIndex).trim();
             const description = cleanLine.substring(firstColonIndex + 1).trim();
@@ -924,29 +889,6 @@
               if (classes[i]) classes[i].value = c.etat;
             });
           }
-        }
-      }
-
-      function ajouterSpoiler(textareaId) {
-        const textarea = document.getElementById(textareaId);
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const texteSelectionne = textarea.value.substring(start, end);
-
-        if (start !== end) {
-          const nouveauTexte =
-            textarea.value.substring(0, start) +
-            "[spoiler]" +
-            texteSelectionne +
-            "[/spoiler]" +
-            textarea.value.substring(end);
-          textarea.value = nouveauTexte;
-
-          // Déclencher l'événement oninput pour mettre à jour le parsing
-          if (textarea.oninput) textarea.oninput();
-
-          // Replacer le curseur après le spoiler
-          textarea.setSelectionRange(end + 19, end + 19); // 19 = longueur des balises ajoutées
         }
       }
 
