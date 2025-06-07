@@ -1009,6 +1009,8 @@
           html += ` <em>Aucune capacité spéciale</em>`;
         }
 
+        // Partie compagnon
+
         const noms = document.querySelectorAll(`.${prefix}_comp_nom`);
         const races = document.querySelectorAll(`.${prefix}_comp_race`);
         noms.forEach((compNom, idx) => {
@@ -1023,11 +1025,60 @@
           const deg = document.querySelectorAll(`.${prefix}_comp_degats`)[idx]
             .value;
 
-          html += `\n
-                  <strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong>
-                  <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong>
-                  <span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong>
-                  <span class="bestiaire-champ">Capacités spéciales</span> : `;
+          html += `\n<strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong>`;
+
+          // Ajouter les bonus/malus de vie
+          if (
+            document.getElementById(`${prefix}_comp${idx}_changementVieCheck`)
+              .checked
+          ) {
+            const valeur = document.getElementById(
+              `${prefix}_comp${idx}_changementVie`
+            ).value;
+            if (valeur.startsWith("-")) {
+              html += ` <strong class="stat-malus">${valeur}</strong>`;
+            } else {
+              html += ` <strong class="stat-bonus">${valeur}</strong>`;
+            }
+          }
+
+          html += `\n<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong>`;
+
+          // Ajouter les bonus/malus de vitesse
+          if (
+            document.getElementById(
+              `${prefix}_comp${idx}_changementVitesseCheck`
+            ).checked
+          ) {
+            const valeur = document.getElementById(
+              `${prefix}_comp${idx}_changementVitesse`
+            ).value;
+            if (valeur.startsWith("-")) {
+              html += ` <strong class="stat-malus">${valeur}</strong>`;
+            } else {
+              html += ` <strong class="stat-bonus">${valeur}</strong>`;
+            }
+          }
+
+          html += `\n<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong>`;
+
+          // Ajouter les bonus/malus de dégâts
+          if (
+            document.getElementById(
+              `${prefix}_comp${idx}_changementDegatsCheck`
+            ).checked
+          ) {
+            const valeur = document.getElementById(
+              `${prefix}_comp${idx}_changementDegats`
+            ).value;
+            if (valeur.startsWith("-")) {
+              html += ` <strong class="stat-malus">${valeur}</strong>`;
+            } else {
+              html += ` <strong class="stat-bonus">${valeur}</strong>`;
+            }
+          }
+
+          html += `\n<span class="bestiaire-champ">Capacités spéciales</span> : `;
 
           const comp_titles = document.querySelectorAll(
             `.${prefix}_comp${idx}_titreCapacite`
