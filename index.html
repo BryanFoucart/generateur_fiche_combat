@@ -203,95 +203,95 @@
 
       function createCharacterForm(idPrefix, label) {
         return `
-      <div class="bloc">
-      <h3>${label}</h3>
-      <label>Nom :
-      <input type="text" id="${idPrefix}_nom">
-      </label>
-      <label>Race :
-      <select id="${idPrefix}_classe">
-      <option value="abyssal">Abyssal</option>
-      <option value="djöllfulin">Djöllfulin</option>
-      <option value="elfe">Elfe</option>
-      <option value="entomothrope">Entomothrope</option>
-      <option value="géant">Géant</option>
-      <option value="humain">Humain</option>
-      <option value="hybride">Hybride</option>
-      <option value="naga">Naga</option>
-      <option value="nain">Nain</option>
-      <option value="orc">Orc</option>
-      <option value="stryge-blanc">Stryge Blanc</option>
-      <option value="stryge-noir">Stryge Noir</option>
-      <option value="thérianthrope">Thérianthrope</option>
-      <option value="vampire">Vampire</option>
-      <option value="bestiaire-nom">Créature</option>
-      <option value="boss">Boss</option>
-      <option value="archi-boss">Archi-Boss</option>
-      </select>
-      </label>
+<div class="bloc">
+<h3>${label}</h3>
+<label>Nom :
+<input type="text" id="${idPrefix}_nom">
+</label>
+<label>Race :
+<select id="${idPrefix}_classe">
+<option value="abyssal">Abyssal</option>
+<option value="djöllfulin">Djöllfulin</option>
+<option value="elfe">Elfe</option>
+<option value="entomothrope">Entomothrope</option>
+<option value="géant">Géant</option>
+<option value="humain">Humain</option>
+<option value="hybride">Hybride</option>
+<option value="naga">Naga</option>
+<option value="nain">Nain</option>
+<option value="orc">Orc</option>
+<option value="stryge-blanc">Stryge Blanc</option>
+<option value="stryge-noir">Stryge Noir</option>
+<option value="thérianthrope">Thérianthrope</option>
+<option value="vampire">Vampire</option>
+<option value="bestiaire-nom">Créature</option>
+<option value="boss">Boss</option>
+<option value="archi-boss">Archi-Boss</option>
+</select>
+</label>
 
-      <label>Vitalité :
-      <input type="number" id="${idPrefix}_vitalite">
-      </label>
-      <label>
-      <input type="checkbox" id="${idPrefix}_changementVieCheck" onchange="toggleChangementVie('${idPrefix}')"> Bonus/Malus ?
-      </label>
-      <div id="${idPrefix}_changementVieBloc" style="display: none;">
-      <label>Bonus/Malus :
-      <input type="text" id="${idPrefix}_changementVie">
-      </label>
-      </div>
-      <label>Vitesse :
-      <input type="number" id="${idPrefix}_vitesse">
-      </label>
-      <label>
-      <input type="checkbox" id="${idPrefix}_changementVitesseCheck" onchange="toggleChangementVitesse('${idPrefix}')"> Bonus/Malus ?
-      </label>
-      <div id="${idPrefix}_changementVitesseBloc" style="display: none;">
-      <label>Bonus/Malus :
-      <input type="text" id="${idPrefix}_changementVitesse">
-      </label>
-      </div>
-      <label>
-      <input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
-      </label>
-      <div id="${idPrefix}_absorptionBloc" style="display: none;">
-      <label>Absorption (%) :
-      <input type="number" id="${idPrefix}_absorption" value="0">
-      </label>
-      </div>
-      <label>Dégâts :
-      <input type="number" id="${idPrefix}_degats">
-      </label>
-      <label>
-      <input type="checkbox" id="${idPrefix}_changementDegatsCheck" onchange="toggleChangementDegats('${idPrefix}')"> Bonus/Malus ?
-      </label>
-      <div id="${idPrefix}_changementDegatsBloc" style="display: none;">
-      <label>Bonus/Malus :
-      <input type="text" id="${idPrefix}_changementDegats">
-      </label>
-      </div>
+<label>Vitalité :
+<input type="number" id="${idPrefix}_vitalite">
+</label>
+<label>
+<input type="checkbox" id="${idPrefix}_changementVieCheck" onchange="toggleChangementVie('${idPrefix}')"> Bonus/Malus ?
+</label>
+<div id="${idPrefix}_changementVieBloc" style="display: none;">
+<label>Bonus/Malus :
+<input type="text" id="${idPrefix}_changementVie">
+</label>
+</div>
+<label>Vitesse :
+<input type="number" id="${idPrefix}_vitesse">
+</label>
+<label>
+<input type="checkbox" id="${idPrefix}_changementVitesseCheck" onchange="toggleChangementVitesse('${idPrefix}')"> Bonus/Malus ?
+</label>
+<div id="${idPrefix}_changementVitesseBloc" style="display: none;">
+<label>Bonus/Malus :
+<input type="text" id="${idPrefix}_changementVitesse">
+</label>
+</div>
+<label>
+<input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
+</label>
+<div id="${idPrefix}_absorptionBloc" style="display: none;">
+<label>Absorption (%) :
+<input type="number" id="${idPrefix}_absorption" value="0">
+</label>
+</div>
+<label>Dégâts :
+<input type="number" id="${idPrefix}_degats">
+</label>
+<label>
+<input type="checkbox" id="${idPrefix}_changementDegatsCheck" onchange="toggleChangementDegats('${idPrefix}')"> Bonus/Malus ?
+</label>
+<div id="${idPrefix}_changementDegatsBloc" style="display: none;">
+<label>Bonus/Malus :
+<input type="text" id="${idPrefix}_changementDegats">
+</label>
+</div>
 
-      <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
-      <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
-      Rapidité : permet d'attaquer à deux reprises.
-      Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
-      Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
-      </label>
-      <div id="${idPrefix}_capacites"></div>
+<label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+<textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
+Rapidité : permet d'attaquer à deux reprises.
+Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
+</label>
+<div id="${idPrefix}_capacites"></div>
 
-      <label>Nombre d'invocations :
-      <input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onchange="updateCompanions('${idPrefix}')">
-      </label>
-      <div id="${idPrefix}_compagnons"></div>
+<label>Nombre d'invocations :
+<input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onchange="updateCompanions('${idPrefix}')">
+</label>
+<div id="${idPrefix}_compagnons"></div>
 
-      <div class="character-actions">
-        <button onclick="exporterPersonnage('${idPrefix}')">Exporter ce personnage</button>
-        <input type="file" id="${idPrefix}_import" accept=".json" onchange="importerPersonnage(event, '${idPrefix}')" style="display: none;">
-        <button onclick="document.getElementById('${idPrefix}_import').click()">Importer un personnage</button>
-      </div>
-      </div>
-      `;
+<div class="character-actions">
+<button onclick="exporterPersonnage('${idPrefix}')">Exporter ce personnage</button>
+<input type="file" id="${idPrefix}_import" accept=".json" onchange="importerPersonnage(event, '${idPrefix}')" style="display: none;">
+<button onclick="document.getElementById('${idPrefix}_import').click()">Importer un personnage</button>
+</div>
+</div>
+`;
       }
 
       function escapeHtml(text) {
@@ -303,87 +303,6 @@
           .replace(/'/g, "&#039;");
       }
 
-      function parseCapacites(prefix) {
-        const input = document.getElementById(
-          `${prefix}_capacites_input`
-        ).value;
-        const container = document.getElementById(`${prefix}_capacites`);
-        container.innerHTML = ""; // Reset
-
-        // Traiter les lignes une par une
-        const lines = input.split("\n").filter((l) => l.trim() !== "");
-        let currentLines = [];
-
-        for (let i = 0; i < lines.length; i++) {
-          if (lines[i].trim() === "@not") {
-            if (currentLines.length > 0 && i + 1 < lines.length) {
-              const lastLine = currentLines.pop();
-              currentLines.push(lastLine + "\n" + lines[i + 1]);
-              i++;
-            }
-          } else {
-            currentLines.push(lines[i]);
-          }
-        }
-
-        currentLines.forEach((line, index) => {
-          // Nettoyer les éventuels @not restants
-          const cleanLine = line
-            .split("\n")
-            .filter((l) => l.trim() !== "@not")
-            .join("\n");
-
-          const firstColonIndex = cleanLine.indexOf(":");
-
-          // Continuer avec le traitement normal pour les lignes sans spoiler
-          if (firstColonIndex !== -1) {
-            const titre = cleanLine.substring(0, firstColonIndex).trim();
-            const description = cleanLine.substring(firstColonIndex + 1).trim();
-            const escapedTitre = escapeHtml(titre);
-            const escapedDescription = escapeHtml(description);
-
-            container.innerHTML += `
-      <div class="capacite-container">
-        <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
-        <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
-        <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
-        <label>État :
-          <select class="${prefix}_classeCapacite">
-            <option value="capacité_spéciale">Neutre</option>
-            <option value="capacité_spéciale active">Active</option>
-            <option value="capacité_spéciale passive">Passive</option>
-            <option value="capacité_spéciale bloquée">Bloquée</option>
-            <option value="capacité_spéciale utilisée">Utilisée</option>
-            <option value="capacité_spéciale annulée">Annulée</option>
-            <option value="capacité_spéciale inactive">Inactive</option>
-          </select>
-        </label>
-      </div>`;
-          } else {
-            const escapedLine = escapeHtml(cleanLine);
-            container.innerHTML += `
-      <div class="capacite-container">
-         <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
-              index + 1
-            }">
-        <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
-        <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
-        <label>État :
-          <select class="${prefix}_classeCapacite">
-            <option value="capacité_spéciale">Neutre</option>
-            <option value="capacité_spéciale active">Active</option>
-            <option value="capacité_spéciale passive">Passive</option>
-            <option value="capacité_spéciale bloquée">Bloquée</option>
-            <option value="capacité_spéciale utilisée">Utilisée</option>
-            <option value="capacité_spéciale annulée">Annulée</option>
-            <option value="capacité_spéciale inactive">Inactive</option>
-          </select>
-        </label>
-      </div>`;
-          }
-        });
-      }
-
       // function parseCapacites(prefix) {
       //   const input = document.getElementById(
       //     `${prefix}_capacites_input`
@@ -391,45 +310,43 @@
       //   const container = document.getElementById(`${prefix}_capacites`);
       //   container.innerHTML = ""; // Reset
 
-      //   const lines = input
-      //     .split("\n")
-      //     .map((l) => l.trim())
-      //     .filter((l) => l !== "");
+      //   // Traiter les lignes une par une
+      //   const lines = input.split("\n").filter((l) => l.trim() !== "");
+      //   let currentLines = [];
 
-      //   const entries = [];
-      //   let currentLine = null;
-
-      //   lines.forEach((line) => {
-      //     if (line.startsWith("x ")) {
-      //       // Nouvelle capacité
-      //       if (currentLine !== null) {
-      //         entries.push(currentLine);
+      //   for (let i = 0; i < lines.length; i++) {
+      //     if (lines[i].trim() === "@not") {
+      //       if (currentLines.length > 0 && i + 1 < lines.length) {
+      //         const lastLine = currentLines.pop();
+      //         currentLines.push(lastLine + "\n" + lines[i + 1]);
+      //         i++;
       //       }
-      //       currentLine = line.substring(2); // Retire le "x "
-      //     } else if (currentLine !== null) {
-      //       currentLine += "\n" + line; // Ajoute la ligne suivante à la description
+      //     } else {
+      //       currentLines.push(lines[i]);
       //     }
-      //   });
-
-      //   if (currentLine !== null) {
-      //     entries.push(currentLine); // Ajouter la dernière
       //   }
 
-      //   entries.forEach((entry, index) => {
-      //     const firstColonIndex = entry.indexOf(":");
+      //   currentLines.forEach((line, index) => {
+      //     // Nettoyer les éventuels @not restants
+      //     const cleanLine = line
+      //       .split("\n")
+      //       .filter((l) => l.trim() !== "@not")
+      //       .join("\n");
 
+      //     const firstColonIndex = cleanLine.indexOf(":");
+
+      //     // Continuer avec le traitement normal pour les lignes sans spoiler
       //     if (firstColonIndex !== -1) {
-      //       const titre = entry.substring(0, firstColonIndex).trim();
-      //       const description = entry.substring(firstColonIndex + 1).trim();
+      //       const titre = cleanLine.substring(0, firstColonIndex).trim();
+      //       const description = cleanLine.substring(firstColonIndex + 1).trim();
       //       const escapedTitre = escapeHtml(titre);
       //       const escapedDescription = escapeHtml(description);
 
       //       container.innerHTML += `
-      // <li>
+      // <div class="capacite-container">
       //   <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
       //   <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
-      //   <em>${escapedTitre}</em> : ${escapedDescription}
-      //   <br>
+      //   <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
       //   <label>État :
       //     <select class="${prefix}_classeCapacite">
       //       <option value="capacité_spéciale">Neutre</option>
@@ -441,17 +358,16 @@
       //       <option value="capacité_spéciale inactive">Inactive</option>
       //     </select>
       //   </label>
-      // </li>`;
+      // </div>`;
       //     } else {
-      //       const escapedLine = escapeHtml(entry);
+      //       const escapedLine = escapeHtml(cleanLine);
       //       container.innerHTML += `
-      // <li>
-      //   <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
+      // <div class="capacite-container">
+      //    <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
       //         index + 1
       //       }">
       //   <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
-      //   <em>Capacité ${index + 1}</em> : ${escapedLine}
-      //   <br>
+      //   <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
       //   <label>État :
       //     <select class="${prefix}_classeCapacite">
       //       <option value="capacité_spéciale">Neutre</option>
@@ -463,10 +379,94 @@
       //       <option value="capacité_spéciale inactive">Inactive</option>
       //     </select>
       //   </label>
-      // </li>`;
+      // </div>`;
       //     }
       //   });
       // }
+
+      function parseCapacites(prefix) {
+        const input = document.getElementById(
+          `${prefix}_capacites_input`
+        ).value;
+        const container = document.getElementById(`${prefix}_capacites`);
+        container.innerHTML = ""; // Reset
+
+        const lines = input
+          .split("\n")
+          .map((l) => l.trim())
+          .filter((l) => l !== "");
+
+        const entries = [];
+        let currentLine = null;
+
+        lines.forEach((line) => {
+          if (line.startsWith("x ")) {
+            // Nouvelle capacité
+            if (currentLine !== null) {
+              entries.push(currentLine);
+            }
+            currentLine = line.substring(2); // Retire le "x "
+          } else if (currentLine !== null) {
+            currentLine += "\n" + line; // Ajoute la ligne suivante à la description
+          }
+        });
+
+        if (currentLine !== null) {
+          entries.push(currentLine); // Ajouter la dernière
+        }
+
+        entries.forEach((entry, index) => {
+          const firstColonIndex = entry.indexOf(":");
+
+          if (firstColonIndex !== -1) {
+            const titre = entry.substring(0, firstColonIndex).trim();
+            const description = entry.substring(firstColonIndex + 1).trim();
+            const escapedTitre = escapeHtml(titre);
+            const escapedDescription = escapeHtml(description);
+
+            container.innerHTML += `
+<li>
+<input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
+<input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
+<em>${escapedTitre}</em> : ${escapedDescription}
+<br>
+<label>État :
+<select class="${prefix}_classeCapacite">
+<option value="capacité_spéciale">Neutre</option>
+<option value="capacité_spéciale active">Active</option>
+<option value="capacité_spéciale passive">Passive</option>
+<option value="capacité_spéciale bloquée">Bloquée</option>
+<option value="capacité_spéciale utilisée">Utilisée</option>
+<option value="capacité_spéciale annulée">Annulée</option>
+<option value="capacité_spéciale inactive">Inactive</option>
+</select>
+</label>
+</li>`;
+          } else {
+            const escapedLine = escapeHtml(entry);
+            container.innerHTML += `
+<li>
+<input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
+              index + 1
+            }">
+<input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
+<em>Capacité ${index + 1}</em> : ${escapedLine}
+<br>
+<label>État :
+<select class="${prefix}_classeCapacite">
+<option value="capacité_spéciale">Neutre</option>
+<option value="capacité_spéciale active">Active</option>
+<option value="capacité_spéciale passive">Passive</option>
+<option value="capacité_spéciale bloquée">Bloquée</option>
+<option value="capacité_spéciale utilisée">Utilisée</option>
+<option value="capacité_spéciale annulée">Annulée</option>
+<option value="capacité_spéciale inactive">Inactive</option>
+</select>
+</label>
+</li>`;
+          }
+        });
+      }
 
       function updateCompanions(prefix) {
         const nb = parseInt(
@@ -498,32 +498,32 @@
         container.innerHTML = "";
         for (let i = 0; i < nb; i++) {
           container.innerHTML += `
-      <div class="companion-container">
-      <h4>Invocation ${i + 1}</h4>
-      <label>Nom :
-      <input type="text" class="${prefix}_comp_nom">
-      </label>
-      <label>Race :
-      <input type="text" class="${prefix}_comp_race" value="invocation" hidden>Invocation
-      </label>
-      <label>Vitalité :
-      <input type="number" class="${prefix}_comp_vitalite">
-      </label>
-      <label>Vitesse :
-      <input type="number" class="${prefix}_comp_vitesse">
-      </label>
-      <label>Dégâts :
-      <input type="number" class="${prefix}_comp_degats">
-      </label>
-      <label>Capacités spéciales (format : "Titre : Description", une par ligne) :
-      <textarea id="${prefix}_comp${i}_capacites_input" oninput="parseCapacitesInvocations('${prefix}', ${i})" placeholder="EXEMPLE
-      Rapidité : permet d'attaquer à deux reprises.
-      Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
-      Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
-      </label>
-      <div id="${prefix}_comp${i}_capacites"></div>
-      </div>
-      `;
+<div class="companion-container">
+<h4>Invocation ${i + 1}</h4>
+<label>Nom :
+<input type="text" class="${prefix}_comp_nom">
+</label>
+<label>Race :
+<input type="text" class="${prefix}_comp_race" value="invocation" hidden>Invocation
+</label>
+<label>Vitalité :
+<input type="number" class="${prefix}_comp_vitalite">
+</label>
+<label>Vitesse :
+<input type="number" class="${prefix}_comp_vitesse">
+</label>
+<label>Dégâts :
+<input type="number" class="${prefix}_comp_degats">
+</label>
+<label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+<textarea id="${prefix}_comp${i}_capacites_input" oninput="parseCapacitesInvocations('${prefix}', ${i})" placeholder="EXEMPLE
+Rapidité : permet d'attaquer à deux reprises.
+Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
+</label>
+<div id="${prefix}_comp${i}_capacites"></div>
+</div>
+`;
         }
 
         // Restaurer les données sauvegardées
@@ -626,47 +626,47 @@
             const escapedDescription = escapeHtml(description);
 
             container.innerHTML += `
-      <div class="capacite-container">
-      <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
-      <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
-      <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
-      <label>État :
-      <select class="${prefix}_comp${idx}_classeCapacite">
-      <option value="capacité_spéciale">Neutre</option>
-      <option value="capacité_spéciale active">Active</option>
-      <option value="capacité_spéciale passive">Passive</option>
-      <option value="capacité_spéciale bloquée">Bloquée</option>
-      <option value="capacité_spéciale utilisée">Utilisée</option>
-      <option value="capacité_spéciale annulée">Annulée</option>
-      <option value="capacité_spéciale inactive">Inactive</option>
-      </select>
-      </label>
-      </div>
-      `;
+<div class="capacite-container">
+<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
+<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
+<p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
+<label>État :
+<select class="${prefix}_comp${idx}_classeCapacite">
+<option value="capacité_spéciale">Neutre</option>
+<option value="capacité_spéciale active">Active</option>
+<option value="capacité_spéciale passive">Passive</option>
+<option value="capacité_spéciale bloquée">Bloquée</option>
+<option value="capacité_spéciale utilisée">Utilisée</option>
+<option value="capacité_spéciale annulée">Annulée</option>
+<option value="capacité_spéciale inactive">Inactive</option>
+</select>
+</label>
+</div>
+`;
           } else {
             // Si pas de ":", traiter comme une capacité sans titre
             const escapedLine = escapeHtml(cleanLine);
 
             container.innerHTML += `
-      <div class="capacite-container">
-      <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="Capacité ${
+<div class="capacite-container">
+<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="Capacité ${
               index + 1
             }">
-      <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedLine}">
-      <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
-      <label>État :
-      <select class="${prefix}_comp${idx}_classeCapacite">
-      <option value="capacité_spéciale">Neutre</option>
-      <option value="capacité_spéciale active">Active</option>
-      <option value="capacité_spéciale passive">Passive</option>
-      <option value="capacité_spéciale bloquée">Bloquée</option>
-      <option value="capacité_spéciale utilisée">Utilisée</option>
-      <option value="capacité_spéciale annulée">Annulée</option>
-      <option value="capacité_spéciale inactive">Inactive</option>
-      </select>
-      </label>
-      </div>
-      `;
+<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedLine}">
+<p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
+<label>État :
+<select class="${prefix}_comp${idx}_classeCapacite">
+<option value="capacité_spéciale">Neutre</option>
+<option value="capacité_spéciale active">Active</option>
+<option value="capacité_spéciale passive">Passive</option>
+<option value="capacité_spéciale bloquée">Bloquée</option>
+<option value="capacité_spéciale utilisée">Utilisée</option>
+<option value="capacité_spéciale annulée">Annulée</option>
+<option value="capacité_spéciale inactive">Inactive</option>
+</select>
+</label>
+</div>
+`;
           }
         });
       }
@@ -703,7 +703,7 @@
 
         html += `\n<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
           document.getElementById(`${prefix}_vitesse`).value
-        }</strong>\n`;
+        }</strong>`;
 
         if (
           document.getElementById(`${prefix}_changementVitesseCheck`).checked
@@ -719,12 +719,12 @@
         }
 
         if (document.getElementById(`${prefix}_corrompu`).checked) {
-          html += `<span class="bestiaire-champ">Absorption</span> : <strong class="dégâts">${
+          html += `\n<span class="bestiaire-champ">Absorption</span> : <strong class="dégâts">${
             document.getElementById(`${prefix}_absorption`).value
-          }%</strong>\n`;
+          }%</strong>`;
         }
 
-        html += `<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${
+        html += `\n<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${
           document.getElementById(`${prefix}_degats`).value
         }</strong>`;
 
@@ -741,7 +741,7 @@
           }
         }
 
-        html += `<span class="bestiaire-champ">Capacités spéciales</span> :`;
+        html += `\n<span class="bestiaire-champ">Capacités spéciales</span> :`;
 
         const titres = Array.from(
           document.getElementsByClassName(`${prefix}_titreCapacite`)
@@ -756,7 +756,8 @@
         if (titres.length > 0) {
           html += `\n<ul>`;
           for (let i = 0; i < titres.length; i++) {
-            html += `<li class="${classes[i].value}"><em>${titres[i].value}</em> : ${descs[i].value}</li>\n`;
+            const titreNettoye = titres[i].value.replace(/^x\s*/i, "");
+            html += `<li class="${classes[i].value}"><em>${titreNettoye}</em> : ${descs[i].value}</li>\n`;
           }
           html += `</ul>`;
         } else {
@@ -778,10 +779,10 @@
             .value;
 
           html += `\n
-      <strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong>
-      <span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong>
-      <span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong>
-      <span class="bestiaire-champ">Capacités spéciales</span> : `;
+<strong class="${race}">${compNom.value}</strong> : <strong class="vitalité">${vit}</strong>
+<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong>
+<span class="bestiaire-champ">Dégâts</span> : <strong class="dégâts">${deg}</strong>
+<span class="bestiaire-champ">Capacités spéciales</span> : `;
 
           const comp_titles = document.querySelectorAll(
             `.${prefix}_comp${idx}_titreCapacite`
@@ -875,7 +876,7 @@
 
         const header = `<div class="titre">${headerTitle}</div>
 
-      <em>${commence} commence le combat</em>`;
+<em>${commence} commence le combat</em>`;
 
         document.getElementById(
           "resultat"
@@ -942,8 +943,13 @@
         );
 
         for (let i = 0; i < titres.length; i++) {
+          const isNumberedCapacity = titres[i].value.startsWith("Capacité ");
+          const titre = isNumberedCapacity
+            ? titres[i].value
+            : `x ${titres[i].value}`;
+
           capacites.push({
-            titre: titres[i].value,
+            titre: titre,
             description: descs[i].value,
             etat: classes[i].value,
           });
@@ -1063,7 +1069,12 @@
 
         // Remplir les capacités
         const capacitesTexte = data.capacites
-          .map((c) => `${c.titre} : ${c.description}`)
+          .map((c) => {
+            if (c.titre.startsWith("Capacité ") || c.titre.startsWith("x ")) {
+              return `${c.titre} : ${c.description}`;
+            }
+            return `x ${c.titre} : ${c.description}`;
+          })
           .join("\n");
         document.getElementById(`${prefix}_capacites_input`).value =
           capacitesTexte;

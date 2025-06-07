@@ -189,4 +189,45 @@
           }
         });
       }
+
+              // Remplir les capacités
+        const capacitesTexte = data.capacites
+          .map((c) => `${c.titre} : ${c.description}`)
+          .join("\n");
+        document.getElementById(`${prefix}_capacites_input`).value =
+          capacitesTexte;
+        parseCapacites(prefix);
+
+        function collecterCapacites(prefix) {
+        const capacites = [];
+        const titres = document.getElementsByClassName(
+          `${prefix}_titreCapacite`
+        );
+        const descs = document.getElementsByClassName(
+          `${prefix}_descriptionCapacite`
+        );
+        const classes = document.getElementsByClassName(
+          `${prefix}_classeCapacite`
+        );
+
+        for (let i = 0; i < titres.length; i++) {
+          capacites.push({
+            titre: titres[i].value,
+            description: descs[i].value,
+            etat: classes[i].value,
+          });
+        }
+        return capacites;
+      }
+
+      // Extract Character
+              if (titres.length > 0) {
+          html += `\n<ul>`;
+          for (let i = 0; i < titres.length; i++) {
+            html += `<li class="${classes[i].value}"><em>${titres[i].value}</em> : ${descs[i].value}</li>\n`;
+          }
+          html += `</ul>`;
+        } else {
+          html += ` <em>Aucune capacité spéciale</em>`;
+        }
 </script>
