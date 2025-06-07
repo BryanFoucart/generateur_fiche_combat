@@ -1,20 +1,36 @@
 <script>
-  function parseCapacites(prefix) { const input = document.getElementById(
-  `${prefix}_capacites_input` ).value; const container =
-  document.getElementById(`${prefix}_capacites`); container.innerHTML = ""; //
-  Reset // Traiter les lignes une par une const lines =
-  input.split("\n").filter((l) => l.trim() !== ""); let currentLines = []; for
-  (let i = 0; i < lines.length; i++) { if (lines[i].trim() === "@not") { if
-  (currentLines.length > 0 && i + 1 < lines.length) { const lastLine =
-  currentLines.pop(); currentLines.push(lastLine + "\n" + lines[i + 1]); i++; } }
-  else { currentLines.push(lines[i]); } } currentLines.forEach((line, index) => {
-  // Nettoyer les éventuels @not restants const cleanLine = line .split("\n")
-  .filter((l) => l.trim() !== "@not") .join("\n"); const firstColonIndex =
-  cleanLine.indexOf(":"); // Continuer avec le traitement normal pour les lignes
-  sans spoiler if (firstColonIndex !== -1) { const titre = cleanLine.substring(0,
-  firstColonIndex).trim(); const description = cleanLine.substring(firstColonIndex
-  + 1).trim(); const escapedTitre = escapeHtml(titre); const escapedDescription =
-  escapeHtml(description); container.innerHTML += `
+  function parseCapacites(prefix) {
+    const input = document.getElementById(`${prefix}_capacites_input`).value;
+    const container = document.getElementById(`${prefix}_capacites`);
+    container.innerHTML = ""; //
+    Reset; // Traiter les lignes une par une const lines =
+    input.split("\n").filter((l) => l.trim() !== "");
+    let currentLines = [];
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim() === "@not") {
+        if (currentLines.length > 0 && i + 1 < lines.length) {
+          const lastLine = currentLines.pop();
+          currentLines.push(lastLine + "\n" + lines[i + 1]);
+          i++;
+        }
+      } else {
+        currentLines.push(lines[i]);
+      }
+    }
+    currentLines.forEach((line, index) => {
+      // Nettoyer les éventuels @not restants
+      const cleanLine = line
+        .split("\n")
+        .filter((l) => l.trim() !== "@not")
+        .join("\n");
+      const firstColonIndex = cleanLine.indexOf(":");
+      // Continuer avec le traitement normal pour les lignes sans spoiler
+      if (firstColonIndex !== -1) {
+        const titre = cleanLine.substring(0, firstColonIndex).trim();
+        const description = cleanLine.substring(firstColonIndex + 1).trim();
+        const escapedTitre = escapeHtml(titre);
+        const escapedDescription = escapeHtml(description);
+        container.innerHTML += `
   <div class="capacite-container">
     <input
       type="hidden"
@@ -42,14 +58,15 @@
       </select>
     </label>
   </div>
-  `; } else { const escapedLine = escapeHtml(cleanLine); container.innerHTML += `
+  `;
+      } else {
+        const escapedLine = escapeHtml(cleanLine);
+        container.innerHTML += `
   <div class="capacite-container">
     <input
       type="hidden"
       class="${prefix}_titreCapacite"
-      value="Capacité ${
-                index + 1
-              }"
+      value="Capacité ${index + 1}"
     />
     <input
       type="hidden"
@@ -72,79 +89,77 @@
       </select>
     </label>
   </div>
-  `; } }); }
+  `;
+      }
+    });
+  }
 
   function parseCapacitesInvocations(prefix, idx) {
-        const input = document.getElementById(
-          `${prefix}_comp${idx}_capacites_input`
-        ).value;
-        const container = document.getElementById(
-          `${prefix}_comp${idx}_capacites`
-        );
-        container.innerHTML = ""; // Reset
+    const input = document.getElementById(
+      `${prefix}_comp${idx}_capacites_input`
+    ).value;
+    const container = document.getElementById(`${prefix}_comp${idx}_capacites`);
+    container.innerHTML = ""; // Reset
 
-        // Traiter les lignes une par une
-        const lines = input.split("\n").filter((l) => l.trim() !== "");
-        let currentLines = [];
+    // Traiter les lignes une par une
+    const lines = input.split("\n").filter((l) => l.trim() !== "");
+    let currentLines = [];
 
-        for (let i = 0; i < lines.length; i++) {
-          if (lines[i].trim() === "@not") {
-            // Si on trouve @not, on fusionne la ligne précédente avec la suivante
-            if (currentLines.length > 0 && i + 1 < lines.length) {
-              const lastLine = currentLines.pop();
-              currentLines.push(lastLine + "\n" + lines[i + 1]);
-              i++; // Sauter la ligne suivante
-            }
-          } else {
-            currentLines.push(lines[i]);
-          }
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim() === "@not") {
+        // Si on trouve @not, on fusionne la ligne précédente avec la suivante
+        if (currentLines.length > 0 && i + 1 < lines.length) {
+          const lastLine = currentLines.pop();
+          currentLines.push(lastLine + "\n" + lines[i + 1]);
+          i++; // Sauter la ligne suivante
         }
+      } else {
+        currentLines.push(lines[i]);
+      }
+    }
 
-        currentLines.forEach((line, index) => {
-          // Nettoyer les éventuels @not restants
-          const cleanLine = line
-            .split("\n")
-            .filter((l) => l.trim() !== "@not")
-            .join("\n");
+    currentLines.forEach((line, index) => {
+      // Nettoyer les éventuels @not restants
+      const cleanLine = line
+        .split("\n")
+        .filter((l) => l.trim() !== "@not")
+        .join("\n");
 
-          // Vérifier si la ligne contient un spoiler
-          if (
-            cleanLine.includes("[spoiler]") &&
-            cleanLine.includes("[/spoiler]")
-          ) {
-            // Pour les lignes avec spoiler, ajouter directement le texte sans créer de <li>
-            const escapedLine = escapeHtml(cleanLine);
-            container.innerHTML += `<p>${escapedLine}</p>`;
-            return; // Passer à la ligne suivante
-          }
+      // Vérifier si la ligne contient un spoiler
+      if (cleanLine.includes("[spoiler]") && cleanLine.includes("[/spoiler]")) {
+        // Pour les lignes avec spoiler, ajouter directement le texte sans créer de <li>
+        const escapedLine = escapeHtml(cleanLine);
+        container.innerHTML += `<p>${escapedLine}</p>`;
+        return; // Passer à la ligne suivante
+      }
 
-          // Pour les lignes normales, ne prendre en compte que le premier ":" qui n'est pas dans un spoiler
-          let firstColonIndex = -1;
-          let inSpoiler = false;
+      // Pour les lignes normales, ne prendre en compte que le premier ":" qui n'est pas dans un spoiler
+      let firstColonIndex = -1;
+      let inSpoiler = false;
 
-          for (let i = 0; i < cleanLine.length; i++) {
-            if (cleanLine.substring(i, i + 9) === "[spoiler]") {
-              inSpoiler = true;
-              i += 8;
-            } else if (cleanLine.substring(i, i + 10) === "[/spoiler]") {
-              inSpoiler = false;
-              i += 9;
-            } else if (cleanLine[i] === ":" && !inSpoiler) {
-              firstColonIndex = i;
-              break;
-            }
-          }
+      for (let i = 0; i < cleanLine.length; i++) {
+        if (cleanLine.substring(i, i + 9) === "[spoiler]") {
+          inSpoiler = true;
+          i += 8;
+        } else if (cleanLine.substring(i, i + 10) === "[/spoiler]") {
+          inSpoiler = false;
+          i += 9;
+        } else if (cleanLine[i] === ":" && !inSpoiler) {
+          firstColonIndex = i;
+          break;
+        }
+      }
 
-          // Continuer avec le traitement normal pour les lignes sans spoiler
-          if (firstColonIndex !== -1) {
-            const titre = cleanLine.substring(0, firstColonIndex).trim();
-            const description = cleanLine.substring(firstColonIndex + 1).trim();
+      // Continuer avec le traitement normal pour les lignes sans spoiler
+      if (firstColonIndex !== -1) {
+        const titre = cleanLine.substring(0, firstColonIndex).trim();
+        const description = cleanLine.substring(firstColonIndex + 1).trim();
 
-            // Échapper les caractères spéciaux pour l'HTML
-            const escapedTitre = escapeHtml(titre);
-            const escapedDescription = escapeHtml(description);
+        // Échapper les caractères spéciaux pour l'HTML
+        const escapedTitre = escapeHtml(titre);
+        const escapedDescription = escapeHtml(description);
 
-            container.innerHTML += `
+        container.innerHTML += `
       <div class="capacite-container">
       <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
       <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
@@ -162,15 +177,15 @@
       </label>
       </div>
       `;
-          } else {
-            // Si pas de ":", traiter comme une capacité sans titre
-            const escapedLine = escapeHtml(cleanLine);
+      } else {
+        // Si pas de ":", traiter comme une capacité sans titre
+        const escapedLine = escapeHtml(cleanLine);
 
-            container.innerHTML += `
+        container.innerHTML += `
       <div class="capacite-container">
       <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="Capacité ${
-              index + 1
-            }">
+          index + 1
+        }">
       <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedLine}">
       <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
       <label>État :
@@ -186,107 +201,100 @@
       </label>
       </div>
       `;
-          }
-        });
       }
+    });
+  }
 
-              // Remplir les capacités
-        const capacitesTexte = data.capacites
-          .map((c) => `${c.titre} : ${c.description}`)
-          .join("\n");
-        document.getElementById(`${prefix}_capacites_input`).value =
-          capacitesTexte;
-        parseCapacites(prefix);
+  // Remplir les capacités
+  const capacitesTexte = data.capacites
+    .map((c) => `${c.titre} : ${c.description}`)
+    .join("\n");
+  document.getElementById(`${prefix}_capacites_input`).value = capacitesTexte;
+  parseCapacites(prefix);
 
-        function collecterCapacites(prefix) {
-        const capacites = [];
-        const titres = document.getElementsByClassName(
-          `${prefix}_titreCapacite`
-        );
-        const descs = document.getElementsByClassName(
-          `${prefix}_descriptionCapacite`
-        );
-        const classes = document.getElementsByClassName(
-          `${prefix}_classeCapacite`
-        );
+  function collecterCapacites(prefix) {
+    const capacites = [];
+    const titres = document.getElementsByClassName(`${prefix}_titreCapacite`);
+    const descs = document.getElementsByClassName(
+      `${prefix}_descriptionCapacite`
+    );
+    const classes = document.getElementsByClassName(`${prefix}_classeCapacite`);
 
-        for (let i = 0; i < titres.length; i++) {
-          capacites.push({
-            titre: titres[i].value,
-            description: descs[i].value,
-            etat: classes[i].value,
-          });
-        }
-        return capacites;
-      }
+    for (let i = 0; i < titres.length; i++) {
+      capacites.push({
+        titre: titres[i].value,
+        description: descs[i].value,
+        etat: classes[i].value,
+      });
+    }
+    return capacites;
+  }
 
-      // Extract Character
-              if (titres.length > 0) {
-          html += `\n<ul>`;
-          for (let i = 0; i < titres.length; i++) {
-            html += `<li class="${classes[i].value}"><em>${titres[i].value}</em> : ${descs[i].value}</li>\n`;
-          }
-          html += `</ul>`;
-        } else {
-          html += ` <em>Aucune capacité spéciale</em>`;
-        }
+  // Extract Character
+  if (titres.length > 0) {
+    html += `\n<ul>`;
+    for (let i = 0; i < titres.length; i++) {
+      html += `<li class="${classes[i].value}"><em>${titres[i].value}</em> : ${descs[i].value}</li>\n`;
+    }
+    html += `</ul>`;
+  } else {
+    html += ` <em>Aucune capacité spéciale</em>`;
+  }
 
+  function remplirInvocation(prefix, idx, data) {
+    const inputs = {
+      nom: document.querySelectorAll(`.${prefix}_comp_nom`)[idx],
+      race: document.querySelectorAll(`.${prefix}_comp_race`)[idx],
+      vitalite: document.querySelectorAll(`.${prefix}_comp_vitalite`)[idx],
+      vitesse: document.querySelectorAll(`.${prefix}_comp_vitesse`)[idx],
+      degats: document.querySelectorAll(`.${prefix}_comp_degats`)[idx],
+    };
 
-      function remplirInvocation(prefix, idx, data) {
-        const inputs = {
-          nom: document.querySelectorAll(`.${prefix}_comp_nom`)[idx],
-          race: document.querySelectorAll(`.${prefix}_comp_race`)[idx],
-          vitalite: document.querySelectorAll(`.${prefix}_comp_vitalite`)[idx],
-          vitesse: document.querySelectorAll(`.${prefix}_comp_vitesse`)[idx],
-          degats: document.querySelectorAll(`.${prefix}_comp_degats`)[idx],
-        };
+    // Vérifier que tous les éléments existent avant de les remplir
+    if (Object.values(inputs).every((el) => el)) {
+      Object.entries(inputs).forEach(([key, el]) => (el.value = data[key]));
 
-        // Vérifier que tous les éléments existent avant de les remplir
-        if (Object.values(inputs).every((el) => el)) {
-          Object.entries(inputs).forEach(([key, el]) => (el.value = data[key]));
+      // Remplir les capacités de l'invocation
+      const capacitesTexte = data.capacites
+        .map((c) => `${c.titre} : ${c.description}`)
+        .join("\n");
+      const inputCapacites = document.getElementById(
+        `${prefix}_comp${idx}_capacites_input`
+      );
+      if (inputCapacites) {
+        inputCapacites.value = capacitesTexte;
+        parseCapacitesInvocations(prefix, idx);
 
-          // Remplir les capacités de l'invocation
-          const capacitesTexte = data.capacites
-            .map((c) => `${c.titre} : ${c.description}`)
-            .join("\n");
-          const inputCapacites = document.getElementById(
-            `${prefix}_comp${idx}_capacites_input`
-          );
-          if (inputCapacites) {
-            inputCapacites.value = capacitesTexte;
-            parseCapacitesInvocations(prefix, idx);
-
-            // Mettre à jour les états des capacités
-            const classes = document.querySelectorAll(
-              `.${prefix}_comp${idx}_classeCapacite`
-            );
-            data.capacites.forEach((c, i) => {
-              if (classes[i]) classes[i].value = c.etat;
-            });
-          }
-        }
-      }
-
-
-            function collecterCapacitesInvocation(prefix, idx) {
-        const capacites = [];
-        const titres = document.querySelectorAll(
-          `.${prefix}_comp${idx}_titreCapacite`
-        );
-        const descs = document.querySelectorAll(
-          `.${prefix}_comp${idx}_descriptionCapacite`
-        );
+        // Mettre à jour les états des capacités
         const classes = document.querySelectorAll(
           `.${prefix}_comp${idx}_classeCapacite`
         );
-
-        for (let i = 0; i < titres.length; i++) {
-          capacites.push({
-            titre: titres[i].value,
-            description: descs[i].value,
-            etat: classes[i].value,
-          });
-        }
-        return capacites;
+        data.capacites.forEach((c, i) => {
+          if (classes[i]) classes[i].value = c.etat;
+        });
       }
+    }
+  }
+
+  function collecterCapacitesInvocation(prefix, idx) {
+    const capacites = [];
+    const titres = document.querySelectorAll(
+      `.${prefix}_comp${idx}_titreCapacite`
+    );
+    const descs = document.querySelectorAll(
+      `.${prefix}_comp${idx}_descriptionCapacite`
+    );
+    const classes = document.querySelectorAll(
+      `.${prefix}_comp${idx}_classeCapacite`
+    );
+
+    for (let i = 0; i < titres.length; i++) {
+      capacites.push({
+        titre: titres[i].value,
+        description: descs[i].value,
+        etat: classes[i].value,
+      });
+    }
+    return capacites;
+  }
 </script>
