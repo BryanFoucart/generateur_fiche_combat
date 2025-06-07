@@ -230,4 +230,40 @@
         } else {
           html += ` <em>Aucune capacité spéciale</em>`;
         }
+
+
+      function remplirInvocation(prefix, idx, data) {
+        const inputs = {
+          nom: document.querySelectorAll(`.${prefix}_comp_nom`)[idx],
+          race: document.querySelectorAll(`.${prefix}_comp_race`)[idx],
+          vitalite: document.querySelectorAll(`.${prefix}_comp_vitalite`)[idx],
+          vitesse: document.querySelectorAll(`.${prefix}_comp_vitesse`)[idx],
+          degats: document.querySelectorAll(`.${prefix}_comp_degats`)[idx],
+        };
+
+        // Vérifier que tous les éléments existent avant de les remplir
+        if (Object.values(inputs).every((el) => el)) {
+          Object.entries(inputs).forEach(([key, el]) => (el.value = data[key]));
+
+          // Remplir les capacités de l'invocation
+          const capacitesTexte = data.capacites
+            .map((c) => `${c.titre} : ${c.description}`)
+            .join("\n");
+          const inputCapacites = document.getElementById(
+            `${prefix}_comp${idx}_capacites_input`
+          );
+          if (inputCapacites) {
+            inputCapacites.value = capacitesTexte;
+            parseCapacitesInvocations(prefix, idx);
+
+            // Mettre à jour les états des capacités
+            const classes = document.querySelectorAll(
+              `.${prefix}_comp${idx}_classeCapacite`
+            );
+            data.capacites.forEach((c, i) => {
+              if (classes[i]) classes[i].value = c.etat;
+            });
+          }
+        }
+      }
 </script>
