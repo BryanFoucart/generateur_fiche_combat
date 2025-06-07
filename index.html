@@ -272,11 +272,11 @@
 </label>
 </div>
 
-<label>Capacités spéciales (format : "Titre : Description", une par ligne) :
+<label>Capacités spéciales (format : "x Titre : Description", un x en début de chaque compétence) :
 <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
-Rapidité : permet d'attaquer à deux reprises.
-Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
-Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
+x Rapidité : permet d'attaquer à deux reprises.
+x Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
 </label>
 <div id="${idPrefix}_capacites"></div>
 
@@ -1016,12 +1016,59 @@ Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit 
         const fichier = event.target.files[0];
         if (!fichier) return;
 
+        // Vider tous les champs avant l'importation
+        viderPersonnage(prefix);
+
         const reader = new FileReader();
         reader.onload = function (e) {
           const personnage = JSON.parse(e.target.result);
           remplirPersonnage(prefix, personnage);
         };
         reader.readAsText(fichier);
+      }
+
+      function viderPersonnage(prefix) {
+        // Vider les champs principaux
+        document.getElementById(`${prefix}_nom`).value = "";
+        document.getElementById(`${prefix}_classe`).value = "humain"; // Valeur par défaut
+        document.getElementById(`${prefix}_vitalite`).value = "";
+        document.getElementById(`${prefix}_vitesse`).value = "";
+        document.getElementById(`${prefix}_degats`).value = "";
+
+        // Réinitialiser les checkboxes et leurs blocs associés
+        document.getElementById(`${prefix}_changementVieCheck`).checked = false;
+        document.getElementById(
+          `${prefix}_changementVitesseCheck`
+        ).checked = false;
+        document.getElementById(
+          `${prefix}_changementDegatsCheck`
+        ).checked = false;
+        document.getElementById(`${prefix}_corrompu`).checked = false;
+
+        // Vider et cacher les blocs de bonus/malus
+        document.getElementById(`${prefix}_changementVie`).value = "";
+        document.getElementById(`${prefix}_changementVitesse`).value = "";
+        document.getElementById(`${prefix}_changementDegats`).value = "";
+        document.getElementById(`${prefix}_absorption`).value = "0";
+
+        document.getElementById(`${prefix}_changementVieBloc`).style.display =
+          "none";
+        document.getElementById(
+          `${prefix}_changementVitesseBloc`
+        ).style.display = "none";
+        document.getElementById(
+          `${prefix}_changementDegatsBloc`
+        ).style.display = "none";
+        document.getElementById(`${prefix}_absorptionBloc`).style.display =
+          "none";
+
+        // Vider les capacités
+        document.getElementById(`${prefix}_capacites_input`).value = "";
+        document.getElementById(`${prefix}_capacites`).innerHTML = "";
+
+        // Réinitialiser les invocations
+        document.getElementById(`${prefix}_nbCompagnons`).value = "0";
+        document.getElementById(`${prefix}_compagnons`).innerHTML = "";
       }
 
       function remplirPersonnage(prefix, data) {
