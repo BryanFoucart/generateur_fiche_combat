@@ -266,4 +266,27 @@
           }
         }
       }
+
+
+            function collecterCapacitesInvocation(prefix, idx) {
+        const capacites = [];
+        const titres = document.querySelectorAll(
+          `.${prefix}_comp${idx}_titreCapacite`
+        );
+        const descs = document.querySelectorAll(
+          `.${prefix}_comp${idx}_descriptionCapacite`
+        );
+        const classes = document.querySelectorAll(
+          `.${prefix}_comp${idx}_classeCapacite`
+        );
+
+        for (let i = 0; i < titres.length; i++) {
+          capacites.push({
+            titre: titres[i].value,
+            description: descs[i].value,
+            etat: classes[i].value,
+          });
+        }
+        return capacites;
+      }
 </script>
