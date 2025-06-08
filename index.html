@@ -316,6 +316,14 @@
                   <input type="text" id="${idPrefix}_changementVie">
                   </label>
                   </div>
+                  <label>
+<input type="checkbox" id="${idPrefix}_auraCheck" onchange="toggleAura('${idPrefix}')"> Aura ?
+</label>
+<div id="${idPrefix}_auraBloc" style="display: none;">
+<label>Aura :
+<input type="number" id="${idPrefix}_aura" value="0">
+</label>
+</div>
                   <label>Vitesse :
                   <input type="number" id="${idPrefix}_vitesse">
                   </label>
@@ -566,6 +574,12 @@
             changementVie:
               comp.querySelector(`#${prefix}_comp${idx}_changementVie`)
                 ?.value || "",
+            auraCheck:
+              document.getElementById(`${prefix}_comp${idx}_auraCheck`)
+                ?.checked || false,
+            aura:
+              document.getElementById(`${prefix}_comp${idx}_aura`)?.value ||
+              "0",
             vitesse: comp.querySelector(`.${prefix}_comp_vitesse`)?.value || "",
             changementVitesseCheck:
               comp.querySelector(`#${prefix}_comp${idx}_changementVitesseCheck`)
@@ -610,6 +624,14 @@
                   <input type="text" id="${prefix}_comp${i}_changementVie">
                   </label>
                   </div>
+                  <label>
+<input type="checkbox" id="${prefix}_comp${i}_auraCheck" onchange="toggleAuraCompanion('${prefix}', ${i})"> Aura ?
+</label>
+<div id="${prefix}_comp${i}_auraBloc" style="display: none;">
+<label>Aura :
+<input type="number" id="${prefix}_comp${i}_aura" value="0">
+</label>
+</div>
                   <label>Vitesse :
                   <input type="number" class="${prefix}_comp_vitesse">
                   </label>
@@ -666,6 +688,18 @@
                   newContainer.querySelector(
                     `#${prefix}_comp${idx}_changementVie`
                   ).value = comp.changementVie;
+                }
+              }
+
+              const auraCheck = document.getElementById(
+                `${prefix}_comp${idx}_auraCheck`
+              );
+              if (auraCheck) {
+                auraCheck.checked = comp.auraCheck;
+                document.getElementById(`${prefix}_comp${idx}_aura`).value =
+                  comp.aura;
+                if (comp.auraCheck) {
+                  toggleAuraCompanion(prefix, idx);
                 }
               }
 
@@ -941,9 +975,16 @@
           ).value;
           if (valeur.startsWith("-")) {
             html += ` <strong class="stat-malus">${valeur}</strong>`;
-          } else {
+          } else if (valeur.startsWith("+")) {
             html += ` <strong class="stat-bonus">${valeur}</strong>`;
+          } else {
+            html += ` <strong class="stat-bonus">+${valeur}</strong>`;
           }
+        }
+
+        if (document.getElementById(`${prefix}_auraCheck`).checked) {
+          const valeur = document.getElementById(`${prefix}_aura`).value;
+          html += `\n<span class="bestiaire-champ">Aura</span> : <strong class="aura">${valeur}</strong>`;
         }
 
         html += `\n<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${
@@ -958,8 +999,10 @@
           ).value;
           if (valeur.startsWith("-")) {
             html += ` <strong class="stat-malus">${valeur}</strong>`;
-          } else {
+          } else if (valeur.startsWith("+")) {
             html += ` <strong class="stat-bonus">${valeur}</strong>`;
+          } else {
+            html += ` <strong class="stat-bonus">+${valeur}</strong>`;
           }
         }
 
@@ -981,8 +1024,10 @@
           ).value;
           if (valeur.startsWith("-")) {
             html += ` <strong class="stat-malus">${valeur}</strong>`;
-          } else {
+          } else if (valeur.startsWith("+")) {
             html += ` <strong class="stat-bonus">${valeur}</strong>`;
+          } else {
+            html += ` <strong class="stat-bonus">+${valeur}</strong>`;
           }
         }
 
@@ -1037,9 +1082,20 @@
             ).value;
             if (valeur.startsWith("-")) {
               html += ` <strong class="stat-malus">${valeur}</strong>`;
-            } else {
+            } else if (valeur.startsWith("+")) {
               html += ` <strong class="stat-bonus">${valeur}</strong>`;
+            } else {
+              html += ` <strong class="stat-bonus">+${valeur}</strong>`;
             }
+          }
+
+          if (
+            document.getElementById(`${prefix}_comp${idx}_auraCheck`).checked
+          ) {
+            const valeur = document.getElementById(
+              `${prefix}_comp${idx}_aura`
+            ).value;
+            html += `\n<span class="bestiaire-champ">Aura</span> :<strong class="aura">${valeur}</strong>`;
           }
 
           html += `\n<span class="bestiaire-champ">Vitesse</span> : <strong class="vitesse">${vitess}</strong>`;
@@ -1055,8 +1111,10 @@
             ).value;
             if (valeur.startsWith("-")) {
               html += ` <strong class="stat-malus">${valeur}</strong>`;
-            } else {
+            } else if (valeur.startsWith("+")) {
               html += ` <strong class="stat-bonus">${valeur}</strong>`;
+            } else {
+              html += ` <strong class="stat-bonus">+${valeur}</strong>`;
             }
           }
 
@@ -1073,8 +1131,10 @@
             ).value;
             if (valeur.startsWith("-")) {
               html += ` <strong class="stat-malus">${valeur}</strong>`;
-            } else {
+            } else if (valeur.startsWith("+")) {
               html += ` <strong class="stat-bonus">${valeur}</strong>`;
+            } else {
+              html += ` <strong class="stat-bonus">+${valeur}</strong>`;
             }
           }
 
@@ -1193,6 +1253,14 @@
         bloc.style.display = isChecked ? "block" : "none";
       }
 
+      function toggleAura(prefix) {
+        const bloc = document.getElementById(`${prefix}_auraBloc`);
+        const isChecked = document.getElementById(
+          `${prefix}_auraCheck`
+        ).checked;
+        bloc.style.display = isChecked ? "block" : "none";
+      }
+
       function toggleChangementVitesse(prefix) {
         const bloc = document.getElementById(`${prefix}_changementVitesseBloc`);
         const isChecked = document.getElementById(
@@ -1215,6 +1283,14 @@
         );
         const isChecked = document.getElementById(
           `${prefix}_comp${idx}_changementVieCheck`
+        ).checked;
+        bloc.style.display = isChecked ? "block" : "none";
+      }
+
+      function toggleAuraCompanion(prefix, idx) {
+        const bloc = document.getElementById(`${prefix}_comp${idx}_auraBloc`);
+        const isChecked = document.getElementById(
+          `${prefix}_comp${idx}_auraCheck`
         ).checked;
         bloc.style.display = isChecked ? "block" : "none";
       }
@@ -1244,8 +1320,8 @@
           nom: document.getElementById(`${prefix}_nom`).value,
           race: document.getElementById(`${prefix}_classe`).value,
           vitalite: document.getElementById(`${prefix}_vitalite`).value,
-          // changementVie: document.getElementById(`${prefix}_changementVie`)
-          // .value,
+          auraCheck: document.getElementById(`${prefix}_auraCheck`).checked,
+          aura: document.getElementById(`${prefix}_aura`).value,
           vitesse: document.getElementById(`${prefix}_vitesse`).value,
           degats: document.getElementById(`${prefix}_degats`).value,
           corrompu: document.getElementById(`${prefix}_corrompu`).checked,
@@ -1294,6 +1370,12 @@
             race: document.querySelectorAll(`.${prefix}_comp_race`)[idx].value,
             vitalite: document.querySelectorAll(`.${prefix}_comp_vitalite`)[idx]
               .value,
+            auraCheck:
+              document.getElementById(`${prefix}_comp${idx}_auraCheck`)
+                ?.checked || false,
+            aura:
+              document.getElementById(`${prefix}_comp${idx}_aura`)?.value ||
+              "0",
             vitesse: document.querySelectorAll(`.${prefix}_comp_vitesse`)[idx]
               .value,
             degats: document.querySelectorAll(`.${prefix}_comp_degats`)[idx]
@@ -1390,6 +1472,9 @@
         document.getElementById(`${prefix}_nom`).value = "";
         document.getElementById(`${prefix}_classe`).value = "humain"; // Valeur par défaut
         document.getElementById(`${prefix}_vitalite`).value = "";
+        document.getElementById(`${prefix}_auraCheck`).checked = false;
+        document.getElementById(`${prefix}_aura`).value = "0";
+        document.getElementById(`${prefix}_auraBloc`).style.display = "none";
         document.getElementById(`${prefix}_vitesse`).value = "";
         document.getElementById(`${prefix}_degats`).value = "";
 
@@ -1458,6 +1543,13 @@
           toggleChangementVie(prefix); // Assurez-vous que le bloc de Malus/Bonus Vie est visible
         }
 
+        // Gérer l'aura si case coché
+        if (data.auraCheck) {
+          document.getElementById(`${prefix}_auraCheck`).checked = true;
+          document.getElementById(`${prefix}_aura`).value = data.aura;
+          toggleAura(prefix);
+        }
+
         // Gérer les malus/bonus de Vitesse si activé
         if (data.changementVitesse) {
           document.getElementById(`${prefix}_changementVitesse`).value =
@@ -1512,6 +1604,15 @@
           vitesse: document.querySelectorAll(`.${prefix}_comp_vitesse`)[idx],
           degats: document.querySelectorAll(`.${prefix}_comp_degats`)[idx],
         };
+
+        if (data.auraCheck) {
+          document.getElementById(
+            `${prefix}_comp${idx}_auraCheck`
+          ).checked = true;
+          document.getElementById(`${prefix}_comp${idx}_aura`).value =
+            data.aura;
+          toggleAuraCompanion(prefix, idx);
+        }
 
         // Vérifier que tous les éléments existent avant de les remplir
         if (Object.values(inputs).every((el) => el)) {
