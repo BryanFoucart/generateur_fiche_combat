@@ -2,6 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Générateur de Combat</title>
     <style>
       body {
@@ -41,12 +42,13 @@
         display: flex;
         justify-content: center;
         margin-bottom: 20px;
+        margin-top: 5px;
       }
 
       .tab-button {
         flex: 1;
         padding: 12px;
-        font-size: 16px;
+        font-size: 1rem;
         cursor: pointer;
         background-color: #eee;
         border: 1px solid #ccc;
@@ -73,11 +75,11 @@
       @media (max-width: 768px) {
         .bloc {
           padding: 10px;
-          font-size: 14px;
+          font-size: 0.875rem;
         }
 
         label {
-          font-size: 14px;
+          font-size: 0.875rem;
         }
 
         [type="checkbox"] {
@@ -87,7 +89,7 @@
         input,
         select,
         textarea {
-          font-size: 14px;
+          font-size: 0.875rem;
           width: 100%;
         }
 
@@ -397,7 +399,7 @@
 </label>
 
 <label>Vitalité :
-<input type="number" id="${idPrefix}_vitalite">
+<input type="number" id="${idPrefix}_vitalite" value="0" onClick="if(this.value==='0')this.value=''">
 </label>
 <label>
 <input type="checkbox" id="${idPrefix}_changementVieCheck" onchange="toggleChangementVie('${idPrefix}')"> Bonus/Malus ?
@@ -412,11 +414,11 @@
 </label>
 <div id="${idPrefix}_auraBloc" style="display: none;">
 <label>Aura :
-<input type="number" id="${idPrefix}_aura" value="0">
+<input type="number" id="${idPrefix}_aura" value="0" onClick="if(this.value==='0')this.value=''">
 </label>
 </div>
 <label>Vitesse :
-<input type="number" id="${idPrefix}_vitesse">
+<input type="number" id="${idPrefix}_vitesse" value="0" onClick="if(this.value==='0')this.value=''">
 </label>
 <label>
 <input type="checkbox" id="${idPrefix}_changementVitesseCheck" onchange="toggleChangementVitesse('${idPrefix}')"> Bonus/Malus ?
@@ -431,11 +433,11 @@
 </label>
 <div id="${idPrefix}_absorptionBloc" style="display: none;">
 <label>Absorption (%) :
-<input type="number" id="${idPrefix}_absorption" value="0">
+<input type="number" id="${idPrefix}_absorption" value="0" onClick="if(this.value==='0')this.value=''">
 </label>
 </div>
 <label>Dégâts :
-<input type="number" id="${idPrefix}_degats">
+<input type="number" id="${idPrefix}_degats" value="0" onClick="if(this.value==='0')this.value=''">
 </label>
 <label>
 <input type="checkbox" id="${idPrefix}_changementDegatsCheck" onchange="toggleChangementDegats('${idPrefix}')"> Bonus/Malus ?
@@ -455,7 +457,7 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
 <div id="${idPrefix}_capacites"></div>
 
 <label>Nombre d'invocations :
-<input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onchange="updateCompanions('${idPrefix}')">
+<input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onClick="if(this.value==='0')this.value=''" onchange="updateCompanions('${idPrefix}')">
 </label>
 <div id="${idPrefix}_compagnons"></div>
 
@@ -706,7 +708,7 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
 <input type="text" class="${prefix}_comp_race" value="invocation" hidden>Invocation
 </label>
 <label>Vitalité :
-<input type="number" class="${prefix}_comp_vitalite">
+<input type="number" class="${prefix}_comp_vitalite" value="0" onClick="if(this.value==='0')this.value=''">
 </label>
 <label>
 <input type="checkbox" id="${prefix}_comp${i}_changementVieCheck" onchange="toggleChangementVieCompanion('${prefix}', ${i})"> Bonus/Malus ?
@@ -721,11 +723,11 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
 </label>
 <div id="${prefix}_comp${i}_auraBloc" style="display: none;">
 <label>Aura :
-<input type="number" id="${prefix}_comp${i}_aura" value="0">
+<input type="number" id="${prefix}_comp${i}_aura" value="0" onClick="if(this.value==='0')this.value=''">
 </label>
 </div>
 <label>Vitesse :
-<input type="number" class="${prefix}_comp_vitesse">
+<input type="number" class="${prefix}_comp_vitesse" value="0" onClick="if(this.value==='0')this.value=''">
 </label>
 <label>
 <input type="checkbox" id="${prefix}_comp${i}_changementVitesseCheck" onchange="toggleChangementVitesseCompanion('${prefix}', ${i})"> Bonus/Malus ?
@@ -736,7 +738,7 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
 </label>
 </div>
 <label>Dégâts :
-<input type="number" class="${prefix}_comp_degats">
+<input type="number" class="${prefix}_comp_degats" value="0" onClick="if(this.value==='0')this.value=''">
 </label>
 <label>
 <input type="checkbox" id="${prefix}_comp${i}_changementDegatsCheck" onchange="toggleChangementDegatsCompanion('${prefix}', ${i})"> Bonus/Malus ?
@@ -1807,6 +1809,16 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
       window.onload = function () {
         genererFormulairesGroupes();
         document.getElementById("groupe1-form").classList.add("active");
+        // Déplier le personnage 1 du groupe 1
+        const blocG1 = document.getElementById("g1_p0");
+        if (blocG1) blocG1.classList.add("expanded");
+
+        // Déplier le personnage 1 du groupe 2
+        const blocG2 = document.getElementById("g2_p0");
+        if (blocG2) blocG2.classList.add("expanded");
+        window.onload = function () {
+          genererFormulairesGroupes();
+        };
       };
     </script>
   </body>
