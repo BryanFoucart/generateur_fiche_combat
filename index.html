@@ -6,8 +6,21 @@
     <title>Générateur de Combat</title>
     <style>
       body {
+        max-width: 100%;
+        width: fit-content;
+        margin: auto;
         font-family: Arial;
         padding: 20px;
+      }
+
+      #selectGroup {
+        display: flex;
+        text-align: center;
+        padding: 5px;
+      }
+
+      div#selectGroup label {
+        margin: auto;
       }
 
       label {
@@ -34,14 +47,14 @@
 
       textarea {
         width: 100%;
-        height: 300px;
+        height: 200px;
         resize: none;
       }
 
       .tabs {
         display: flex;
         justify-content: center;
-        margin-bottom: 20px;
+        /* margin-bottom: 20px; */
         margin-top: 5px;
       }
 
@@ -72,9 +85,30 @@
         display: block;
       }
 
+      div li {
+        border: 1px black dotted;
+        padding: 5px;
+        margin-top: 5px;
+
+        & label {
+          margin-top: 5px;
+        }
+      }
+
+      div.character-actions {
+        display: flex;
+        margin-top: 5px;
+        justify-content: center;
+      }
+
+      button#btnHTML {
+        display: flex;
+        margin: 5px auto;
+      }
+
       @media (max-width: 768px) {
         .bloc {
-          padding: 10px;
+          /* padding: 10px; */
           font-size: 0.875rem;
         }
 
@@ -86,12 +120,11 @@
           width: auto;
         }
 
-        input,
+        /* input,
         select,
         textarea {
-          font-size: 0.875rem;
-          width: 100%;
-        }
+          /* font-size: 0.875rem; */
+        /* width: 100%; } */
 
         .tabs {
           flex-direction: column;
@@ -124,7 +157,7 @@
   <body>
     <h2>Générateur de Fiche de Combat</h2>
 
-    <div>
+    <div id="selectGroup">
       <label
         >Nombre de personnages dans le Groupe 1 :
         <input
@@ -161,7 +194,7 @@
       <div id="groupe2-form"></div>
     </div>
 
-    <button onclick="genererHTML()">Générer le Code HTML</button>
+    <button onclick="genererHTML()" id="btnHTML">Générer le Code HTML</button>
 
     <h2>Résultat HTML :</h2>
     <textarea id="resultat" readonly></textarea>
