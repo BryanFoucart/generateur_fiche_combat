@@ -6,8 +6,7 @@
     <title>Générateur de Combat</title>
     <style>
       body {
-        max-width: 100%;
-        width: fit-content;
+        max-width: 1000px;
         margin: auto;
         font-family: Arial;
         padding: 20px;
@@ -98,7 +97,8 @@
       div.character-actions {
         display: flex;
         margin-top: 5px;
-        justify-content: center;
+
+        justify-content: space-evenly;
       }
 
       button#btnHTML {
@@ -106,6 +106,16 @@
         margin: 5px auto;
       }
 
+      /* button#btnHTML,
+      button#btnCopie {
+        display: inline-flex;
+        margin: 5px;
+      } */
+
+      .button-container {
+        text-align: center;
+        margin: 5px auto;
+      }
       @media (max-width: 768px) {
         .bloc {
           /* padding: 10px; */
@@ -133,6 +143,19 @@
         .tab-button {
           border-bottom: 1px solid #ccc;
         }
+
+        #selectGroup {
+          display: block;
+
+          label {
+            padding-bottom: 5px;
+            display: block;
+
+            input {
+              width: 50%;
+            }
+          }
+        }
       }
 
       .character-content {
@@ -159,7 +182,7 @@
 
     <div id="selectGroup">
       <label
-        >Nombre de personnages dans le Groupe 1 :
+        >Personnages - Groupe 1 :
         <input
           type="number"
           id="nbGroupe1"
@@ -169,7 +192,7 @@
         />
       </label>
       <label
-        >Nombre de personnages dans le Groupe 2 :
+        >Personnages - Groupe 2 :
         <input
           type="number"
           id="nbGroupe2"
@@ -268,7 +291,9 @@
         for (let i = 0; i < nb; i++) {
           html += createCharacterForm(
             `g${groupeNum}_p${i}`,
-            `Personnage ${i + 1}`
+            // `Personnage ${i + 1}`
+            document.getElementById(`g${groupeNum}_p${i}_nom`)?.value ||
+              `Personnage ${i + 1}`
           );
         }
         document.getElementById(`groupe${groupeNum}-form`).innerHTML = html;
@@ -376,13 +401,21 @@
         // 2. Générer le HTML pour chaque groupe
         let html1 = `<h3>Groupe 1</h3>`;
         for (let i = 0; i < nb1; i++) {
-          html1 += createCharacterForm(`g1_p${i}`, `Personnage ${i + 1}`);
+          html1 += createCharacterForm(
+            `g1_p${i}`,
+            document.getElementById(`g1_p${i}_nom`)?.value ||
+              `Personnage ${i + 1}`
+          );
         }
         document.getElementById("groupe1-form").innerHTML = html1;
 
         let html2 = `<h3>Groupe 2</h3>`;
         for (let i = 0; i < nb2; i++) {
-          html2 += createCharacterForm(`g2_p${i}`, `Personnage ${i + 1}`);
+          html2 += createCharacterForm(
+            `g2_p${i}`,
+            document.getElementById(`g2_p${i}_nom`)?.value ||
+              `Personnage ${i + 1}`
+          );
         }
         document.getElementById("groupe2-form").innerHTML = html2;
 
@@ -403,105 +436,105 @@
 
       function createCharacterForm(idPrefix, label) {
         return `
-<div class="bloc" id="${idPrefix}">
-<h3 onclick="toggleCharacter('${idPrefix}')">${label}</h3>
-<div class="character-content">
-<label>Nom :
-<input type="text" id="${idPrefix}_nom">
-</label>
-<label>Race :
-<select id="${idPrefix}_classe">
-<option value="abyssal">Abyssal</option>
-<option value="djöllfulin">Djöllfulin</option>
-<option value="elfe">Elfe</option>
-<option value="entomothrope">Entomothrope</option>
-<option value="géant">Géant</option>
-<option value="humain">Humain</option>
-<option value="hybride">Hybride</option>
-<option value="naga">Naga</option>
-<option value="nain">Nain</option>
-<option value="orc">Orc</option>
-<option value="stryge-blanc">Stryge Blanc</option>
-<option value="stryge-noir">Stryge Noir</option>
-<option value="thérianthrope">Thérianthrope</option>
-<option value="vampire">Vampire</option>
-<option value="bestiaire-nom">Créature</option>
-<option value="boss">Boss</option>
-<option value="archi-boss">Archi-Boss</option>
-</select>
-</label>
+      <div class="bloc" id="${idPrefix}">
+      <h3 onclick="toggleCharacter('${idPrefix}')">${label}</h3>
+      <div class="character-content">
+      <label>Nom :
+      <input type="text" id="${idPrefix}_nom" onchange="updateCharacterName('${idPrefix}')">
+      </label>
+      <label>Race :
+      <select id="${idPrefix}_classe">
+      <option value="abyssal">Abyssal</option>
+      <option value="djöllfulin">Djöllfulin</option>
+      <option value="elfe">Elfe</option>
+      <option value="entomothrope">Entomothrope</option>
+      <option value="géant">Géant</option>
+      <option value="humain">Humain</option>
+      <option value="hybride">Hybride</option>
+      <option value="naga">Naga</option>
+      <option value="nain">Nain</option>
+      <option value="orc">Orc</option>
+      <option value="stryge-blanc">Stryge Blanc</option>
+      <option value="stryge-noir">Stryge Noir</option>
+      <option value="thérianthrope">Thérianthrope</option>
+      <option value="vampire">Vampire</option>
+      <option value="bestiaire-nom">Créature</option>
+      <option value="boss">Boss</option>
+      <option value="archi-boss">Archi-Boss</option>
+      </select>
+      </label>
 
-<label>Vitalité :
-<input type="number" id="${idPrefix}_vitalite" value="0" onClick="if(this.value==='0')this.value=''">
-</label>
-<label>
-<input type="checkbox" id="${idPrefix}_changementVieCheck" onchange="toggleChangementVie('${idPrefix}')"> Bonus/Malus ?
-</label>
-<div id="${idPrefix}_changementVieBloc" style="display: none;">
-<label>Bonus/Malus :
-<input type="text" id="${idPrefix}_changementVie">
-</label>
-</div>
-<label>
-<input type="checkbox" id="${idPrefix}_auraCheck" onchange="toggleAura('${idPrefix}')"> Aura ?
-</label>
-<div id="${idPrefix}_auraBloc" style="display: none;">
-<label>Aura :
-<input type="number" id="${idPrefix}_aura" value="0" onClick="if(this.value==='0')this.value=''">
-</label>
-</div>
-<label>Vitesse :
-<input type="number" id="${idPrefix}_vitesse" value="0" onClick="if(this.value==='0')this.value=''">
-</label>
-<label>
-<input type="checkbox" id="${idPrefix}_changementVitesseCheck" onchange="toggleChangementVitesse('${idPrefix}')"> Bonus/Malus ?
-</label>
-<div id="${idPrefix}_changementVitesseBloc" style="display: none;">
-<label>Bonus/Malus :
-<input type="text" id="${idPrefix}_changementVitesse">
-</label>
-</div>
-<label>
-<input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
-</label>
-<div id="${idPrefix}_absorptionBloc" style="display: none;">
-<label>Absorption (%) :
-<input type="number" id="${idPrefix}_absorption" value="0" onClick="if(this.value==='0')this.value=''">
-</label>
-</div>
-<label>Dégâts :
-<input type="number" id="${idPrefix}_degats" value="0" onClick="if(this.value==='0')this.value=''">
-</label>
-<label>
-<input type="checkbox" id="${idPrefix}_changementDegatsCheck" onchange="toggleChangementDegats('${idPrefix}')"> Bonus/Malus ?
-</label>
-<div id="${idPrefix}_changementDegatsBloc" style="display: none;">
-<label>Bonus/Malus :
-<input type="text" id="${idPrefix}_changementDegats">
-</label>
-</div>
+      <label>Vitalité :
+      <input type="number" id="${idPrefix}_vitalite" value="0" onClick="if(this.value==='0')this.value=''">
+      </label>
+      <label>
+      <input type="checkbox" id="${idPrefix}_changementVieCheck" onchange="toggleChangementVie('${idPrefix}')"> Bonus/Malus ?
+      </label>
+      <div id="${idPrefix}_changementVieBloc" style="display: none;">
+      <label>Bonus/Malus :
+      <input type="text" id="${idPrefix}_changementVie">
+      </label>
+      </div>
+      <label>
+      <input type="checkbox" id="${idPrefix}_auraCheck" onchange="toggleAura('${idPrefix}')"> Aura ?
+      </label>
+      <div id="${idPrefix}_auraBloc" style="display: none;">
+      <label>Aura :
+      <input type="number" id="${idPrefix}_aura" value="0" onClick="if(this.value==='0')this.value=''">
+      </label>
+      </div>
+      <label>Vitesse :
+      <input type="number" id="${idPrefix}_vitesse" value="0" onClick="if(this.value==='0')this.value=''">
+      </label>
+      <label>
+      <input type="checkbox" id="${idPrefix}_changementVitesseCheck" onchange="toggleChangementVitesse('${idPrefix}')"> Bonus/Malus ?
+      </label>
+      <div id="${idPrefix}_changementVitesseBloc" style="display: none;">
+      <label>Bonus/Malus :
+      <input type="text" id="${idPrefix}_changementVitesse">
+      </label>
+      </div>
+      <label>
+      <input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
+      </label>
+      <div id="${idPrefix}_absorptionBloc" style="display: none;">
+      <label>Absorption (%) :
+      <input type="number" id="${idPrefix}_absorption" value="0" onClick="if(this.value==='0')this.value=''">
+      </label>
+      </div>
+      <label>Dégâts :
+      <input type="number" id="${idPrefix}_degats" value="0" onClick="if(this.value==='0')this.value=''">
+      </label>
+      <label>
+      <input type="checkbox" id="${idPrefix}_changementDegatsCheck" onchange="toggleChangementDegats('${idPrefix}')"> Bonus/Malus ?
+      </label>
+      <div id="${idPrefix}_changementDegatsBloc" style="display: none;">
+      <label>Bonus/Malus :
+      <input type="text" id="${idPrefix}_changementDegats">
+      </label>
+      </div>
 
-<label>Capacités spéciales (format : "x Titre : Description", un x en début de chaque compétence) :
-<textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
-x Rapidité : permet d'attaquer à deux reprises.
-x Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
-x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
-</label>
-<div id="${idPrefix}_capacites"></div>
+      <label>Capacités spéciales (format : "x Titre : Description", un x en début de chaque compétence) :
+      <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
+      x Rapidité : permet d'attaquer à deux reprises.
+      x Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+      x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
+      </label>
+      <div id="${idPrefix}_capacites"></div>
 
-<label>Nombre d'invocations :
-<input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onClick="if(this.value==='0')this.value=''" onchange="updateCompanions('${idPrefix}')">
-</label>
-<div id="${idPrefix}_compagnons"></div>
+      <label>Nombre d'invocations :
+      <input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onClick="if(this.value==='0')this.value=''" onchange="updateCompanions('${idPrefix}')">
+      </label>
+      <div id="${idPrefix}_compagnons"></div>
 
-<div class="character-actions">
-<button onclick="exporterPersonnage('${idPrefix}')">Exporter ce personnage</button>
-<input type="file" id="${idPrefix}_import" accept=".json" onchange="importerPersonnage(event, '${idPrefix}')" style="display: none;">
-<button onclick="document.getElementById('${idPrefix}_import').click()">Importer un personnage</button>
-</div>
-</div>
-</div>
-`;
+      <div class="character-actions">
+      <button onclick="exporterPersonnage('${idPrefix}')">Exporter ce personnage</button>
+      <input type="file" id="${idPrefix}_import" accept=".json" onchange="importerPersonnage(event, '${idPrefix}')" style="display: none;">
+      <button onclick="document.getElementById('${idPrefix}_import').click()">Importer un personnage</button>
+      </div>
+      </div>
+      </div>
+      `;
       }
 
       function escapeHtml(text) {
@@ -635,45 +668,45 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
             const escapedDescription = escapeHtml(description);
 
             container.innerHTML += `
-<li>
-<input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
-<input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
-<em>${escapedTitre}</em> : ${escapedDescription}
-<br>
-<label>État :
-<select class="${prefix}_classeCapacite">
-<option value="capacité_spéciale">Neutre</option>
-<option value="capacité_spéciale active">Active</option>
-<option value="capacité_spéciale passive">Passive</option>
-<option value="capacité_spéciale bloquée">Bloquée</option>
-<option value="capacité_spéciale utilisée">Utilisée</option>
-<option value="capacité_spéciale annulée">Annulée</option>
-<option value="capacité_spéciale inactive">Inactive</option>
-</select>
-</label>
-</li>`;
+      <li>
+      <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
+      <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
+      <em>${escapedTitre}</em> : ${escapedDescription}
+      <br>
+      <label>État :
+      <select class="${prefix}_classeCapacite">
+      <option value="capacité_spéciale">Neutre</option>
+      <option value="capacité_spéciale active">Active</option>
+      <option value="capacité_spéciale passive">Passive</option>
+      <option value="capacité_spéciale bloquée">Bloquée</option>
+      <option value="capacité_spéciale utilisée">Utilisée</option>
+      <option value="capacité_spéciale annulée">Annulée</option>
+      <option value="capacité_spéciale inactive">Inactive</option>
+      </select>
+      </label>
+      </li>`;
           } else {
             const escapedLine = escapeHtml(entry);
             container.innerHTML += `
-<li>
-<input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
+      <li>
+      <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
               index + 1
             }">
-<input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
-<em>Capacité ${index + 1}</em> : ${escapedLine}
-<br>
-<label>État :
-<select class="${prefix}_classeCapacite">
-<option value="capacité_spéciale">Neutre</option>
-<option value="capacité_spéciale active">Active</option>
-<option value="capacité_spéciale passive">Passive</option>
-<option value="capacité_spéciale bloquée">Bloquée</option>
-<option value="capacité_spéciale utilisée">Utilisée</option>
-<option value="capacité_spéciale annulée">Annulée</option>
-<option value="capacité_spéciale inactive">Inactive</option>
-</select>
-</label>
-</li>`;
+      <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
+      <em>Capacité ${index + 1}</em> : ${escapedLine}
+      <br>
+      <label>État :
+      <select class="${prefix}_classeCapacite">
+      <option value="capacité_spéciale">Neutre</option>
+      <option value="capacité_spéciale active">Active</option>
+      <option value="capacité_spéciale passive">Passive</option>
+      <option value="capacité_spéciale bloquée">Bloquée</option>
+      <option value="capacité_spéciale utilisée">Utilisée</option>
+      <option value="capacité_spéciale annulée">Annulée</option>
+      <option value="capacité_spéciale inactive">Inactive</option>
+      </select>
+      </label>
+      </li>`;
           }
         });
       }
@@ -732,64 +765,64 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
         container.innerHTML = "";
         for (let i = 0; i < nb; i++) {
           container.innerHTML += `
-<div class="companion-container">
-<h4>Invocation ${i + 1}</h4>
-<label>Nom :
-<input type="text" class="${prefix}_comp_nom">
-</label>
-<label>Race :
-<input type="text" class="${prefix}_comp_race" value="invocation" hidden>Invocation
-</label>
-<label>Vitalité :
-<input type="number" class="${prefix}_comp_vitalite" value="0" onClick="if(this.value==='0')this.value=''">
-</label>
-<label>
-<input type="checkbox" id="${prefix}_comp${i}_changementVieCheck" onchange="toggleChangementVieCompanion('${prefix}', ${i})"> Bonus/Malus ?
-</label>
-<div id="${prefix}_comp${i}_changementVieBloc" style="display: none;">
-<label>Bonus/Malus :
-<input type="text" id="${prefix}_comp${i}_changementVie">
-</label>
-</div>
-<label>
-<input type="checkbox" id="${prefix}_comp${i}_auraCheck" onchange="toggleAuraCompanion('${prefix}', ${i})"> Aura ?
-</label>
-<div id="${prefix}_comp${i}_auraBloc" style="display: none;">
-<label>Aura :
-<input type="number" id="${prefix}_comp${i}_aura" value="0" onClick="if(this.value==='0')this.value=''">
-</label>
-</div>
-<label>Vitesse :
-<input type="number" class="${prefix}_comp_vitesse" value="0" onClick="if(this.value==='0')this.value=''">
-</label>
-<label>
-<input type="checkbox" id="${prefix}_comp${i}_changementVitesseCheck" onchange="toggleChangementVitesseCompanion('${prefix}', ${i})"> Bonus/Malus ?
-</label>
-<div id="${prefix}_comp${i}_changementVitesseBloc" style="display: none;">
-<label>Bonus/Malus :
-<input type="text" id="${prefix}_comp${i}_changementVitesse">
-</label>
-</div>
-<label>Dégâts :
-<input type="number" class="${prefix}_comp_degats" value="0" onClick="if(this.value==='0')this.value=''">
-</label>
-<label>
-<input type="checkbox" id="${prefix}_comp${i}_changementDegatsCheck" onchange="toggleChangementDegatsCompanion('${prefix}', ${i})"> Bonus/Malus ?
-</label>
-<div id="${prefix}_comp${i}_changementDegatsBloc" style="display: none;">
-<label>Bonus/Malus :
-<input type="text" id="${prefix}_comp${i}_changementDegats">
-</label>
-</div>
-<label>Capacités spéciales (format : "x Titre : Description", un x en début de chaque compétence) :
-<textarea id="${prefix}_comp${i}_capacites_input" oninput="parseCapacitesInvocations('${prefix}', ${i})" placeholder="EXEMPLE
-x Rapidité : permet d'attaquer à deux reprises.
-x Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
-x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
-</label>
-<div id="${prefix}_comp${i}_capacites"></div>
-</div>
-`;
+      <div class="companion-container">
+      <h4>Invocation ${i + 1}</h4>
+      <label>Nom :
+      <input type="text" class="${prefix}_comp_nom">
+      </label>
+      <label>Race :
+      <input type="text" class="${prefix}_comp_race" value="invocation" hidden>Invocation
+      </label>
+      <label>Vitalité :
+      <input type="number" class="${prefix}_comp_vitalite" value="0" onClick="if(this.value==='0')this.value=''">
+      </label>
+      <label>
+      <input type="checkbox" id="${prefix}_comp${i}_changementVieCheck" onchange="toggleChangementVieCompanion('${prefix}', ${i})"> Bonus/Malus ?
+      </label>
+      <div id="${prefix}_comp${i}_changementVieBloc" style="display: none;">
+      <label>Bonus/Malus :
+      <input type="text" id="${prefix}_comp${i}_changementVie">
+      </label>
+      </div>
+      <label>
+      <input type="checkbox" id="${prefix}_comp${i}_auraCheck" onchange="toggleAuraCompanion('${prefix}', ${i})"> Aura ?
+      </label>
+      <div id="${prefix}_comp${i}_auraBloc" style="display: none;">
+      <label>Aura :
+      <input type="number" id="${prefix}_comp${i}_aura" value="0" onClick="if(this.value==='0')this.value=''">
+      </label>
+      </div>
+      <label>Vitesse :
+      <input type="number" class="${prefix}_comp_vitesse" value="0" onClick="if(this.value==='0')this.value=''">
+      </label>
+      <label>
+      <input type="checkbox" id="${prefix}_comp${i}_changementVitesseCheck" onchange="toggleChangementVitesseCompanion('${prefix}', ${i})"> Bonus/Malus ?
+      </label>
+      <div id="${prefix}_comp${i}_changementVitesseBloc" style="display: none;">
+      <label>Bonus/Malus :
+      <input type="text" id="${prefix}_comp${i}_changementVitesse">
+      </label>
+      </div>
+      <label>Dégâts :
+      <input type="number" class="${prefix}_comp_degats" value="0" onClick="if(this.value==='0')this.value=''">
+      </label>
+      <label>
+      <input type="checkbox" id="${prefix}_comp${i}_changementDegatsCheck" onchange="toggleChangementDegatsCompanion('${prefix}', ${i})"> Bonus/Malus ?
+      </label>
+      <div id="${prefix}_comp${i}_changementDegatsBloc" style="display: none;">
+      <label>Bonus/Malus :
+      <input type="text" id="${prefix}_comp${i}_changementDegats">
+      </label>
+      </div>
+      <label>Capacités spéciales (format : "x Titre : Description", un x en début de chaque compétence) :
+      <textarea id="${prefix}_comp${i}_capacites_input" oninput="parseCapacitesInvocations('${prefix}', ${i})" placeholder="EXEMPLE
+      x Rapidité : permet d'attaquer à deux reprises.
+      x Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
+      x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
+      </label>
+      <div id="${prefix}_comp${i}_capacites"></div>
+      </div>
+      `;
         }
 
         // Restaurer les données sauvegardées
@@ -1034,45 +1067,45 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
             const escapedDescription = escapeHtml(description);
 
             container.innerHTML += `
-<li>
-<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
-<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
-<em>${escapedTitre}</em> : ${escapedDescription}
-<br>
-<label>État :
-<select class="${prefix}_comp${idx}_classeCapacite">
-<option value="capacité_spéciale">Neutre</option>
-<option value="capacité_spéciale active">Active</option>
-<option value="capacité_spéciale passive">Passive</option>
-<option value="capacité_spéciale bloquée">Bloquée</option>
-<option value="capacité_spéciale utilisée">Utilisée</option>
-<option value="capacité_spéciale annulée">Annulée</option>
-<option value="capacité_spéciale inactive">Inactive</option>
-</select>
-</label>
-</li>`;
+      <li>
+      <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
+      <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
+      <em>${escapedTitre}</em> : ${escapedDescription}
+      <br>
+      <label>État :
+      <select class="${prefix}_comp${idx}_classeCapacite">
+      <option value="capacité_spéciale">Neutre</option>
+      <option value="capacité_spéciale active">Active</option>
+      <option value="capacité_spéciale passive">Passive</option>
+      <option value="capacité_spéciale bloquée">Bloquée</option>
+      <option value="capacité_spéciale utilisée">Utilisée</option>
+      <option value="capacité_spéciale annulée">Annulée</option>
+      <option value="capacité_spéciale inactive">Inactive</option>
+      </select>
+      </label>
+      </li>`;
           } else {
             const escapedLine = escapeHtml(entry);
             container.innerHTML += `
-<li>
-<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="Capacité ${
+      <li>
+      <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="Capacité ${
               index + 1
             }">
-<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedLine}">
-<em>Capacité ${index + 1}</em> : ${escapedLine}
-<br>
-<label>État :
-<select class="${prefix}_comp${idx}_classeCapacite">
-<option value="capacité_spéciale">Neutre</option>
-<option value="capacité_spéciale active">Active</option>
-<option value="capacité_spéciale passive">Passive</option>
-<option value="capacité_spéciale bloquée">Bloquée</option>
-<option value="capacité_spéciale utilisée">Utilisée</option>
-<option value="capacité_spéciale annulée">Annulée</option>
-<option value="capacité_spéciale inactive">Inactive</option>
-</select>
-</label>
-</li>`;
+      <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedLine}">
+      <em>Capacité ${index + 1}</em> : ${escapedLine}
+      <br>
+      <label>État :
+      <select class="${prefix}_comp${idx}_classeCapacite">
+      <option value="capacité_spéciale">Neutre</option>
+      <option value="capacité_spéciale active">Active</option>
+      <option value="capacité_spéciale passive">Passive</option>
+      <option value="capacité_spéciale bloquée">Bloquée</option>
+      <option value="capacité_spéciale utilisée">Utilisée</option>
+      <option value="capacité_spéciale annulée">Annulée</option>
+      <option value="capacité_spéciale inactive">Inactive</option>
+      </select>
+      </label>
+      </li>`;
           }
         });
       }
@@ -1359,7 +1392,7 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
 
         const header = `<div class="titre">${headerTitle}</div>
 
-<em>${commence} commence le combat</em>`;
+      <em>${commence} commence le combat</em>`;
 
         document.getElementById(
           "resultat"
@@ -1837,6 +1870,17 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
       function toggleCharacter(idPrefix) {
         const bloc = document.getElementById(idPrefix).closest(".bloc");
         bloc.classList.toggle("expanded");
+      }
+
+      // Changement de Personnage 1 en Nom du personnage
+      function updateCharacterName(prefix) {
+        const newName =
+          document.getElementById(`${prefix}_nom`).value ||
+          `Personnage ${prefix.split("_")[1].substring(1)}`;
+        const h3 = document.querySelector(`#${prefix} h3`);
+        if (h3) {
+          h3.textContent = newName;
+        }
       }
 
       window.onload = function () {
