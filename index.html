@@ -217,6 +217,19 @@ textarea {
       </label>
     </div>
 
+    <div style="text-align: center; margin: 10px 0">
+      <label
+        >Tour :
+        <input
+          type="number"
+          id="numeroTour"
+          value="1"
+          min="1"
+          style="width: 60px"
+        />
+      </label>
+    </div>
+
     <div class="tabs">
       <button class="tab-button active" onclick="switchTab('groupe1')">
         Groupe 1
@@ -1455,9 +1468,10 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
             ? "Groupe 2"
             : document.getElementById("g2_p0_nom").value;
 
+        const numeroTour = document.getElementById("numeroTour").value;
         const headerTitle =
           nb1 > 1 && nb2 > 1
-            ? "Groupe 1 contre Groupe 2"
+            ? `Groupe 1 contre Groupe 2 [T${numeroTour}]`
             : `${
                 nb1 === 1
                   ? document.getElementById("g1_p0_nom").value
@@ -1466,7 +1480,7 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
                 nb2 === 1
                   ? document.getElementById("g2_p0_nom").value
                   : "Groupe 2"
-              }`;
+              } [T${numeroTour}]`;
 
         const header = `<div class="titre">${headerTitle}</div>
 
