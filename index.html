@@ -468,7 +468,9 @@
                 <option value="archi-boss">Archi-Boss</option>
                 </select>
                 </label>
-
+    <label>
+    <input type="checkbox" id="${idPrefix}_invisible" onchange="toggleInvisible('${idPrefix}')"> Invisible ?
+    </label>
                 <label>Vitalité :
                 <input type="number" id="${idPrefix}_vitalite" value="0" onClick="if(this.value==='0')this.value=''">
                 </label>
@@ -1155,6 +1157,11 @@
           }
         }
 
+        // Ajouter l'état invisible après la vitalité
+        if (document.getElementById(`${prefix}_invisible`).checked) {
+          html += ` <span style="color: #49B">{Invisible}</span>`;
+        }
+
         if (document.getElementById(`${prefix}_auraCheck`).checked) {
           const valeur = document.getElementById(`${prefix}_aura`).value;
           html += `\n<span class="bestiaire-champ">Aura</span> : <strong class="aura">${valeur}</strong>`;
@@ -1638,6 +1645,7 @@
           nom: document.getElementById(`${prefix}_nom`).value,
           race: document.getElementById(`${prefix}_classe`).value,
           vitalite: document.getElementById(`${prefix}_vitalite`).value,
+          invisible: document.getElementById(`${prefix}_invisible`).checked,
           auraCheck: document.getElementById(`${prefix}_auraCheck`).checked,
           aura: document.getElementById(`${prefix}_aura`).value,
           vitesse: document.getElementById(`${prefix}_vitesse`).value,
@@ -1796,6 +1804,7 @@
         document.getElementById(`${prefix}_nom`).value = "";
         document.getElementById(`${prefix}_classe`).value = "humain"; // Valeur par défaut
         document.getElementById(`${prefix}_vitalite`).value = "";
+        document.getElementById(`${prefix}_invisible`).checked = false;
         document.getElementById(`${prefix}_auraCheck`).checked = false;
         document.getElementById(`${prefix}_aura`).value = "0";
         document.getElementById(`${prefix}_auraBloc`).style.display = "none";
@@ -1845,6 +1854,7 @@
         document.getElementById(`${prefix}_vitalite`).value = data.vitalite;
         document.getElementById(`${prefix}_changementVieCheck`).checked =
           data.changementVie;
+        document.getElementById(`${prefix}_invisible`).checked = data.invisible;
         document.getElementById(`${prefix}_vitesse`).value = data.vitesse;
         document.getElementById(`${prefix}_changementVitesseCheck`).checked =
           data.changementVitesse;
