@@ -101,16 +101,16 @@
         justify-content: space-evenly;
       }
 
-      button#btnHTML {
+      /* button#btnHTML {
         display: flex;
         margin: 5px auto;
-      }
+      } */
 
-      /* button#btnHTML,
+      button#btnHTML,
       button#btnCopie {
         display: inline-flex;
         margin: 5px;
-      } */
+      }
 
       .button-container {
         text-align: center;
@@ -217,7 +217,12 @@
       <div id="groupe2-form"></div>
     </div>
 
-    <button onclick="genererHTML()" id="btnHTML">Générer le Code HTML</button>
+    <div class="button-container">
+      <button onclick="genererHTML()" id="btnHTML">Générer le Code HTML</button>
+      <button onclick="copierHTML()" id="btnCopie" style="display: none">
+        Copier le Code HTML
+      </button>
+    </div>
 
     <h2>Résultat HTML :</h2>
     <textarea id="resultat" readonly></textarea>
@@ -529,7 +534,7 @@
 
       <div class="character-actions">
       <button onclick="exporterPersonnage('${idPrefix}')">Exporter ce personnage</button>
-      <input type="file" id="${idPrefix}_import" accept=".json" onchange="importerPersonnage(event, '${idPrefix}')" style="display: none;">
+      <input type="file" id="${idPrefix}_import" accept=".json,application/json" onchange="importerPersonnage(event, '${idPrefix}')" style="display: none;">
       <button onclick="document.getElementById('${idPrefix}_import').click()">Importer un personnage</button>
       </div>
       </div>
@@ -1397,6 +1402,51 @@
         document.getElementById(
           "resultat"
         ).value = `${header}\n\n${vitesseG1}\n${htmlG1}\n\n<div class="combat-séparation">Contre</div>\n\n${vitesseG2}\n${htmlG2}`;
+
+        document.getElementById("btnCopie").style.display = "inline-flex";
+      }
+
+      function copierHTML() {
+        const texte = document.getElementById("resultat");
+
+        // Sélectionner le texte
+        texte.select();
+        texte.setSelectionRange(0, 99999); // Pour mobile
+
+        try {
+          // Essayer d'abord avec l'API Clipboard moderne
+          navigator.clipboard
+            .writeText(texte.value)
+            .then(
+              () => {
+                montrerFeedback();
+              },
+              () => {
+                // Si ça échoue, utiliser la méthode fallback
+                document.execCommand("copy");
+                montrerFeedback();
+              }
+            )
+            .catch(() => {
+              // Si tout échoue, utiliser la méthode de secours
+              document.execCommand("copy");
+              montrerFeedback();
+            });
+        } catch (err) {
+          // Dernière tentative avec execCommand
+          document.execCommand("copy");
+          montrerFeedback();
+        }
+      }
+
+      // Fonction séparée pour le feedback visuel
+      function montrerFeedback() {
+        const btnCopie = document.getElementById("btnCopie");
+        const texteOriginal = btnCopie.textContent;
+        btnCopie.textContent = "Copié !";
+        setTimeout(() => {
+          btnCopie.textContent = texteOriginal;
+        }, 2000);
       }
 
       function toggleAbsorption(prefix) {
