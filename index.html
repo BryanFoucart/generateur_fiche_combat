@@ -472,7 +472,7 @@ textarea {
 <h3 onclick="toggleCharacter('${idPrefix}')">${label}</h3>
 <div class="character-content">
 <label>Nom :
-<input type="text" id="${idPrefix}_nom" onchange="updateCharacterName('${idPrefix}')">
+<input type="text" id="${idPrefix}_nom" onchange="updateCharacterName('${idPrefix}')" onblur="updateCharacterName('${idPrefix}')">
 </label>
 <label>Race :
 <select id="${idPrefix}_classe">
@@ -1892,6 +1892,7 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
       function remplirPersonnage(prefix, data) {
         // Remplir les champs de base
         document.getElementById(`${prefix}_nom`).value = data.nom;
+        updateCharacterName(prefix);
         document.getElementById(`${prefix}_classe`).value = data.race;
         document.getElementById(`${prefix}_vitalite`).value = data.vitalite;
         document.getElementById(`${prefix}_changementVieCheck`).checked =
