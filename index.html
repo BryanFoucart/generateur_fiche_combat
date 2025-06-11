@@ -820,12 +820,19 @@ textarea {
         // Générer le nouveau HTML
         container.innerHTML = "";
         for (let i = 0; i < nb; i++) {
+          const existingData = existingCompanions[i] || {};
           container.innerHTML += `
-       <div class="companion-container">
-              <h4 id="${prefix}_comp${i}_title">Invocation ${i + 1}</h4>
-              <label>Nom :
-                <input type="text" class="${prefix}_comp_nom" onchange="updateCompanionName('${prefix}', ${i})" onblur="updateCompanionName('${prefix}', ${i})">
-              </label>
+      <div class="companion-container">
+      <h4 id="${prefix}_comp${i}_title">${
+            existingData.nom || `Invocation ${i + 1}`
+          }</h4>
+      <label>Nom :
+      <input type="text"
+      class="${prefix}_comp_nom"
+      value="${existingData.nom || ""}"
+      onchange="updateCompanionName('${prefix}', ${i})"
+      onblur="updateCompanionName('${prefix}', ${i})">
+      </label>
       <label>Race :
       <input type="text" class="${prefix}_comp_race" value="invocation" hidden>Invocation
       </label>
@@ -884,6 +891,9 @@ textarea {
         // Restaurer les données sauvegardées
         existingCompanions.forEach((comp, idx) => {
           if (idx < nb) {
+            const inputNom = document.querySelectorAll(`.${prefix}_comp_nom`)[
+              idx
+            ];
             // Ne restaurer que si l'invocation existe toujours
             const newContainer = container.children[idx];
             if (newContainer) {
@@ -897,6 +907,7 @@ textarea {
               const changementVieCheck = newContainer.querySelector(
                 `#${prefix}_comp${idx}_changementVieCheck`
               );
+
               if (changementVieCheck) {
                 changementVieCheck.checked = comp.changementVieCheck;
                 if (comp.changementVieCheck) {
@@ -957,6 +968,10 @@ textarea {
                 capacitesInput.value = comp.capacites;
                 parseCapacitesInvocations(prefix, idx);
               }
+            }
+            if (inputNom) {
+              input.value = comp.nom || "";
+              updateCompanionName(prefix, idx); // Utiliser la fonction existante
             }
           }
         });
@@ -2002,7 +2017,21 @@ textarea {
 
         // Vérifier que tous les éléments existent avant de les remplir
         if (Object.values(inputs).every((el) => el)) {
-          Object.entries(inputs).forEach(([key, el]) => (el.value = data[key]));
+          Object.entries(inputs).forEach(([key, el]) => {
+            el.value = data[key];
+            // Mettre à jour le titre après avoir rempli le nom
+            if (key === "nom") {
+              updateCompanionName(prefix, idx);
+            }
+          });
+
+          // Mettre à jour le titre avec le nom de l'invocation
+          if (data.nom) {
+            const title = document.getElementById(`${prefix}_comp${idx}_title`);
+            if (title) {
+              title.textContent = data.nom;
+            }
+          }
 
           // Restaurer les données temporaires si elles existent
           if (data._tempData) {
