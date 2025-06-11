@@ -602,87 +602,6 @@ textarea {
           .replace(/'/g, "&#039;");
       }
 
-      // function parseCapacites(prefix) {
-      //   const input = document.getElementById(
-      //     `${prefix}_capacites_input`
-      //   ).value;
-      //   const container = document.getElementById(`${prefix}_capacites`);
-      //   container.innerHTML = ""; // Reset
-
-      //   // Traiter les lignes une par une
-      //   const lines = input.split("\n").filter((l) => l.trim() !== "");
-      //   let currentLines = [];
-
-      //   for (let i = 0; i < lines.length; i++) {
-      //     if (lines[i].trim() === "@not") {
-      //       if (currentLines.length > 0 && i + 1 < lines.length) {
-      //         const lastLine = currentLines.pop();
-      //         currentLines.push(lastLine + "\n" + lines[i + 1]);
-      //         i++;
-      //       }
-      //     } else {
-      //       currentLines.push(lines[i]);
-      //     }
-      //   }
-
-      //   currentLines.forEach((line, index) => {
-      //     // Nettoyer les éventuels @not restants
-      //     const cleanLine = line
-      //       .split("\n")
-      //       .filter((l) => l.trim() !== "@not")
-      //       .join("\n");
-
-      //     const firstColonIndex = cleanLine.indexOf(":");
-
-      //     // Continuer avec le traitement normal pour les lignes sans spoiler
-      //     if (firstColonIndex !== -1) {
-      //       const titre = cleanLine.substring(0, firstColonIndex).trim();
-      //       const description = cleanLine.substring(firstColonIndex + 1).trim();
-      //       const escapedTitre = escapeHtml(titre);
-      //       const escapedDescription = escapeHtml(description);
-
-      //       container.innerHTML += `
-      // <div class="capacite-container">
-      //   <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
-      //   <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
-      //   <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
-      //   <label>État :
-      //     <select class="${prefix}_classeCapacite">
-      //       <option value="capacité_spéciale">Neutre</option>
-      //       <option value="capacité_spéciale active">Active</option>
-      //       <option value="capacité_spéciale passive">Passive</option>
-      //       <option value="capacité_spéciale bloquée">Bloquée</option>
-      //       <option value="capacité_spéciale utilisée">Utilisée</option>
-      //       <option value="capacité_spéciale annulée">Annulée</option>
-      //       <option value="capacité_spéciale inactive">Inactive</option>
-      //     </select>
-      //   </label>
-      // </div>`;
-      //     } else {
-      //       const escapedLine = escapeHtml(cleanLine);
-      //       container.innerHTML += `
-      // <div class="capacite-container">
-      //    <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
-      //         index + 1
-      //       }">
-      //   <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedLine}">
-      //   <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
-      //   <label>État :
-      //     <select class="${prefix}_classeCapacite">
-      //       <option value="capacité_spéciale">Neutre</option>
-      //       <option value="capacité_spéciale active">Active</option>
-      //       <option value="capacité_spéciale passive">Passive</option>
-      //       <option value="capacité_spéciale bloquée">Bloquée</option>
-      //       <option value="capacité_spéciale utilisée">Utilisée</option>
-      //       <option value="capacité_spéciale annulée">Annulée</option>
-      //       <option value="capacité_spéciale inactive">Inactive</option>
-      //     </select>
-      //   </label>
-      // </div>`;
-      //     }
-      //   });
-      // }
-
       function parseCapacites(prefix) {
         const input = document.getElementById(
           `${prefix}_capacites_input`
@@ -839,17 +758,21 @@ textarea {
       <label>Vitalité :
       <input type="number" class="${prefix}_comp_vitalite" value="0" onClick="if(this.value==='0')this.value=''">
       </label>
+      <div class="checkbox-container">
       <label>
       <input type="checkbox" id="${prefix}_comp${i}_changementVieCheck" onchange="toggleChangementVieCompanion('${prefix}', ${i})"> Bonus/Malus - Vitalité ?
       </label>
+      </div>
       <div id="${prefix}_comp${i}_changementVieBloc" style="display: none;">
       <label>Bonus/Malus - Vitalité :
       <input type="text" id="${prefix}_comp${i}_changementVie">
       </label>
       </div>
+      <div class="checkbox-container">
       <label>
       <input type="checkbox" id="${prefix}_comp${i}_auraCheck" onchange="toggleAuraCompanion('${prefix}', ${i})"> Aura ?
       </label>
+      </div>
       <div id="${prefix}_comp${i}_auraBloc" style="display: none;">
       <label>Aura :
       <input type="number" id="${prefix}_comp${i}_aura" value="0" onClick="if(this.value==='0')this.value=''">
@@ -858,9 +781,11 @@ textarea {
       <label>Vitesse :
       <input type="number" class="${prefix}_comp_vitesse" value="0" onClick="if(this.value==='0')this.value=''">
       </label>
+      <div class="checkbox-container">
       <label>
       <input type="checkbox" id="${prefix}_comp${i}_changementVitesseCheck" onchange="toggleChangementVitesseCompanion('${prefix}', ${i})"> Bonus/Malus - Vitesse ?
       </label>
+      </div>
       <div id="${prefix}_comp${i}_changementVitesseBloc" style="display: none;">
       <label>Bonus/Malus - Vitesse :
       <input type="text" id="${prefix}_comp${i}_changementVitesse">
@@ -869,9 +794,11 @@ textarea {
       <label>Dégâts :
       <input type="number" class="${prefix}_comp_degats" value="0" onClick="if(this.value==='0')this.value=''">
       </label>
+      <div class="checkbox-container">
       <label>
       <input type="checkbox" id="${prefix}_comp${i}_changementDegatsCheck" onchange="toggleChangementDegatsCompanion('${prefix}', ${i})"> Bonus/Malus - Dégâts ?
       </label>
+      </div>
       <div id="${prefix}_comp${i}_changementDegatsBloc" style="display: none;">
       <label>Bonus/Malus - Dégâts :
       <input type="text" id="${prefix}_comp${i}_changementDegats">
@@ -976,122 +903,6 @@ textarea {
           }
         });
       }
-
-      //       function parseCapacitesInvocations(prefix, idx) {
-      //         const input = document.getElementById(
-      //           `${prefix}_comp${idx}_capacites_input`
-      //         ).value;
-      //         const container = document.getElementById(
-      //           `${prefix}_comp${idx}_capacites`
-      //         );
-      //         container.innerHTML = ""; // Reset
-
-      //         // Traiter les lignes une par une
-      //         const lines = input.split("\n").filter((l) => l.trim() !== "");
-      //         let currentLines = [];
-
-      //         for (let i = 0; i < lines.length; i++) {
-      //           if (lines[i].trim() === "@not") {
-      //             // Si on trouve @not, on fusionne la ligne précédente avec la suivante
-      //             if (currentLines.length > 0 && i + 1 < lines.length) {
-      //               const lastLine = currentLines.pop();
-      //               currentLines.push(lastLine + "\n" + lines[i + 1]);
-      //               i++; // Sauter la ligne suivante
-      //             }
-      //           } else {
-      //             currentLines.push(lines[i]);
-      //           }
-      //         }
-
-      //         currentLines.forEach((line, index) => {
-      //           // Nettoyer les éventuels @not restants
-      //           const cleanLine = line
-      //             .split("\n")
-      //             .filter((l) => l.trim() !== "@not")
-      //             .join("\n");
-
-      //           // Vérifier si la ligne contient un spoiler
-      //           if (
-      //             cleanLine.includes("[spoiler]") &&
-      //             cleanLine.includes("[/spoiler]")
-      //           ) {
-      //             // Pour les lignes avec spoiler, ajouter directement le texte sans créer de <li>
-      //             const escapedLine = escapeHtml(cleanLine);
-      //             container.innerHTML += `<p>${escapedLine}</p>`;
-      //             return; // Passer à la ligne suivante
-      //           }
-
-      //           // Pour les lignes normales, ne prendre en compte que le premier ":" qui n'est pas dans un spoiler
-      //           let firstColonIndex = -1;
-      //           let inSpoiler = false;
-
-      //           for (let i = 0; i < cleanLine.length; i++) {
-      //             if (cleanLine.substring(i, i + 9) === "[spoiler]") {
-      //               inSpoiler = true;
-      //               i += 8;
-      //             } else if (cleanLine.substring(i, i + 10) === "[/spoiler]") {
-      //               inSpoiler = false;
-      //               i += 9;
-      //             } else if (cleanLine[i] === ":" && !inSpoiler) {
-      //               firstColonIndex = i;
-      //               break;
-      //             }
-      //           }
-
-      //           // Continuer avec le traitement normal pour les lignes sans spoiler
-      //           if (firstColonIndex !== -1) {
-      //             const titre = cleanLine.substring(0, firstColonIndex).trim();
-      //             const description = cleanLine.substring(firstColonIndex + 1).trim();
-
-      //             // Échapper les caractères spéciaux pour l'HTML
-      //             const escapedTitre = escapeHtml(titre);
-      //             const escapedDescription = escapeHtml(description);
-
-      //             container.innerHTML += `
-      // <div class="capacite-container">
-      // <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
-      // <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
-      // <p><strong><em>${escapedTitre}</em></strong> : ${escapedDescription}</p>
-      // <label>État :
-      // <select class="${prefix}_comp${idx}_classeCapacite">
-      // <option value="capacité_spéciale">Neutre</option>
-      // <option value="capacité_spéciale active">Active</option>
-      // <option value="capacité_spéciale passive">Passive</option>
-      // <option value="capacité_spéciale bloquée">Bloquée</option>
-      // <option value="capacité_spéciale utilisée">Utilisée</option>
-      // <option value="capacité_spéciale annulée">Annulée</option>
-      // <option value="capacité_spéciale inactive">Inactive</option>
-      // </select>
-      // </label>
-      // </div>
-      // `;
-      //           } else {
-      //             // Si pas de ":", traiter comme une capacité sans titre
-      //             const escapedLine = escapeHtml(cleanLine);
-
-      //             container.innerHTML += `
-      // <div class="capacite-container">
-      // <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="Capacité ${
-      //               index + 1
-      //             }">
-      // <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedLine}">
-      // <p><strong><em>Capacité ${index + 1}</em></strong> : ${escapedLine}</p>
-      // <label>État :
-      // <select class="${prefix}_comp${idx}_classeCapacite">
-      // <option value="capacité_spéciale">Neutre</option>
-      // <option value="capacité_spéciale active">Active</option>
-      // <option value="capacité_spéciale passive">Passive</option>
-      // <option value="capacité_spéciale bloquée">Bloquée</option>
-      // <option value="capacité_spéciale utilisée">Utilisée</option>
-      // <option value="capacité_spéciale annulée">Annulée</option>
-      // <option value="capacité_spéciale inactive">Inactive</option>
-      // </select>
-      // </label>
-      // </div>
-      // `;
-      //           }
-      //         });
-      //       }
 
       function parseCapacitesInvocations(prefix, idx) {
         const input = document.getElementById(
