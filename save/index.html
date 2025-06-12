@@ -341,6 +341,29 @@
     ${createCharacterForm("p2", "Personnage 2")}
     <button onclick="genererHTML()">Générer le Code HTML</button>
   `;
+      // DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+      // Modifier la partie du code qui gère l'affichage des bonus/malus
+      if (document.getElementById(`${prefix}_changementVieCheck`).checked) {
+        const valeurComplete = document.getElementById(
+          `${prefix}_changementVie`
+        ).value;
+        // Séparer les différentes valeurs par les espaces et traiter chaque valeur
+        const valeurs = valeurComplete
+          .split(" ")
+          .filter((val) => val.trim() !== "");
+
+        valeurs.forEach((valeur) => {
+          valeur = valeur.trim();
+          if (valeur.startsWith("-")) {
+            html += ` <strong class="stat-malus">${valeur}</strong>`;
+          } else if (valeur.startsWith("+")) {
+            html += ` <strong class="stat-bonus">${valeur}</strong>`;
+          } else {
+            // Si pas de signe, ajouter un +
+            html += ` <strong class="stat-bonus">+${valeur}</strong>`;
+          }
+        });
+      }
     </script>
   </body>
 </html>
