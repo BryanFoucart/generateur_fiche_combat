@@ -1110,7 +1110,7 @@ textarea {
           const absorption =
             parseInt(document.getElementById(`${prefix}_absorption`).value) ||
             0;
-          degats = Math.floor((vitalite * absorption) / 100);
+          degats = Math.ceil((vitalite * absorption) / 100);
           // Mettre à jour le champ dégâts avec la valeur calculée
           document.getElementById(`${prefix}_degats`).value = degats;
         }
@@ -1445,7 +1445,7 @@ textarea {
               absorptionValue += bonusMalus;
             }
 
-            const degats = Math.floor((vitalite * absorptionValue) / 100);
+            const degats = Math.ceil((vitalite * absorptionValue) / 100);
             document.getElementById(`${prefix}_degats`).value = degats;
           }
         };
@@ -1489,7 +1489,7 @@ textarea {
             absorptionValue += bonusMalus;
           }
 
-          const degats = Math.floor((vitalite * absorptionValue) / 100);
+          const degats = Math.ceil((vitalite * absorptionValue) / 100);
           document.getElementById(`${prefix}_degats`).value = degats;
         }
       }
