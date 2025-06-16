@@ -603,43 +603,48 @@ textarea {
 <input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
 </label>
 </div>
-<div id="${idPrefix}_absorptionBloc" style="display: none;">
-<label>Absorption (%) :
-<input type="number" id="${idPrefix}_absorption" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateAbsorptionDebut('${idPrefix}')">
-</label>
-<div class="checkbox-container">
-<input type="checkbox" id="${idPrefix}_absorptionDebutCheck" onchange="toggleAbsorptionDebut('${idPrefix}')">
-<label for="${idPrefix}_absorptionDebutCheck">Absorption début de combat ?</label>
-</div>
-<div id="${idPrefix}_absorptionDebutBloc" style="display: none;">
-<label>Absorption début de combat :
-<input type="text" id="${idPrefix}_absorptionDebut" oninput="updateAbsorptionDebut('${idPrefix}')">
-</label>
-</div>
-</div>
-<div class="checkbox-container">
-<label>
-<input type="checkbox" id="${idPrefix}_changementAbsorptionCheck" onchange="toggleChangementAbsorption('${idPrefix}')"> Bonus/Malus Absorption ?
-</label>
-</div>
-<div id="${idPrefix}_changementAbsorptionBloc" style="display: none;">
-<label>Bonus/Malus - Absorption :
-<input type="number" id="${idPrefix}_changementAbsorption">
-</label>
-</div>
-</div>
-<label>Dégâts :
-<input type="number" id="${idPrefix}_degats" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateDegatsDebut('${idPrefix}')">
-</label>
-<div class="checkbox-container">
-<input type="checkbox" id="${idPrefix}_degatsDebutCheck" onchange="toggleDegatsDebut('${idPrefix}')">
-<label for="${idPrefix}_degatsDebutCheck">Dégâts début de combat ?</label>
-</div>
-<div id="${idPrefix}_degatsDebutBloc" style="display: none;">
-<label>Dégâts début de combat :
-<input type="text" id="${idPrefix}_degatsDebut" oninput="updateDegatsDebut('${idPrefix}')">
-</label>
-</div>
+ <div id="${idPrefix}_absorptionBloc" style="display: none;">
+      <label>Absorption (%) :
+        <input type="number" id="${idPrefix}_absorption" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateAbsorptionDebut('${idPrefix}')">
+      </label>
+      
+      <div class="checkbox-container">
+        <input type="checkbox" id="${idPrefix}_absorptionDebutCheck" onchange="toggleAbsorptionDebut('${idPrefix}')">
+        <label for="${idPrefix}_absorptionDebutCheck">Absorption début de combat ?</label>
+      </div>
+      
+      <div id="${idPrefix}_absorptionDebutBloc" style="display: none;">
+        <label>Absorption début de combat :
+          <input type="text" id="${idPrefix}_absorptionDebut" oninput="updateAbsorptionDebut('${idPrefix}')">
+        </label>
+      </div>
+
+      <div class="checkbox-container">
+        <input type="checkbox" id="${idPrefix}_changementAbsorptionCheck" onchange="toggleChangementAbsorption('${idPrefix}')">
+        <label for="${idPrefix}_changementAbsorptionCheck">Bonus/Malus ?</label>
+      </div>
+      
+      <div id="${idPrefix}_changementAbsorptionBloc" style="display: none;">
+        <label>Bonus/Malus :
+          <input type="text" id="${idPrefix}_changementAbsorption">
+        </label>
+      </div>
+    </div>
+
+    <label>Dégâts :
+      <input type="number" id="${idPrefix}_degats" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateDegatsDebut('${idPrefix}')">
+    </label>
+    
+    <div class="checkbox-container">
+      <input type="checkbox" id="${idPrefix}_degatsDebutCheck" onchange="toggleDegatsDebut('${idPrefix}')">
+      <label for="${idPrefix}_degatsDebutCheck">Dégâts début de combat ?</label>
+    </div>
+    
+    <div id="${idPrefix}_degatsDebutBloc" style="display: none;">
+      <label>Dégâts début de combat :
+        <input type="text" id="${idPrefix}_degatsDebut" oninput="updateDegatsDebut('${idPrefix}')">
+      </label>
+    </div>
 <div class="checkbox-container">
 <label>
 <input type="checkbox" id="${idPrefix}_changementDegatsCheck" onchange="toggleChangementDegats('${idPrefix}')"> Bonus/Malus - Dégâts ?
