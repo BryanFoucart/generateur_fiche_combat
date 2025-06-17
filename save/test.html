@@ -297,4 +297,15 @@
     }
     return capacites;
   }
+
+
+
+
+  // Permet de corriger les soucis de valeur négative 
+  const calculDegats = (vitalite, pourcentage) => {
+    const valeurDecimale = (vitalite * parseInt(pourcentage.replace('%', ''))) / 100;
+    return pourcentage.startsWith('-') ?
+      -Math.ceil(Math.abs(valeurDecimale)) :
+      Math.ceil(valeurDecimale);
+  };
 </script>

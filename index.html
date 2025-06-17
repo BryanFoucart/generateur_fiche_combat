@@ -1148,21 +1148,32 @@ document.getElementById(`${prefix}_nom`).value
       if (document.getElementById(`${prefix}_corrompu`).checked) {
         const absorptionFinale = updateAbsorptionDebut(prefix);
         html += `\n<span class="bestiaire-champ">Absorption</span> : <strong class="dégâts">${absorptionFinale}%</strong>`;
-      }
 
-      if (
-        document.getElementById(`${prefix}_changementAbsorptionCheck`)
-        .checked
-      ) {
-        const valeur = document.getElementById(
-          `${prefix}_changementAbsorption`
-        ).value;
-        if (valeur.startsWith("-")) {
-          html += ` <strong class="stat-malus">${valeur}%</strong>`;
-        } else if (valeur.startsWith("+")) {
-          html += ` <strong class="stat-bonus">${valeur}%</strong>`;
-        } else {
-          html += ` <strong class="stat-bonus">+${valeur}%</strong>`;
+
+        if (document.getElementById(`${prefix}_changementAbsorptionCheck`).checked) {
+          const valeurComplete = document.getElementById(`${prefix}_changementAbsorption`).value;
+          const valeurs = valeurComplete.split(" ").filter(val => val.trim() !== "");
+
+          valeurs.forEach(valeur => {
+            valeur = valeur.trim();
+            if (valeur.endsWith('%')) {
+              if (valeur.startsWith('-')) {
+                html += ` <strong class="stat-malus">${valeur}</strong>`;
+              } else if (valeur.startsWith('+')) {
+                html += ` <strong class="stat-bonus">${valeur}</strong>`;
+              } else {
+                html += ` <strong class="stat-bonus">+${valeur}</strong>`;
+              }
+            } else {
+              if (valeur.startsWith('-')) {
+                html += ` <strong class="stat-malus">${valeur}%</strong>`;
+              } else if (valeur.startsWith('+')) {
+                html += ` <strong class="stat-bonus">${valeur}%</strong>`;
+              } else {
+                html += ` <strong class="stat-bonus">+${valeur}%</strong>`;
+              }
+            }
+          });
         }
       }
 
@@ -1206,6 +1217,37 @@ document.getElementById(`${prefix}_nom`).value
             html += ` <strong class="stat-bonus">+${valeur}</strong>`;
           }
         });
+      }
+
+      if (document.getElementById(`${prefix}_corrompu`).checked) {
+        if (document.getElementById(`${prefix}_changementAbsorptionCheck`).checked) {
+          const valeurComplete = document.getElementById(`${prefix}_changementAbsorption`).value;
+          const valeurs = valeurComplete.split(" ").filter(val => val.trim() !== "");
+
+          const calculDegats = (vitalite, pourcentage) => {
+            const valeurDecimale = (vitalite * parseInt(pourcentage.replace('%', ''))) / 100;
+            return pourcentage.startsWith('-') ?
+              -Math.ceil(Math.abs(valeurDecimale)) :
+              Math.ceil(valeurDecimale);
+            return pourcentage.startsWith('+') ?
+              -Math.ceil(Math.abs(valeurDecimale)) :
+              Math.ceil(valeurDecimale);
+          };
+
+          valeurs.forEach(valeur => {
+            const vitalite =
+              parseInt(document.getElementById(`${prefix}_vitalite`).value) || 0;
+            valeur = valeur.trim();
+            degats = calculDegats(vitalite, valeur);
+            if (valeur.startsWith('-')) {
+              html += ` <strong class="stat-malus">${degats}</strong>`;
+            } else if (valeur.startsWith('+')) {
+              html += ` <strong class="stat-bonus">+${degats}</strong>`;
+            } else {
+              html += ` <strong class="stat-bonus">+${degats}</strong>`;
+            }
+          });
+        }
       }
 
       html += `\n<span class="bestiaire-champ">Capacités spéciales</span> :`;
