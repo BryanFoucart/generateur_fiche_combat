@@ -1500,19 +1500,6 @@ nb2 === 1
             parseInt(document.getElementById(`${prefix}_absorption`).value) ||
             0;
 
-          // Prendre en compte le bonus/malus d'absorption
-          const bonusMalusCheck = document.getElementById(
-            `${prefix}_changementAbsorptionCheck`
-          ).checked;
-          if (bonusMalusCheck) {
-            const bonusMalus =
-              parseInt(
-                document.getElementById(`${prefix}_changementAbsorption`)
-                .value
-              ) || 0;
-            absorptionValue += bonusMalus;
-          }
-
           const degats = Math.ceil((vitalite * absorptionValue) / 100);
           document.getElementById(`${prefix}_degats`).value = degats;
         }
@@ -1522,11 +1509,11 @@ nb2 === 1
       const absorption = document.getElementById(`${prefix}_absorption`);
       absorption.addEventListener("input", updateDegats);
 
-      // Écouter les changements de bonus/malus d'absorption
-      const bonusMalusAbsorption = document.getElementById(
-        `${prefix}_changementAbsorption`
+      // Écouter les changements de vitalité
+      const vitalite = document.getElementById(
+        `${prefix}_vitalite`
       );
-      bonusMalusAbsorption.addEventListener("input", updateDegats);
+      vitalite.addEventListener("input", updateDegats);
 
       // Mise à jour initiale
       updateDegats();
@@ -1579,26 +1566,6 @@ nb2 === 1
         `${prefix}_changementAbsorptionCheck`
       ).checked;
       bloc.style.display = isChecked ? "block" : "none";
-
-      // Recalculer les dégâts quand on active/désactive le bonus/malus
-      if (document.getElementById(`${prefix}_corrompu`).checked) {
-        const vitalite =
-          parseInt(document.getElementById(`${prefix}_vitalite`).value) || 0;
-        let absorptionValue =
-          parseInt(document.getElementById(`${prefix}_absorption`).value) ||
-          0;
-
-        if (isChecked) {
-          const bonusMalus =
-            parseInt(
-              document.getElementById(`${prefix}_changementAbsorption`).value
-            ) || 0;
-          absorptionValue += bonusMalus;
-        }
-
-        const degats = Math.ceil((vitalite * absorptionValue) / 100);
-        document.getElementById(`${prefix}_degats`).value = degats;
-      }
     }
 
     function toggleDegatsDebut(prefix) {
