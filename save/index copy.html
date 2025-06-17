@@ -7,188 +7,178 @@
   <title>Générateur de Combat</title>
   <style>
     body {
-      max-width: 1000px;
-      margin: auto;
-      font-family: Arial;
-      padding: 20px;
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      margin: 0 auto;
+      padding: 1rem;
+      max-width: 1200px;
+      background: #f9f9f9;
+      color: #333;
     }
 
-    #selectGroup {
+    h2,
+    h3 {
+      margin-top: 1.5rem;
+      color: #222;
+    }
+
+    #selectGroup,
+    .tabs {
       display: flex;
-      text-align: center;
-      padding: 5px;
-    }
-
-    div#selectGroup label {
-      margin: auto;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 1rem;
     }
 
     label {
       display: block;
-      margin-top: 10px;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
     }
 
-    .bloc {
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 5rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
       border: 1px solid #ccc;
-      padding: 15px;
-      margin-top: 20px;
+      border-radius: 6px;
+      background: white;
     }
 
-    .capacite-container {
-      margin-left: 20px;
-      margin-bottom: 10px;
-    }
-
-    .companion-container {
-      border: 1px dashed #aaa;
-      padding: 10px;
-      margin-top: 10px;
+    select,
+    input[type="text"].nom {
+      width: 10rem;
     }
 
     textarea {
+      min-height: 150px;
       width: 100%;
-      height: 200px;
-      resize: none;
     }
 
-    .tabs {
-      display: flex;
-      justify-content: center;
-      /* margin-bottom: 20px; */
-      margin-top: 5px;
+    .bloc {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      margin-bottom: 1rem;
+      overflow: hidden;
     }
 
-    .tab-button {
-      flex: 1;
-      padding: 12px;
-      font-size: 1rem;
-      cursor: pointer;
+    .bloc summary {
+      padding: 1rem;
       background-color: #eee;
-      border: 1px solid #ccc;
-      border-bottom: none;
-      transition: background-color 0.3s;
+      cursor: pointer;
+      font-size: 1.1rem;
     }
 
-    .tab-button.active {
-      background-color: white;
-      font-weight: bold;
-      border-bottom: 2px solid #333;
-    }
-
-    #combat-form>div {
-      display: none;
-      padding: 10px;
-      border: 1px solid #ccc;
-    }
-
-    #combat-form>.active {
-      display: block;
-    }
-
-    div li {
-      border: 1px black dotted;
-      padding: 5px;
-      margin-top: 5px;
-
-      & label {
-        margin-top: 5px;
-      }
-    }
-
-    div.character-actions {
-      display: flex;
-      margin-top: 5px;
-
-      justify-content: space-evenly;
-    }
-
-    /* button#btnHTML {
-display: flex;
-margin: 5px auto;
-} */
-
-    button#btnHTML,
-    button#btnCopie {
-      display: inline-flex;
-      margin: 5px;
-    }
-
-    .button-container {
-      text-align: center;
-      margin: 5px auto;
+    .character-content {
+      padding: 1rem;
     }
 
     .checkbox-container {
       display: flex;
       align-items: center;
-      margin: 10px 0;
+      margin: 0.5rem 0;
     }
 
     .checkbox-container input[type="checkbox"] {
-      margin-right: 8px;
+      margin-right: 0.5rem;
     }
 
-    .checkbox-container label {
-      margin-top: 0;
-    }
-
-    @media (max-width: 768px) {
-      .bloc {
-        /* padding: 10px; */
-        font-size: 0.875rem;
-      }
-
-      label {
-        font-size: 0.875rem;
-      }
-
-      [type="checkbox"] {
-        width: auto;
-      }
-
-      /* input,
-select,
-textarea {
-/* font-size: 0.875rem; */
-      /* width: 100%; } */
-
-      .tabs {
-        flex-direction: column;
-      }
-
-      .tab-button {
-        border-bottom: 1px solid #ccc;
-      }
-
-      #selectGroup {
-        display: block;
-
-        label {
-          padding-bottom: 5px;
-          display: block;
-
-          input {
-            width: 50%;
-          }
-        }
-      }
-    }
-
-    .character-content {
-      display: none;
-      padding-top: 10px;
-    }
-
-    .bloc h3 {
-      cursor: pointer;
-      background-color: #f0f0f0;
-      padding: 8px;
-      margin: -15px -15px 10px -15px;
+    .tabs {
       border-bottom: 1px solid #ccc;
     }
 
-    .bloc.expanded .character-content {
+    .tab-button {
+      padding: 0.75rem 1rem;
+      background: #ddd;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px 4px 0 0;
+      margin-right: 0.5rem;
+      font-weight: bold;
+    }
+
+    .tab-button.active {
+      background: white;
+      border-bottom: 2px solid #333;
+    }
+
+    .button-container {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    button {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 0.25rem;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #555;
+    }
+
+    ul {
+      list-style: disc;
+      padding-left: 1.5rem;
+    }
+
+    .form-section {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    #combat-form>div {
+      display: none;
+    }
+
+    #combat-form>div.active {
       display: block;
+    }
+
+    .tab-button.active {
+      background-color: white;
+      border-bottom: 2px solid #333;
+      font-weight: bold;
+    }
+
+    .tab-button:not(.active) {
+      background-color: #ddd;
+    }
+
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      .tabs {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .tab-button {
+        width: 100%;
+        border-radius: 0;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      select,
+      textarea {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
@@ -512,9 +502,10 @@ textarea {
 
     function createCharacterForm(idPrefix, label) {
       return `
-<div class="bloc" id="${idPrefix}">
-<h3 onclick="toggleCharacter('${idPrefix}')">${label}</h3>
+<details class="bloc" id="${idPrefix}" open>
+<summary onclick="toggleCharacter('${idPrefix}')">${label}</summary>
 <div class="character-content">
+<div class="form-section">
 <label>Nom :
 <input type="text" id="${idPrefix}_nom" onchange="updateCharacterName('${idPrefix}')" onblur="updateCharacterName('${idPrefix}')">
 </label>
@@ -544,6 +535,17 @@ textarea {
 <input type="checkbox" id="${idPrefix}_invisible" onchange="toggleInvisible('${idPrefix}')"> Invisible ?
 </label>
 </div>
+<div class="checkbox-container">
+<label>
+<input type="checkbox" id="${idPrefix}_auraCheck" onchange="toggleAura('${idPrefix}')"> Aura ?
+</label>
+</div>
+<div id="${idPrefix}_auraBloc" style="display: none;">
+<label>Aura :
+<input type="number" id="${idPrefix}_aura" value="0" onClick="if(this.value==='0')this.value=''">
+</label>
+</div></div>
+<div class="form-section">
 <label>Vitalité :
 <input type="number" id="${idPrefix}_vitalite" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateVitaliteDebut('${idPrefix}')">
 </label>
@@ -565,17 +567,8 @@ textarea {
 <label>Bonus/Malus - Vitalité :
 <input type="text" id="${idPrefix}_changementVie">
 </label>
-</div>
-<div class="checkbox-container">
-<label>
-<input type="checkbox" id="${idPrefix}_auraCheck" onchange="toggleAura('${idPrefix}')"> Aura ?
-</label>
-</div>
-<div id="${idPrefix}_auraBloc" style="display: none;">
-<label>Aura :
-<input type="number" id="${idPrefix}_aura" value="0" onClick="if(this.value==='0')this.value=''">
-</label>
-</div>
+</div></div>
+<div class="form-section">
 <label>Vitesse :
 <input type="number" id="${idPrefix}_vitesse" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateVitesseDebut('${idPrefix}')">
 </label>
@@ -597,7 +590,8 @@ textarea {
 <label>Bonus/Malus - Vitesse :
 <input type="text" id="${idPrefix}_changementVitesse">
 </label>
-</div>
+</div></div>
+<div class="form-section">
 <div class="checkbox-container">
 <label>
 <input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
@@ -654,28 +648,32 @@ textarea {
 <label>Bonus/Malus - Dégâts:
 <input type="text" id="${idPrefix}_changementDegats">
 </label>
-</div>
+</div></div>
 
+<div class="form-section">
 <label>Capacités spéciales (format : "x Titre : Description", un x en début de chaque compétence) :
 <textarea id="${idPrefix}_capacites_input" oninput="parseCapacites('${idPrefix}')" placeholder="EXEMPLE
 x Rapidité : permet d'attaquer à deux reprises.
 x Hydro cyno : Régénère la vitalité lorsqu'elle atteint 25%.
 x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et réduit les dégâts de sa prochaine attaque à hauteur de 10% des dégâts du corrompu. Non réalisable dans la région des 'Mers & Océans'."></textarea>
 </label>
-<div id="${idPrefix}_capacites"></div>
 
+<div id="${idPrefix}_capacites"></div></div>
+
+<div class="form-section">
 <label>Nombre d'invocations :
 <input type="number" id="${idPrefix}_nbCompagnons" value="0" min="0" onClick="if(this.value==='0')this.value=''" onchange="updateCompanions('${idPrefix}')">
-</label>
+</label></div>
 <div id="${idPrefix}_compagnons"></div>
 
+<div class="form-section">
 <div class="character-actions">
 <button onclick="exporterPersonnage('${idPrefix}')">Exporter ce personnage</button>
 <input type="file" id="${idPrefix}_import" accept=".json,application/json" onchange="importerPersonnage(event, '${idPrefix}')" style="display: none;">
 <button onclick="document.getElementById('${idPrefix}_import').click()">Importer un personnage</button>
 </div>
-</div>
-</div>
+</div></div>
+</details>
 `;
     }
 
@@ -728,7 +726,7 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
           const escapedTitre = escapeHtml(titre);
           const escapedDescription = escapeHtml(description);
 
-          container.innerHTML += `
+          container.innerHTML += `<div class="form-section">
 <li>
 <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
 <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
@@ -745,10 +743,10 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
 <option value="capacité_spéciale inactive">Inactive</option>
 </select>
 </label>
-</li>`;
+</li></div>`;
         } else {
           const escapedLine = escapeHtml(entry);
-          container.innerHTML += `
+          container.innerHTML += `<div class="form-section">
 <li>
 <input type="hidden" class="${prefix}_titreCapacite" value="Capacité ${
 index + 1
@@ -767,7 +765,7 @@ index + 1
 <option value="capacité_spéciale inactive">Inactive</option>
 </select>
 </label>
-</li>`;
+</li></div>`;
         }
       });
     }
@@ -2343,9 +2341,9 @@ nb2 === 1
       const newName =
         document.getElementById(`${prefix}_nom`).value ||
         `Personnage ${prefix.split("_")[1].substring(1)}`;
-      const h3 = document.querySelector(`#${prefix} h3`);
-      if (h3) {
-        h3.textContent = newName;
+      const summary = document.querySelector(`#${prefix} summary`);
+      if (summary) {
+        summary.textContent = newName;
       }
     }
 
