@@ -621,11 +621,11 @@ textarea {
 
       <div class="checkbox-container">
         <input type="checkbox" id="${idPrefix}_changementAbsorptionCheck" onchange="toggleChangementAbsorption('${idPrefix}')">
-        <label for="${idPrefix}_changementAbsorptionCheck">Bonus/Malus ?</label>
+        <label for="${idPrefix}_changementAbsorptionCheck">Bonus/Malus - Absorption ?</label>
       </div>
       
       <div id="${idPrefix}_changementAbsorptionBloc" style="display: none;">
-        <label>Bonus/Malus :
+        <label>Bonus/Malus - Absorption :
           <input type="text" id="${idPrefix}_changementAbsorption">
         </label>
       </div>
@@ -1100,12 +1100,21 @@ document.getElementById(`${prefix}_nom`).value
 
         valeurs.forEach((valeur) => {
           valeur = valeur.trim();
-          if (valeur.startsWith("-")) {
-            html += ` <strong class="stat-malus">${valeur}</strong>`;
-          } else if (valeur.startsWith("+")) {
-            html += ` <strong class="stat-bonus">${valeur}</strong>`;
+          if (valeur.endsWith('%')) {
+            const resultat = calculStatPourcentage(vitaliteFinale, valeur);
+            if (resultat.startsWith("-")) {
+              html += ` <strong class="stat-malus">${resultat}</strong>`;
+            } else {
+              html += ` <strong class="stat-bonus">${resultat}</strong>`;
+            }
           } else {
-            html += ` <strong class="stat-bonus">+${valeur}</strong>`;
+            if (valeur.startsWith("-")) {
+              html += ` <strong class="stat-malus">${valeur}</strong>`;
+            } else if (valeur.startsWith("+")) {
+              html += ` <strong class="stat-bonus">${valeur}</strong>`;
+            } else {
+              html += ` <strong class="stat-bonus">+${valeur}</strong>`;
+            }
           }
         });
       }
@@ -1224,27 +1233,13 @@ document.getElementById(`${prefix}_nom`).value
           const valeurComplete = document.getElementById(`${prefix}_changementAbsorption`).value;
           const valeurs = valeurComplete.split(" ").filter(val => val.trim() !== "");
 
-          const calculDegats = (vitalite, pourcentage) => {
-            const valeurDecimale = (vitalite * parseInt(pourcentage.replace('%', ''))) / 100;
-            return pourcentage.startsWith('-') ?
-              -Math.ceil(Math.abs(valeurDecimale)) :
-              Math.ceil(valeurDecimale);
-            return pourcentage.startsWith('+') ?
-              -Math.ceil(Math.abs(valeurDecimale)) :
-              Math.ceil(valeurDecimale);
-          };
-
           valeurs.forEach(valeur => {
-            const vitalite =
-              parseInt(document.getElementById(`${prefix}_vitalite`).value) || 0;
             valeur = valeur.trim();
-            degats = calculDegats(vitalite, valeur);
-            if (valeur.startsWith('-')) {
-              html += ` <strong class="stat-malus">${degats}</strong>`;
-            } else if (valeur.startsWith('+')) {
-              html += ` <strong class="stat-bonus">+${degats}</strong>`;
+            const resultat = calculStatPourcentage(vitaliteFinale, valeur);
+            if (resultat.startsWith('-')) {
+              html += ` <strong class="stat-malus">${resultat}</strong>`;
             } else {
-              html += ` <strong class="stat-bonus">+${degats}</strong>`;
+              html += ` <strong class="stat-bonus">${resultat}</strong>`;
             }
           });
         }
@@ -1756,6 +1751,17 @@ nb2 === 1
       }
 
       return vitesseBase;
+    }
+
+    function calculStatPourcentage(stat, pourcentage) {
+      const valeurDecimale = (stat * parseInt(pourcentage.replace('%', ''))) / 100;
+      if (pourcentage.startsWith('-')) {
+        return `-${Math.ceil(Math.abs(valeurDecimale))}`;
+      } else if (pourcentage.startsWith('+')) {
+        return `+${Math.ceil(valeurDecimale)}`;
+      } else {
+        return `+${Math.ceil(valeurDecimale)}`;
+      }
     }
 
     function toggleChangementVitesse(prefix) {
