@@ -139,6 +139,12 @@
       border-bottom: 1px solid #eee;
     }
 
+    div[id^="g"][id$="_capacites"] {
+      display: grid;
+      grid: auto-flow / 50% 1fr;
+      column-gap: 2%;
+    }
+
     #combat-form>div {
       display: none;
     }
@@ -214,6 +220,10 @@
 
     .capacite-item.open .capacite-description {
       display: block;
+    }
+
+    .capacite-item.open {
+      grid-column: 1/-1;
     }
   </style>
 </head>
@@ -588,8 +598,10 @@
 <input type="number" id="${idPrefix}_vitalite" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateVitaliteDebut('${idPrefix}')">
 </label>
 <div class="checkbox-container">
+<label for="${idPrefix}_vitaliteDebutCheck">
 <input type="checkbox" id="${idPrefix}_vitaliteDebutCheck" onchange="toggleVitaliteDebut('${idPrefix}')">
-<label for="${idPrefix}_vitaliteDebutCheck">Vitalité début de combat ?</label>
+Vitalité début de combat ?
+</label>
 </div>
 <div id="${idPrefix}_vitaliteDebutBloc" style="display: none;">
 <label>Vitalité début de combat :
@@ -611,8 +623,10 @@
 <input type="number" id="${idPrefix}_vitesse" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateVitesseDebut('${idPrefix}')">
 </label>
 <div class="checkbox-container">
+<label for="${idPrefix}_vitesseDebutCheck">
 <input type="checkbox" id="${idPrefix}_vitesseDebutCheck" onchange="toggleVitesseDebut('${idPrefix}')">
-<label for="${idPrefix}_vitesseDebutCheck">Vitesse début de combat ?</label>
+Vitesse début de combat ?
+</label>
 </div>
 <div id="${idPrefix}_vitesseDebutBloc" style="display: none;">
 <label>Vitesse début de combat :
@@ -635,48 +649,54 @@
 <input type="checkbox" id="${idPrefix}_corrompu" onchange="toggleAbsorption('${idPrefix}')"> Corrompu ?
 </label>
 </div>
- <div id="${idPrefix}_absorptionBloc" style="display: none;">
-      <label>Absorption (%) :
-        <input type="number" id="${idPrefix}_absorption" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateAbsorptionDebut('${idPrefix}')">
-      </label>
-      
-      <div class="checkbox-container">
-        <input type="checkbox" id="${idPrefix}_absorptionDebutCheck" onchange="toggleAbsorptionDebut('${idPrefix}')">
-        <label for="${idPrefix}_absorptionDebutCheck">Absorption début de combat ?</label>
-      </div>
-      
-      <div id="${idPrefix}_absorptionDebutBloc" style="display: none;">
-        <label>Absorption début de combat :
-          <input type="text" id="${idPrefix}_absorptionDebut" oninput="updateAbsorptionDebut('${idPrefix}')">
-        </label>
-      </div>
+<div id="${idPrefix}_absorptionBloc" style="display: none;">
+<label>Absorption (%) :
+<input type="number" id="${idPrefix}_absorption" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateAbsorptionDebut('${idPrefix}')">
+</label>
 
-      <div class="checkbox-container">
-        <input type="checkbox" id="${idPrefix}_changementAbsorptionCheck" onchange="toggleChangementAbsorption('${idPrefix}')">
-        <label for="${idPrefix}_changementAbsorptionCheck">Bonus/Malus - Absorption ?</label>
-      </div>
-      
-      <div id="${idPrefix}_changementAbsorptionBloc" style="display: none;">
-        <label>Bonus/Malus - Absorption :
-          <input type="text" id="${idPrefix}_changementAbsorption">
-        </label>
-      </div>
-    </div>
+<div class="checkbox-container">
+<label for="${idPrefix}_absorptionDebutCheck">
+<input type="checkbox" id="${idPrefix}_absorptionDebutCheck" onchange="toggleAbsorptionDebut('${idPrefix}')">
+Absorption début de combat ?
+</label>
+</div>
 
-    <label>Dégâts :
-      <input type="number" id="${idPrefix}_degats" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateDegatsDebut('${idPrefix}')">
-    </label>
-    
-    <div class="checkbox-container">
-      <input type="checkbox" id="${idPrefix}_degatsDebutCheck" onchange="toggleDegatsDebut('${idPrefix}')">
-      <label for="${idPrefix}_degatsDebutCheck">Dégâts début de combat ?</label>
-    </div>
-    
-    <div id="${idPrefix}_degatsDebutBloc" style="display: none;">
-      <label>Dégâts début de combat :
-        <input type="text" id="${idPrefix}_degatsDebut" oninput="updateDegatsDebut('${idPrefix}')">
-      </label>
-    </div>
+<div id="${idPrefix}_absorptionDebutBloc" style="display: none;">
+<label>Absorption début de combat :
+<input type="text" id="${idPrefix}_absorptionDebut" oninput="updateAbsorptionDebut('${idPrefix}')">
+</label>
+</div>
+
+<div class="checkbox-container">
+<label for="${idPrefix}_changementAbsorptionCheck">
+<input type="checkbox" id="${idPrefix}_changementAbsorptionCheck" onchange="toggleChangementAbsorption('${idPrefix}')">
+Bonus/Malus - Absorption ?
+</label>
+</div>
+
+<div id="${idPrefix}_changementAbsorptionBloc" style="display: none;">
+<label>Bonus/Malus - Absorption :
+<input type="text" id="${idPrefix}_changementAbsorption">
+</label>
+</div>
+</div>
+
+<label>Dégâts :
+<input type="number" id="${idPrefix}_degats" value="0" onClick="if(this.value==='0')this.value=''" oninput="updateDegatsDebut('${idPrefix}')">
+</label>
+
+<div class="checkbox-container">
+<label for="${idPrefix}_degatsDebutCheck">
+<input type="checkbox" id="${idPrefix}_degatsDebutCheck" onchange="toggleDegatsDebut('${idPrefix}')">
+Dégâts début de combat ?
+</label>
+</div>
+
+<div id="${idPrefix}_degatsDebutBloc" style="display: none;">
+<label>Dégâts début de combat :
+<input type="text" id="${idPrefix}_degatsDebut" oninput="updateDegatsDebut('${idPrefix}')">
+</label>
+</div>
 <div class="checkbox-container">
 <label>
 <input type="checkbox" id="${idPrefix}_changementDegatsCheck" onchange="toggleChangementDegats('${idPrefix}')"> Bonus/Malus - Dégâts ?
@@ -765,23 +785,23 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
 
         container.innerHTML += `
 <div class="capacite-item">
-  <div class="capacite-header" onclick="toggleCapacite(this)">
-    <em>${escapedTitre}</em>
-    <label>État :
-      <select class="${prefix}_classeCapacite">
-        <option value="capacité_spéciale">Neutre</option>
-        <option value="capacité_spéciale active">Active</option>
-        <option value="capacité_spéciale passive">Passive</option>
-        <option value="capacité_spéciale bloquée">Bloquée</option>
-        <option value="capacité_spéciale utilisée">Utilisée</option>
-        <option value="capacité_spéciale annulée">Annulée</option>
-        <option value="capacité_spéciale inactive">Inactive</option>
-      </select>
-    </label>
-    <input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
-    <input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
-  </div>
-  <div class="capacite-description">${escapedDescription}</div>
+<div class="capacite-header" onclick="toggleCapacite(this)">
+<em>${escapedTitre}</em>
+<label>État :
+<select class="${prefix}_classeCapacite">
+<option value="capacité_spéciale">Neutre</option>
+<option value="capacité_spéciale active">Active</option>
+<option value="capacité_spéciale passive">Passive</option>
+<option value="capacité_spéciale bloquée">Bloquée</option>
+<option value="capacité_spéciale utilisée">Utilisée</option>
+<option value="capacité_spéciale annulée">Annulée</option>
+<option value="capacité_spéciale inactive">Inactive</option>
+</select>
+</label>
+<input type="hidden" class="${prefix}_titreCapacite" value="${escapedTitre}">
+<input type="hidden" class="${prefix}_descriptionCapacite" value="${escapedDescription}">
+</div>
+<div class="capacite-description">${escapedDescription}</div>
 </div>`;
       });
     }
@@ -1037,23 +1057,23 @@ x Attache ensablée : À chaque attache réussie, la cible s'affaiblit et rédui
 
         container.innerHTML += `
 <div class="capacite-item">
-  <div class="capacite-header" onclick="toggleCapacite(this)">
-    <em>${escapedTitre}</em>
-    <label>État :
-      <select class="${prefix}_comp${idx}_classeCapacite">
-        <option value="capacité_spéciale">Neutre</option>
-        <option value="capacité_spéciale active">Active</option>
-        <option value="capacité_spéciale passive">Passive</option>
-        <option value="capacité_spéciale bloquée">Bloquée</option>
-        <option value="capacité_spéciale utilisée">Utilisée</option>
-        <option value="capacité_spéciale annulée">Annulée</option>
-        <option value="capacité_spéciale inactive">Inactive</option>
-      </select>
-    </label>
-    <input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
-    <input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
-  </div>
-  <div class="capacite-description">${escapedDescription}</div>
+<div class="capacite-header" onclick="toggleCapacite(this)">
+<em>${escapedTitre}</em>
+<label>État :
+<select class="${prefix}_comp${idx}_classeCapacite">
+<option value="capacité_spéciale">Neutre</option>
+<option value="capacité_spéciale active">Active</option>
+<option value="capacité_spéciale passive">Passive</option>
+<option value="capacité_spéciale bloquée">Bloquée</option>
+<option value="capacité_spéciale utilisée">Utilisée</option>
+<option value="capacité_spéciale annulée">Annulée</option>
+<option value="capacité_spéciale inactive">Inactive</option>
+</select>
+</label>
+<input type="hidden" class="${prefix}_comp${idx}_titreCapacite" value="${escapedTitre}">
+<input type="hidden" class="${prefix}_comp${idx}_descriptionCapacite" value="${escapedDescription}">
+</div>
+<div class="capacite-description">${escapedDescription}</div>
 </div>`;
       });
     }
