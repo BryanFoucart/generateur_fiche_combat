@@ -1566,11 +1566,22 @@ nb2 === 1
       const isChecked = document.getElementById(`${prefix}_corrompu`).checked;
       bloc.style.display = isChecked ? "block" : "none";
 
+// Gestion readonly/désactivation des camps liés aux dégâts
+const degatsInput = document.getElementById(`${prefix}_degats`);
+ const degatsDebutCheck = document.getElementById(`${prefix}_degatsDebutCheck`);
+  const changementDegatsCheck = document.getElementById(`${prefix}_changementDegatsCheck`);
+
+  if (degatsInput) degatsInput.readOnly = isChecked;
+  if (degatsDebutCheck) degatsDebutCheck.disabled = isChecked;
+  if (changementDegatsCheck) changementDegatsCheck.disabled = isChecked;
+// Fin
+
       const updateDegats = () => {
         if (isChecked) {
-          const vitalite =
-            parseInt(document.getElementById(`${prefix}_vitalite`).value) ||
-            0;
+          // const vitalite = 
+          //   parseInt(document.getElementById(`${prefix}_vitalite`).value) ||
+          //   0;
+          const vitalite = updateVitaliteDebut(prefix) || 0;
           let absorptionValue =
             parseInt(document.getElementById(`${prefix}_absorption`).value) ||
             0;
@@ -1589,6 +1600,11 @@ nb2 === 1
         `${prefix}_vitalite`
       );
       vitalite.addEventListener("input", updateDegats);
+
+            const vitaliteDebut = document.getElementById(
+        `${prefix}_vitaliteDebut`
+      );
+      vitaliteDebut.addEventListener("input", updateDegats);
 
       // Mise à jour initiale
       updateDegats();
