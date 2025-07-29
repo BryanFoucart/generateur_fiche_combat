@@ -665,6 +665,13 @@ Vitalité début de combat ?
 <div class="checkbox-container">
 <label>
 <input type="checkbox" id="${idPrefix}_changementVieCheck" onchange="toggleChangementVie('${idPrefix}')"> Bonus/Malus - Vitalité ?
+<span class="help-icon">
+  <i class="fa-solid fa-circle-question"></i>
+  <i class="fa-regular fa-circle-question"></i>
+  <span class="help-tooltip">
+    Ici, il est question de la vitalité en tant qu'effet applicable par tour. Ainsi, cette dernière n'est prise en compte qu'à la fin du tour (à rajouter soi-même au début du tour souvent donc), elle correspond au +50 à côté de Vitalité.
+  </span>
+</span>
 </label>
 </div>
 <div id="${idPrefix}_changementVieBloc" style="display: none;">
