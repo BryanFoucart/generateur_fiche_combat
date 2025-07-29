@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <title>Générateur de Combat</title>
   <style>
     body {
@@ -225,6 +226,52 @@
     .capacite-item.open {
       grid-column: 1/-1;
     }
+
+    .help-icon {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.help-icon .help-tooltip {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 120%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #222;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  padding: 0.7em 1em;
+  font-size: 0.95em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 10;
+  min-width: 260px;
+  max-width: 320px;
+  white-space: normal;
+}
+
+.help-icon:hover .help-tooltip,
+.help-icon:focus-within .help-tooltip {
+  display: block;
+}
+
+.help-icon i.fa-solid {
+  display: none;
+}
+.help-icon:hover i.fa-regular {
+  display: none;
+}
+.help-icon:hover i.fa-solid {
+  display: inline;
+}
+.help-icon:focus-within i.fa-regular {
+  display: none;
+}
+.help-icon:focus-within i.fa-solid {
+  display: inline;
+}
   </style>
 </head>
 
@@ -601,6 +648,13 @@
 <label for="${idPrefix}_vitaliteDebutCheck">
 <input type="checkbox" id="${idPrefix}_vitaliteDebutCheck" onchange="toggleVitaliteDebut('${idPrefix}')">
 Vitalité début de combat ?
+<span class="help-icon">
+    <i class="fa-regular fa-circle-question"></i>
+    <i class="fa-solid fa-circle-question"></i>
+    <span class="help-tooltip">
+      La vitalité en début de combat s'applique immédiatement à la vitalité totale présente dans "Vitalité" sur la fiche de combat. Elle se comptabilise avant même le début du combat.
+    </span>
+  </span>
 </label>
 </div>
 <div id="${idPrefix}_vitaliteDebutBloc" style="display: none;">
