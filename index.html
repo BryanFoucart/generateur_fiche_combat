@@ -1184,7 +1184,16 @@ document.getElementById(`${prefix}_nom`).value
               } else {
                 html += ` <strong class="stat-bonus">+${valeur}</strong>`;
               }
-            } else {
+            } else if (/^[+-]?\d+%/.test(valeur)) {
+              if (valeur.startsWith('-')) {
+                html += ` <strong class="stat-malus">${valeur}</strong>`;
+              } else if (valeur.startsWith('+')) {
+                html += ` <strong class="stat-bonus">${valeur}</strong>`;
+              } else {
+                html += ` <strong class="stat-bonus">+${valeur}</strong>`;
+              }
+            } 
+            else {
               if (valeur.startsWith('-')) {
                 html += ` <strong class="stat-malus">${valeur}%</strong>`;
               } else if (valeur.startsWith('+')) {
@@ -1784,16 +1793,28 @@ nb2 === 1
 
         return `${resultat}${suffixe}`;
       } 
+  //     else {
+  //   // Cas classique : +10, -5, 7, etc.
+  //   if (pourcentage.startsWith('-')) {
+  //     return pourcentage;
+  //   } else if (pourcentage.startsWith('+')) {
+  //     return pourcentage;
+  //   } else if (pourcentage) {
+  //     return `+${pourcentage}`;
+  //   } else {
+  //     return "";
+  //   }
+  // }
 
       // Cas classique : +5%, -5%, etc.
-      // const valeurDecimale = (stat * parseInt(pourcentage.replace('%', ''))) / 100;
-      // if (pourcentage.startsWith('-')) {
-      //   return `-${Math.ceil(Math.abs(valeurDecimale))}`;
-      // } else if (pourcentage.startsWith('+')) {
-      //   return `+${Math.ceil(valeurDecimale)}`;
-      // } else {
-      //   return `+${Math.ceil(valeurDecimale)}`;
-      // }
+      const valeurDecimale = (stat * parseInt(pourcentage.replace('%', ''))) / 100;
+      if (pourcentage.startsWith('-')) {
+        return `-${Math.ceil(Math.abs(valeurDecimale))}`;
+      } else if (pourcentage.startsWith('+')) {
+        return `+${Math.ceil(valeurDecimale)}`;
+      } else {
+        return `+${Math.ceil(valeurDecimale)}`;
+      }
     }
 
     function toggleChangementVitesse(prefix) {
