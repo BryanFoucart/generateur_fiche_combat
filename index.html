@@ -1155,6 +1155,14 @@ document.getElementById(`${prefix}_nom`).value
 
         valeurs.forEach((valeur) => {
           valeur = valeur.trim();
+          if (/^[+-]?\d+%/.test(valeur)){
+            const resultat = calculStatPourcentage(vitesseFinale, valeur);
+            if (resultat.startsWith("-")) {
+              html += ` <strong class="stat-malus">${resultat}</strong>`;
+            } else {
+              html += ` <strong class="stat-bonus">${resultat}</strong>`;
+            }
+          } else {
           if (valeur.startsWith("-")) {
             html += ` <strong class="stat-malus">${valeur}</strong>`;
           } else if (valeur.startsWith("+")) {
@@ -1162,6 +1170,7 @@ document.getElementById(`${prefix}_nom`).value
           } else {
             html += ` <strong class="stat-bonus">+${valeur}</strong>`;
           }
+        }
         });
       }
 
