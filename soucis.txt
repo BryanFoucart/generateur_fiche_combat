@@ -9,3 +9,14 @@ Soucis : l'autre code le fait, mais les x disparaissent vu qu'ils ne sont pas sa
 Mettre en place les malus 
 Mettre en place pour les arlequins 
 Bouton @not (?)
+
+
+Problème 25/05/2026 :
+- C/C Compétence : je sais pas pourquoi mais les 3 premières compétences ne sont pas pris en compte et il faut enlever et remettre le X pour qu'elles soient prises en compte...
+- Compétences : Premier clique dévéloppe la compétence, deuxième referme : sauf que ça le fait aussi avec la prise en compte de l'état ce qui est chiant. Faudrait plutôt qu'il soit concentré sur un endroit pour le développer (une petite flèche ?)
+- Par Tour : Appliquer le terme /tour à la fin
+- Se réinitilise tout seul à certains moments ? Semble le faire uniquement quand c'est rempli ? - NE SEMBLE PAS ETRE UN SOUCI, SE FAIT UNIQUEMENT SI JE CHANGE MON CODE
+- Bonus/Malus & Bonus début de combat pas inclus dans l'extraction/importation (logique ?)
+- Nommer groupe ?
+- Aura mal placé (au-dessus du nom pas endessous)
+- Essayer d'additionner les bonus/malus par tour
