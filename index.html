@@ -628,11 +628,25 @@
 <div class="checkbox-container">
 <label>
 <input type="checkbox" id="${idPrefix}_invisible" onchange="toggleInvisible('${idPrefix}')"> Invisible ?
+<span class="help-icon">
+  <i class="fa-solid fa-circle-question"></i>
+  <i class="fa-regular fa-circle-question"></i>
+  <span class="help-tooltip">
+    Cette case permet d'appliquer le statut "Invisible" sur votre fiche de combat.
+  </span>
+</span>
 </label>
 </div>
 <div class="checkbox-container">
 <label>
 <input type="checkbox" id="${idPrefix}_auraCheck" onchange="toggleAura('${idPrefix}')"> Aura ?
+<span class="help-icon">
+  <i class="fa-solid fa-circle-question"></i>
+  <i class="fa-regular fa-circle-question"></i>
+  <span class="help-tooltip">
+    Cette case permet d'indiquer l'Aura de votre personnage.
+  </span>
+</span>
 </label>
 </div>
 <div id="${idPrefix}_auraBloc" style="display: none;">
@@ -669,7 +683,7 @@ Vitalité début de combat ?
   <i class="fa-solid fa-circle-question"></i>
   <i class="fa-regular fa-circle-question"></i>
   <span class="help-tooltip">
-    Ici, il est question de la vitalité en tant qu'effet applicable par tour. Ainsi, cette dernière n'est prise en compte qu'à la fin du tour (à rajouter soi-même au début du tour souvent donc), elle correspond au +50 à côté de Vitalité.
+    Ici, il est question de la vitalité en tant qu'effet applicable par tour. Ainsi, cette dernière n'est prise en compte qu'à la fin du tour (à rajouter soi-même au début du tour suivant donc), elle correspond au +50 à côté de Vitalité, par exemple.
   </span>
 </span>
 </label>
@@ -687,6 +701,13 @@ Vitalité début de combat ?
 <label for="${idPrefix}_vitesseDebutCheck">
 <input type="checkbox" id="${idPrefix}_vitesseDebutCheck" onchange="toggleVitesseDebut('${idPrefix}')">
 Vitesse début de combat ?
+<span class="help-icon">
+  <i class="fa-solid fa-circle-question"></i>
+  <i class="fa-regular fa-circle-question"></i>
+  <span class="help-tooltip">
+    La vitesse en début de combat s'applique immédiatement à la vitesse totale présente dans "Vitesse" sur la fiche de combat. Elle se comptabilise avant même le début du combat.
+  </span>
+</span>
 </label>
 </div>
 <div id="${idPrefix}_vitesseDebutBloc" style="display: none;">
@@ -697,6 +718,13 @@ Vitesse début de combat ?
 <div class="checkbox-container">
 <label>
 <input type="checkbox" id="${idPrefix}_changementVitesseCheck" onchange="toggleChangementVitesse('${idPrefix}')"> Bonus/Malus - Vitesse ?
+<span class="help-icon">
+  <i class="fa-solid fa-circle-question"></i>
+  <i class="fa-regular fa-circle-question"></i>
+  <span class="help-tooltip">
+    Ici, il est question de la vitesse en tant qu'effet applicable par tour. Ainsi, cette dernière n'est prise en compte qu'à la fin du tour (à rajouter soi-même au début du tour suivant donc), elle correspond au +50 à côté de Vitesse, par exemple.
+  </span>
+</span>
 </label>
 </div>
 <div id="${idPrefix}_changementVitesseBloc" style="display: none;">
@@ -719,6 +747,13 @@ Vitesse début de combat ?
 <label for="${idPrefix}_absorptionDebutCheck">
 <input type="checkbox" id="${idPrefix}_absorptionDebutCheck" onchange="toggleAbsorptionDebut('${idPrefix}')">
 Absorption début de combat ?
+<span class="help-icon">
+  <i class="fa-solid fa-circle-question"></i>
+  <i class="fa-regular fa-circle-question"></i>
+  <span class="help-tooltip">
+    L'absorption en début de combat s'applique immédiatement à l'absorption totale présente dans "Absorption" sur la fiche de combat. Elle se comptabilise avant même le début du combat. Attention : Indiquer +10% ne donnera pas 10% d'Absorption, mais 10% de votre Absorption de base. Pour gagner 10% d'Absorption, il suffit d'indiquer "+10" ou simplement "10".
+  </span>
+</span>
 </label>
 </div>
 
@@ -732,6 +767,13 @@ Absorption début de combat ?
 <label for="${idPrefix}_changementAbsorptionCheck">
 <input type="checkbox" id="${idPrefix}_changementAbsorptionCheck" onchange="toggleChangementAbsorption('${idPrefix}')">
 Bonus/Malus - Absorption ?
+<span class="help-icon">
+  <i class="fa-solid fa-circle-question"></i>
+  <i class="fa-regular fa-circle-question"></i>
+  <span class="help-tooltip">
+    L'absorption n'est pas affecté par les bonus au cours du combat, cette case ne devrait donc jamais être remplit.
+  </span>
+</span>
 </label>
 </div>
 
@@ -750,6 +792,13 @@ Bonus/Malus - Absorption ?
 <label for="${idPrefix}_degatsDebutCheck">
 <input type="checkbox" id="${idPrefix}_degatsDebutCheck" onchange="toggleDegatsDebut('${idPrefix}')">
 Dégâts début de combat ?
+<span class="help-icon">
+  <i class="fa-solid fa-circle-question"></i>
+  <i class="fa-regular fa-circle-question"></i>
+  <span class="help-tooltip">
+    Les Dégâts en début de combat s'appliquent immédiatement aux Dégâts totaux présents dans "Dégâts" sur la fiche de combat. Ils se comptabilisent avant même le début du combat.
+  </span>
+</span>
 </label>
 </div>
 
@@ -761,6 +810,13 @@ Dégâts début de combat ?
 <div class="checkbox-container">
 <label>
 <input type="checkbox" id="${idPrefix}_changementDegatsCheck" onchange="toggleChangementDegats('${idPrefix}')"> Bonus/Malus - Dégâts ?
+<span class="help-icon">
+  <i class="fa-solid fa-circle-question"></i>
+  <i class="fa-regular fa-circle-question"></i>
+  <span class="help-tooltip">
+    Ici, il est question des dégâts en tant qu'effet applicable par tour. Ainsi, ces derniers ne sont pris en compte qu'à la fin du tour (à rajouter soi-même au début du tour suivant donc), elle correspond au +50 à côté de Dégâts, par exemple.
+  </span>
+</span>
 </label>
 </div>
 <div id="${idPrefix}_changementDegatsBloc" style="display: none;">
