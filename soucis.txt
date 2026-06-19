@@ -20,3 +20,5 @@ Problème 25/05/2026 :
 - Nommer groupe ?
 - Aura mal placé (au-dessus du nom pas endessous)
 - Essayer d'additionner les bonus/malus par tour
+- Absorption en début de combat n'est pas intégré dans les dégats
+- La vitesse prise en compte pour le placement du combat n'est pas la vitesse finale, mais celle de base.
